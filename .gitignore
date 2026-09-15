@@ -1,0 +1,11 @@
+wp-config.php
+*.log
+.DS_Store
+Thumbs.db
+*.zip
+*.tar
+*.gz
+.env
+.envrc
+wp-content/cache/
+wp-content/uploads/cache/

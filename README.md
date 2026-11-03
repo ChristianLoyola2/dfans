@@ -198,3 +198,18 @@ Dominio local utilizado:
 
 ```text
 http://dfans.local
+---
+
+## Personalización (código propio)
+
+El código desarrollado para D’FANS está en [`dfans-personalizacion/`](dfans-personalizacion/): snippets, CSS, bloques de la portada y plantillas, y los scripts de mantenimiento.
+
+Funciones principales:
+
+- **Match familiar**: polos unisex con fotos y tallas según la sección (Adultos o Niños) y filtro por público (hombre, mujer, niño, niña).
+- **Exclusivos D’FANS**: diseños propios con corte distinto por público (Oversize, Baby tee, Regular reforzado, Manga mariposa).
+- **Interacción**: favoritos, vista rápida, vistos recientemente, quiz de fandom, guía de tallas y barra de compra en móvil.
+- **Checkout**: delivery en Lima, recojo en Gamarra o envío a provincia; pago con Yape o transferencia.
+- **Legal**: Libro de Reclamaciones virtual, Términos y condiciones, Política de privacidad y de cambios.
+
+El paso a producción se hace con **Duplicator** (paquete .zip + installer.php, que no se sube al repositorio).

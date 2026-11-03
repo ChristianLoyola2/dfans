@@ -9,3 +9,18 @@ Thumbs.db
 .envrc
 wp-content/cache/
 wp-content/uploads/cache/
+# Paquetes de migración de Duplicator: contienen la base de datos completa (no subir nunca)
+wp-content/backups-dup-lite/
+wp-content/backups-dup-pro/
+wp-content/duplicator-backups/
+installer.php
+*_installer.php
+dup-installer/
+*_archive.zip
+*_archive.daf
+
+# Archivo que deja una actualización interrumpida de WordPress
+.maintenance
+
+# Fotos subidas (~450 MB): van en el paquete de Duplicator, no en Git
+wp-content/uploads/

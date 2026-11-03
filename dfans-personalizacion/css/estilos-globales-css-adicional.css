@@ -1,0 +1,1701 @@
+/* CSS adicional de los estilos globales (post 29), exportado el 03/11/2026 */
+/* ================================
+   D'FANS — ESTILOS PERSONALIZADOS
+   ================================ */
+
+:root {
+	--dfans-negro: #0b0b0c;
+	--dfans-carbon: #151517;
+	--dfans-rojo: #e0262f;
+	--dfans-crema: #f4f1ec;
+	--dfans-gris: #a1a1a8;
+}
+
+/* Ocultar título automático de la página Inicio */
+.home .wp-block-post-title {
+	display: none !important;
+}
+
+/* ---------- Cabecera ---------- */
+header.wp-block-template-part:has(.dfans-header) {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+.admin-bar header.wp-block-template-part:has(.dfans-header) { top: 32px; }
+@media (max-width: 782px) {
+	.admin-bar header.wp-block-template-part:has(.dfans-header) { top: 0; position: relative; }
+}
+.dfans-header {
+	background: var(--dfans-negro);
+	color: #fff;
+	border-bottom: 1px solid #222;
+}
+.dfans-header a { color: #fff; text-decoration: none; }
+.dfans-header .wp-block-site-title a:hover { color: var(--dfans-rojo); }
+.dfans-header .wp-block-navigation {
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 600;
+	font-size: 0.95rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+.dfans-header .wp-block-navigation-item__content:hover,
+.dfans-header .wp-block-navigation-item.current-menu-item > .wp-block-navigation-item__content {
+	color: var(--dfans-rojo);
+}
+.dfans-header .wp-block-navigation__submenu-container {
+	background: var(--dfans-negro) !important;
+	color: #fff !important;
+	border: 1px solid #2a2a2e !important;
+	border-top: 2px solid var(--dfans-rojo) !important;
+	padding: 0.4rem 0 !important;
+	min-width: 220px !important;
+	text-transform: none;
+	letter-spacing: 0;
+}
+.dfans-header .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+	padding: 0.5rem 1.1rem !important;
+}
+.dfans-header .wc-block-mini-cart__button,
+.dfans-header .wc-block-customer-account a { color: #fff; }
+.dfans-header .wc-block-mini-cart__button:hover,
+.dfans-header .wc-block-customer-account a:hover { color: var(--dfans-rojo); }
+.dfans-header .wc-block-mini-cart__badge {
+	background: var(--dfans-rojo) !important;
+	color: #fff !important;
+	border-color: var(--dfans-negro) !important;
+}
+
+/* ---------- Secciones del inicio ---------- */
+.dfans-hero,
+.dfans-beneficios,
+.dfans-seccion,
+.dfans-cta {
+	margin-block: 0 !important;
+}
+.wp-block-post-content > .dfans-hero:first-child { margin-top: 0 !important; }
+
+.dfans-eyebrow {
+	color: var(--dfans-rojo);
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 0.8rem;
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	margin-bottom: 0.5rem;
+}
+
+/* Hero */
+.dfans-hero {
+	background: radial-gradient(ellipse at 80% 40%, #2a0d10 0%, var(--dfans-negro) 60%);
+	color: #fff;
+	padding-top: clamp(3rem, 7vw, 6rem);
+	padding-bottom: clamp(3rem, 7vw, 6rem);
+}
+.dfans-hero-titulo {
+	color: #fff;
+	font-size: clamp(2.8rem, 8vw, 6rem) !important;
+	line-height: 0.92 !important;
+	margin: 0.3rem 0 1.4rem;
+}
+.dfans-rojo { color: var(--dfans-rojo) !important; }
+.dfans-hero-texto {
+	color: #d4d4d8;
+	font-size: 1.15rem;
+	max-width: 30rem;
+}
+.dfans-hero-botones { margin-top: 2rem; gap: 0.8rem; }
+.dfans-hero-tags {
+	margin-top: 2rem;
+	color: var(--dfans-gris);
+	font-size: 0.85rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+.dfans-hero-img img {
+	border-radius: 8px;
+	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+	transition: transform 0.4s ease;
+}
+.dfans-hero-img img:hover { transform: scale(1.02) rotate(-0.5deg); }
+
+/* Botones de color */
+.dfans-btn-rojo .wp-block-button__link {
+	background: var(--dfans-rojo) !important;
+	color: #fff !important;
+	border: 2px solid var(--dfans-rojo);
+}
+.dfans-btn-rojo .wp-block-button__link:hover {
+	background: #b81d25 !important;
+	border-color: #b81d25;
+}
+.dfans-btn-borde .wp-block-button__link {
+	background: transparent !important;
+	color: #fff !important;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+}
+.dfans-btn-borde .wp-block-button__link:hover {
+	background: #fff !important;
+	color: var(--dfans-negro) !important;
+}
+.dfans-btn-blanco .wp-block-button__link {
+	background: #fff !important;
+	color: var(--dfans-negro) !important;
+}
+.dfans-btn-blanco .wp-block-button__link:hover {
+	background: var(--dfans-negro) !important;
+	color: #fff !important;
+}
+.wp-block-button__link { transition: background 0.2s, color 0.2s, transform 0.2s; }
+.wp-block-button__link:hover { transform: translateY(-2px); }
+
+/* Rejillas de 4 columnas (beneficios y pasos) */
+.dfans-beneficios > .wp-block-group,
+.dfans-pasos {
+	grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+@media (max-width: 900px) {
+	.dfans-beneficios > .wp-block-group,
+	.dfans-pasos { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 560px) {
+	.dfans-pasos { grid-template-columns: 1fr !important; }
+}
+
+/* Beneficios */
+.dfans-beneficios {
+	background: var(--dfans-rojo);
+	color: #fff;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
+.dfans-beneficio h3 {
+	font-size: 1rem !important;
+	margin: 0 0 0.3rem;
+	color: #fff;
+}
+.dfans-beneficio p {
+	margin: 0;
+	font-size: 0.9rem;
+	opacity: 0.9;
+	line-height: 1.4;
+}
+
+/* Secciones genéricas */
+.dfans-seccion {
+	padding-top: clamp(3.5rem, 7vw, 6rem);
+	padding-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+.dfans-seccion--crema { background: var(--dfans-crema); }
+.dfans-seccion-cabecera { margin-bottom: 2.2rem; }
+.dfans-seccion-cabecera > * { max-width: none !important; margin-inline: 0 !important; }
+.dfans-seccion-cabecera h2 {
+	font-size: clamp(2rem, 5vw, 3.2rem) !important;
+	margin: 0;
+}
+
+/* Tarjetas de categoría */
+.dfans-grid-cats {
+	gap: 1rem !important;
+	grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+@media (max-width: 900px) {
+	.dfans-grid-cats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 560px) {
+	.dfans-grid-cats { grid-template-columns: 1fr !important; }
+}
+.dfans-cat {
+	--c: var(--dfans-rojo);
+	position: relative;
+	overflow: hidden;
+	background: var(--dfans-carbon);
+	color: #fff;
+	border-radius: 10px;
+	padding: 1.8rem !important;
+	min-height: 230px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.dfans-cat::before {
+	content: "";
+	position: absolute;
+	right: -70px;
+	top: -70px;
+	width: 240px;
+	height: 240px;
+	border-radius: 50%;
+	background: var(--c);
+	opacity: 0.35;
+	filter: blur(50px);
+	transition: opacity 0.25s ease;
+}
+.dfans-cat > * { position: relative; margin-block: 0 !important; margin-inline: 0 !important; max-width: none !important; }
+.dfans-cat:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25); }
+.dfans-cat:hover::before { opacity: 0.7; }
+.dfans-cat-num {
+	color: var(--c);
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 0.85rem;
+	letter-spacing: 0.15em;
+	margin-bottom: auto !important;
+}
+.dfans-cat h3 {
+	font-size: clamp(1.6rem, 3vw, 2rem) !important;
+	margin-top: 3rem !important;
+}
+.dfans-cat h3 a { color: #fff; text-decoration: none; }
+.dfans-cat h3 a::after { content: ""; position: absolute; inset: -500px; z-index: 2; }
+.dfans-cat { isolation: isolate; }
+.dfans-cat-ejemplos { color: var(--dfans-gris); font-size: 0.9rem; margin-top: 0.4rem !important; }
+.dfans-cat-cta {
+	color: var(--c);
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 700;
+	font-size: 0.8rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	margin-top: 1.1rem !important;
+}
+.dfans-cat--anime { --c: #ff5a36; }
+.dfans-cat--rock { --c: #ffc21a; }
+.dfans-cat--metal { --c: #c3cad6; }
+.dfans-cat--artistas { --c: #b066ff; }
+.dfans-cat--peliculas { --c: #3d8bff; }
+.dfans-cat--videojuegos { --c: #2fd46a; }
+
+/* Adultos y niños */
+.dfans-familia { gap: 1.5rem !important; }
+.dfans-familia-card {
+	background: #fff;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+	display: flex;
+	flex-direction: column;
+}
+.dfans-familia-card .wp-block-image { margin: 0; overflow: hidden; }
+.dfans-familia-card .wp-block-image img {
+	width: 100%;
+	aspect-ratio: 5 / 4;
+	object-fit: cover;
+	object-position: center 8%;
+	transition: transform 0.4s ease;
+}
+.dfans-familia-card:hover .wp-block-image img { transform: scale(1.04); }
+.dfans-familia-texto { padding: 1.6rem 1.8rem 2rem !important; margin-top: 0 !important; }
+.dfans-familia-texto h3 { font-size: 1.6rem !important; margin: 0 0 0.4rem; }
+.dfans-familia-texto p { margin: 0.2rem 0; color: #444; }
+.dfans-precio {
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 1.3rem;
+	color: var(--dfans-rojo) !important;
+	margin: 0.6rem 0 1.2rem !important;
+}
+
+/* Diseño destacado */
+.dfans-destacado { background: var(--dfans-negro); color: #fff; }
+.dfans-destacado h2 { color: #fff; font-size: clamp(2rem, 5vw, 3.2rem) !important; margin: 0 0 1rem; }
+.dfans-destacado p { color: #d4d4d8; }
+.dfans-modelos { gap: 0.8rem !important; }
+.dfans-modelo { margin: 0 !important; position: relative; overflow: hidden; border-radius: 8px; }
+.dfans-modelo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 20%; display: block; }
+.dfans-modelo figcaption {
+	position: absolute;
+	left: 0.6rem;
+	bottom: 0.6rem;
+	margin: 0 !important;
+	background: var(--dfans-rojo);
+	color: #fff !important;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 0.72rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	padding: 0.3rem 0.6rem;
+	border-radius: 3px;
+}
+.dfans-precios { list-style: none; padding: 0 !important; margin: 1.5rem 0 2rem; }
+.dfans-precios li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.8rem 0;
+	border-bottom: 1px solid #2a2a2e;
+}
+.dfans-precios li span {
+	color: var(--dfans-rojo);
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+}
+
+/* Cómo comprar */
+.dfans-pasos { gap: 1rem !important; }
+.dfans-paso {
+	background: #fff;
+	border-radius: 10px;
+	padding: 1.8rem !important;
+	border-top: 4px solid var(--dfans-rojo);
+}
+.dfans-paso > * { margin-block: 0 !important; }
+.dfans-paso-num {
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 2.4rem;
+	line-height: 1;
+	color: var(--dfans-rojo);
+}
+.dfans-paso h3 { font-size: 1.15rem !important; margin-top: 1rem !important; }
+.dfans-paso p { color: #555; font-size: 0.95rem; margin-top: 0.4rem !important; }
+
+/* Llamado final */
+.dfans-cta {
+	background: var(--dfans-rojo);
+	color: #fff;
+	text-align: center;
+	padding-top: clamp(3rem, 6vw, 5rem);
+	padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+.dfans-cta h2 { color: #fff; font-size: clamp(2rem, 6vw, 3.6rem) !important; margin: 0; }
+.dfans-cta p { font-size: 1.15rem; margin: 0.6rem 0 1.6rem; }
+
+/* ---------- Pie de página ---------- */
+footer.wp-block-template-part { margin-block-start: 0 !important; }
+.dfans-footer {
+	background: var(--dfans-negro);
+	color: var(--dfans-gris);
+	padding-top: 4rem;
+	padding-bottom: 2rem;
+	font-size: 0.95rem;
+}
+.dfans-footer a { color: #e4e4e7; text-decoration: none; }
+.dfans-footer a:hover { color: var(--dfans-rojo); }
+.dfans-footer-logo {
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 1.8rem;
+	letter-spacing: 0.04em;
+	color: #fff;
+	margin-bottom: 0.6rem;
+}
+.dfans-footer-dato { font-size: 0.88rem; }
+.dfans-footer-dato strong { color: #fff; }
+.dfans-footer-titulo {
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 0.8rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: #fff;
+	margin-bottom: 0.8rem;
+}
+.dfans-footer-links { list-style: none; padding: 0 !important; margin: 0; }
+.dfans-footer-links li { margin: 0.45rem 0; }
+.dfans-footer-legal {
+	border-top: 1px solid #222;
+	margin-top: 3rem !important;
+	padding-top: 1.5rem;
+	font-size: 0.82rem;
+	color: #71717a;
+}
+
+/* ---------- Tienda: coherencia con la marca ---------- */
+.woocommerce .price,
+.wc-block-components-product-price,
+.wp-block-woocommerce-product-price { color: var(--dfans-negro); font-weight: 700; }
+.wc-block-components-product-sale-badge,
+.onsale { background: var(--dfans-rojo) !important; color: #fff !important; border: 0 !important; }
+.woocommerce-store-notice,
+p.demo_store { background: var(--dfans-rojo); }
+
+/* ---------- Móvil ---------- */
+@media (max-width: 781px) {
+	.dfans-hero .wp-block-columns { gap: 2.5rem; }
+	.dfans-hero-img { max-width: 420px; margin-inline: auto; }
+	.dfans-cat { min-height: 190px; }
+	.dfans-destacado .wp-block-columns { gap: 2rem; }
+	.dfans-footer .wp-block-columns { gap: 2rem; }
+}
+
+/* ---------- Mi cuenta ---------- */
+.woocommerce-account .wp-block-post-content > .woocommerce {
+	max-width: 1000px !important;
+	margin-inline: auto !important;
+}
+
+/* Con sesión iniciada: menú a la izquierda, contenido a la derecha */
+.woocommerce-account.logged-in .woocommerce {
+	display: grid;
+	grid-template-columns: 260px minmax(0, 1fr);
+	gap: 2rem;
+	align-items: start;
+}
+.woocommerce-account.logged-in .woocommerce::before,
+.woocommerce-account.logged-in .woocommerce::after {
+	display: none;
+}
+.woocommerce-account.logged-in .woocommerce > .woocommerce-notices-wrapper {
+	grid-column: 1 / -1;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation,
+.woocommerce-account .woocommerce-MyAccount-content {
+	float: none !important;
+	width: auto !important;
+	margin: 0 !important;
+}
+
+/* Menú de la cuenta */
+.woocommerce-MyAccount-navigation {
+	background: #111;
+	border-radius: 8px;
+	padding: 0.5rem 0;
+}
+.woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.woocommerce-MyAccount-navigation li {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: 0 !important;
+}
+.woocommerce-MyAccount-navigation li a {
+	display: block;
+	padding: 0.8rem 1.25rem;
+	color: #ddd;
+	text-decoration: none;
+	border-left: 3px solid transparent;
+}
+.woocommerce-MyAccount-navigation li a:hover {
+	background: #1d1d1d;
+	color: #fff;
+}
+.woocommerce-MyAccount-navigation li.is-active a {
+	background: #1d1d1d;
+	color: #fff;
+	font-weight: bold;
+	border-left-color: #e0262f;
+}
+.woocommerce-MyAccount-navigation li.woocommerce-MyAccount-navigation-link--customer-logout {
+	border-top: 1px solid #2a2a2a !important;
+	margin-top: 0.4rem !important;
+	padding-top: 0.4rem !important;
+}
+.woocommerce-MyAccount-navigation-link--customer-logout a {
+	color: #e0262f !important;
+}
+
+/* Contenido de la cuenta */
+.woocommerce-MyAccount-content {
+	background: #f6f6f6;
+	border-radius: 8px;
+	padding: 2rem;
+}
+.woocommerce-MyAccount-content > p:first-child {
+	font-size: 1.15rem;
+}
+.woocommerce-MyAccount-content a {
+	color: #e0262f;
+}
+.woocommerce-MyAccount-content h2,
+.woocommerce-MyAccount-content h3 {
+	font-size: 1.3rem;
+	margin-top: 0;
+}
+
+/* Tabla de pedidos */
+.woocommerce-account table.shop_table {
+	background: #fff;
+	border-radius: 8px;
+	border-collapse: collapse;
+	width: 100%;
+}
+.woocommerce-account table.shop_table th,
+.woocommerce-account table.shop_table td {
+	padding: 0.8rem;
+	border-bottom: 1px solid #eee;
+}
+
+/* Botones y campos */
+.woocommerce-account .button,
+.woocommerce-account button[type="submit"] {
+	background: #111 !important;
+	color: #fff !important;
+	border: 0;
+	border-radius: 4px;
+	padding: 0.7rem 1.3rem;
+	text-decoration: none;
+}
+.woocommerce-account .button:hover,
+.woocommerce-account button[type="submit"]:hover {
+	background: #e0262f !important;
+}
+.woocommerce-account .woocommerce-MyAccount-content .button {
+	color: #fff !important;
+}
+.woocommerce-account input.input-text,
+.woocommerce-account select {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding: 0.6rem 0.8rem;
+	background: #fff;
+}
+
+/* Sin sesión: formularios de acceso y registro */
+.woocommerce-account .u-columns.col2-set {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 2rem;
+}
+.woocommerce-account .u-columns.col2-set::before,
+.woocommerce-account .u-columns.col2-set::after {
+	display: none;
+}
+.woocommerce-account .u-columns .u-column1,
+.woocommerce-account .u-columns .u-column2 {
+	float: none !important;
+	width: auto !important;
+	background: #f6f6f6;
+	border-radius: 8px;
+	padding: 2rem;
+}
+.woocommerce-account form.login,
+.woocommerce-account form.register {
+	border: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+@media (max-width: 781px) {
+	.woocommerce-account.logged-in .woocommerce,
+	.woocommerce-account .u-columns.col2-set {
+		grid-template-columns: 1fr;
+	}
+	.woocommerce-MyAccount-content {
+		padding: 1.25rem;
+	}
+}
+
+/* ---------- Páginas legales y Libro de Reclamaciones ---------- */
+.dfans-por-completar {
+	background: #fff3b0;
+	color: #7a5b00;
+	padding: 0 0.3rem;
+	border-radius: 3px;
+	font-style: italic;
+}
+.dfans-footer-libro a {
+	display: inline-block;
+	margin-top: 0.8rem;
+	padding: 0.5rem 0.8rem;
+	border: 1px solid #444;
+	border-radius: 4px;
+	color: #fff !important;
+	font-size: 0.85rem;
+}
+.dfans-footer-libro a:hover {
+	border-color: var(--dfans-rojo, #e0262f);
+}
+
+.dfans-reclamo {
+	max-width: 760px;
+}
+.dfans-reclamo-cabecera {
+	background: #f6f6f6;
+	border-radius: 8px;
+	padding: 1rem 1.25rem;
+	font-size: 0.95rem;
+}
+.dfans-reclamo fieldset {
+	border: 1px solid #e2e2e2;
+	border-radius: 8px;
+	padding: 1.25rem 1.5rem 0.5rem;
+	margin: 0 0 1.5rem;
+}
+.dfans-reclamo legend {
+	font-weight: 800;
+	padding: 0 0.5rem;
+	text-transform: uppercase;
+	font-size: 0.9rem;
+	letter-spacing: 0.04em;
+}
+.dfans-reclamo label {
+	display: block;
+	margin-bottom: 1rem;
+	font-size: 0.95rem;
+}
+.dfans-reclamo input[type="text"],
+.dfans-reclamo input[type="tel"],
+.dfans-reclamo input[type="email"],
+.dfans-reclamo select,
+.dfans-reclamo textarea {
+	display: block;
+	width: 100%;
+	margin-top: 0.35rem;
+	padding: 0.6rem 0.8rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font: inherit;
+	background: #fff;
+	box-sizing: border-box;
+}
+.dfans-reclamo-fila {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0 1rem;
+}
+.dfans-reclamo-opciones label {
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-start;
+	margin-bottom: 0.6rem;
+}
+.dfans-reclamo-opciones input {
+	margin-top: 0.3rem;
+}
+.dfans-reclamo-acepto {
+	display: flex !important;
+	gap: 0.5rem;
+	align-items: flex-start;
+}
+.dfans-reclamo-acepto input {
+	margin-top: 0.3rem;
+}
+.dfans-reclamo-aviso {
+	font-size: 0.85rem;
+	color: #555;
+}
+.dfans-reclamo-trampa {
+	position: absolute;
+	left: -9999px;
+}
+.dfans-reclamo-errores {
+	background: #fdecec;
+	border-left: 4px solid #e0262f;
+	padding: 0.75rem 1rem;
+	margin-bottom: 1.5rem;
+	border-radius: 4px;
+}
+.dfans-reclamo-errores ul {
+	margin: 0;
+	padding-left: 1.2rem;
+}
+.dfans-reclamo-ok {
+	background: #eaf7ee;
+	border-left: 4px solid #2f9e44;
+	padding: 1.25rem 1.5rem;
+	border-radius: 4px;
+}
+@media (max-width: 600px) {
+	.dfans-reclamo-fila {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---------- Carrusel de la portada ---------- */
+/* 8 imágenes, 3,5 s cada una: ciclo de 28 s con transición suave.
+   En el editor (body.editor-styles-wrapper) se ven como imágenes normales. */
+body:not(.editor-styles-wrapper) .dfans-carrusel {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #eee;
+	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide {
+	position: absolute;
+	inset: 0;
+	margin: 0 !important;
+	opacity: 0;
+	visibility: hidden;
+	animation: dfans-carrusel 28s infinite;
+}
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide a,
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide img {
+	object-fit: cover;
+}
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(2) { animation-delay: 3.5s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(3) { animation-delay: 7s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(4) { animation-delay: 10.5s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(5) { animation-delay: 14s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(6) { animation-delay: 17.5s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(7) { animation-delay: 21s; }
+body:not(.editor-styles-wrapper) .dfans-carrusel > .dfans-slide:nth-child(8) { animation-delay: 24.5s; }
+
+@keyframes dfans-carrusel {
+	0%     { opacity: 0; visibility: visible; transform: scale(1.04); }
+	2.5%   { opacity: 1; }
+	12.5%  { opacity: 1; transform: scale(1); }
+	15%    { opacity: 0; visibility: visible; }
+	15.01%, 100% { opacity: 0; visibility: hidden; }
+}
+
+/* Pausa al pasar el ratón (para poder hacer clic en el polo). */
+.dfans-carrusel:hover > .dfans-slide {
+	animation-play-state: paused;
+}
+
+/* Etiqueta: género y diseño */
+body:not(.editor-styles-wrapper) .dfans-carrusel figcaption {
+	position: absolute;
+	left: 1rem;
+	bottom: 1rem;
+	margin: 0 !important;
+	background: var(--dfans-rojo, #e0262f);
+	color: #fff !important;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-weight: 800;
+	font-size: 0.78rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	padding: 0.4rem 0.75rem;
+	border-radius: 3px;
+}
+
+/* Sin animaciones si el usuario lo prefiere: se muestra solo el primer polo. */
+@media (prefers-reduced-motion: reduce) {
+	.dfans-carrusel > .dfans-slide {
+		animation: none !important;
+	}
+	.dfans-carrusel > .dfans-slide:first-child {
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
+}
+
+@media (max-width: 781px) {
+	.dfans-carrusel {
+		max-width: 420px;
+		margin-inline: auto;
+	}
+}
+
+/* Carrito: el envío (costo a coordinar) se elige en el checkout; se oculta la fila "Envío GRATIS" y se explica en una nota (oculta si el carrito está vacío) */
+.wp-block-woocommerce-cart .wc-block-components-totals-shipping{display:none}
+.dfans-nota-envio{max-width:720px;margin:1rem auto 0;color:#555}
+body:has(.wc-block-cart__empty-cart__title) .dfans-nota-envio{display:none}
+
+
+/* ---------- Producto: Modelo y Talla como botones ---------- */
+.variations_form table.variations,
+.variations_form table.variations tbody,
+.variations_form table.variations tr,
+.variations_form table.variations th,
+.variations_form table.variations td { display: block; width: 100%; border: 0; }
+.variations_form table.variations th.label { padding: 0 0 0.45rem; }
+.variations_form table.variations td.value { padding: 0 0 1.1rem; }
+.variations_form table.variations th.label label {
+	font-weight: 700;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+.dfans-select-oculto { display: none !important; }
+.dfans-opciones { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.dfans-opcion {
+	min-width: 3.1rem;
+	padding: 0.65rem 1rem;
+	border: 1.5px solid #d4d4d8;
+	border-radius: 4px;
+	background: #fff;
+	color: var(--dfans-negro);
+	font-family: var(--wp--preset--font-family--manrope);
+	font-size: 0.85rem;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.dfans-opcion:hover { border-color: var(--dfans-negro); }
+.dfans-opcion.is-activa { background: var(--dfans-negro); border-color: var(--dfans-negro); color: #fff; }
+.dfans-opcion:focus-visible { outline: 2px solid var(--dfans-rojo); outline-offset: 2px; }
+.dfans-opcion:disabled { opacity: 0.35; text-decoration: line-through; cursor: not-allowed; }
+.variations_form .reset_variations { display: inline-block; margin-top: 0.6rem; font-size: 0.85rem; color: var(--dfans-gris); }
+
+/* ---------- Carrito ---------- */
+.wp-block-woocommerce-cart .wp-block-woocommerce-cart-totals-block {
+	background: #faf9f7;
+	border: 1px solid #e7e5e4;
+	border-radius: 8px;
+	padding: 1.25rem 1.5rem;
+}
+.wp-block-woocommerce-cart .wc-block-cart__totals-title {
+	font-weight: 800;
+	letter-spacing: 0.08em;
+}
+.wp-block-woocommerce-cart .wc-block-components-product-name {
+	color: var(--dfans-negro);
+	font-weight: 700;
+	text-decoration: none;
+}
+.wp-block-woocommerce-cart .wc-block-components-product-name:hover { color: var(--dfans-rojo); }
+.wp-block-woocommerce-cart .wc-block-cart-item__image img { border-radius: 6px; }
+.wp-block-woocommerce-cart .wc-block-components-totals-footer-item { font-weight: 800; }
+.wp-block-woocommerce-cart .wc-block-cart__submit-button:hover { background: var(--dfans-rojo); border-color: var(--dfans-rojo); }
+
+/* ---------- Checkout ---------- */
+/* Cabecera simplificada del checkout con los colores de la marca. */
+body.woocommerce-checkout header.wp-block-template-part:not(:has(.dfans-header)) {
+	background: var(--dfans-negro);
+	border-bottom: 1px solid #222;
+}
+body.woocommerce-checkout header.wp-block-template-part:not(:has(.dfans-header)) a { color: #fff; text-decoration: none; }
+body.woocommerce-checkout header.wp-block-template-part:not(:has(.dfans-header)) a:hover { color: var(--dfans-rojo); }
+
+/* Avisos (acceder, cupón) en tono neutro. */
+.woocommerce-checkout .wc-block-components-notice-banner.is-info {
+	background: #faf9f7;
+	border-color: #e4e4e7;
+	color: var(--dfans-negro);
+}
+.woocommerce-checkout .wc-block-components-notice-banner.is-info > svg { background: var(--dfans-negro); }
+
+/* Dos columnas: datos a la izquierda, resumen y pago a la derecha. */
+@media (min-width: 960px) {
+	.woocommerce-checkout form.checkout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+		column-gap: 3rem;
+		align-items: start;
+		max-width: 1160px !important;
+		margin-inline: auto;
+	}
+	.woocommerce-checkout form.checkout > * { grid-column: 1; }
+	.woocommerce-checkout form.checkout > #customer_details { grid-column: 1; grid-row: 1 / span 2; }
+	.woocommerce-checkout form.checkout > #order_review_heading { grid-column: 2; grid-row: 1; margin-top: 0; }
+	.woocommerce-checkout form.checkout > #order_review { grid-column: 2; grid-row: 2; }
+}
+.woocommerce-checkout #customer_details.col2-set .col-1,
+.woocommerce-checkout #customer_details.col2-set .col-2 { float: none; width: 100%; max-width: none; }
+.woocommerce-checkout #customer_details .col-2 { margin-top: 1.5rem; }
+
+/* Títulos. */
+.woocommerce-checkout .woocommerce-billing-fields > h3,
+.woocommerce-checkout .woocommerce-additional-fields > h3,
+.woocommerce-checkout #ship-to-different-address,
+.woocommerce-checkout #dfans-tipo-entrega h3 {
+	font-size: 1.05rem !important;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+/* Campos. */
+.woocommerce-checkout .form-row label { font-weight: 600; font-size: 0.85rem; }
+.woocommerce-checkout .form-row .input-text,
+.woocommerce-checkout .form-row select,
+.woocommerce-checkout .form-row textarea {
+	border: 1px solid #d4d4d8;
+	border-radius: 6px;
+	padding: 0.75rem 0.9rem;
+	background: #fff;
+	font-size: 0.95rem;
+}
+.woocommerce-checkout .select2-container .select2-selection--single {
+	height: 46px;
+	border: 1px solid #d4d4d8;
+	border-radius: 6px;
+}
+.woocommerce-checkout .select2-container .select2-selection--single .select2-selection__rendered { line-height: 44px; padding-left: 0.9rem; }
+.woocommerce-checkout .select2-container .select2-selection--single .select2-selection__arrow { height: 44px; }
+.woocommerce-checkout .form-row .input-text:focus,
+.woocommerce-checkout .form-row select:focus,
+.woocommerce-checkout .form-row textarea:focus {
+	outline: none;
+	border-color: var(--dfans-negro);
+	box-shadow: 0 0 0 3px rgba(224, 38, 47, 0.15);
+}
+.woocommerce-checkout input[type="radio"],
+.woocommerce-checkout input[type="checkbox"] { accent-color: var(--dfans-rojo); }
+
+/* Tarjetas de tipo de entrega (el snippet usa estilos en línea). */
+#dfans-tipo-entrega { background: transparent !important; border: 0 !important; padding: 0 !important; }
+#dfans-tipo-entrega label {
+	border: 1.5px solid #e4e4e7 !important;
+	border-radius: 8px !important;
+	transition: border-color 0.15s, box-shadow 0.15s;
+}
+#dfans-tipo-entrega label:hover { border-color: #a1a1aa !important; }
+#dfans-tipo-entrega label:has(input:checked) {
+	border-color: var(--dfans-negro) !important;
+	box-shadow: 0 0 0 1px var(--dfans-negro);
+	background: #faf9f7 !important;
+}
+#dfans-recojo-info { border-left-color: var(--dfans-rojo) !important; background: #faf9f7 !important; }
+
+/* Resumen del pedido. */
+.woocommerce-checkout #order_review_heading {
+	margin-bottom: 0;
+	padding: 1rem 1.25rem;
+	background: var(--dfans-negro);
+	color: #fff;
+	border-radius: 8px 8px 0 0;
+	font-size: 1rem !important;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+.woocommerce-checkout #order_review {
+	padding: 1.25rem;
+	background: #faf9f7;
+	border: 1px solid #e7e5e4;
+	border-top: 0;
+	border-radius: 0 0 8px 8px;
+}
+.woocommerce-checkout #order_review table.shop_table { border: 0; margin: 0 0 1.25rem; }
+.woocommerce-checkout #order_review table.shop_table th,
+.woocommerce-checkout #order_review table.shop_table td {
+	padding: 0.6rem 0;
+	border: 0;
+	border-bottom: 1px solid #e7e5e4;
+	background: transparent;
+}
+.woocommerce-checkout #order_review table.shop_table .order-total th,
+.woocommerce-checkout #order_review table.shop_table .order-total td { border-bottom: 0; font-size: 1.1rem; font-weight: 800; }
+
+/* Métodos de pago como tarjetas. */
+body.woocommerce-checkout #payment { background: transparent !important; border-radius: 0; }
+.woocommerce-checkout #payment ul.payment_methods { padding: 0; border: 0; }
+.woocommerce-checkout #payment ul.payment_methods li {
+	list-style: none;
+	margin: 0 0 0.6rem;
+	padding: 0.85rem 1rem;
+	background: #fff;
+	border: 1.5px solid #e4e4e7;
+	border-radius: 8px;
+}
+.woocommerce-checkout #payment ul.payment_methods li:has(> input:checked) {
+	border-color: var(--dfans-negro);
+	box-shadow: 0 0 0 1px var(--dfans-negro);
+}
+.woocommerce-checkout #payment ul.payment_methods li > label { font-weight: 700; }
+body.woocommerce-checkout #payment div.payment_box { margin: 0.75rem 0 0; background: #f4f4f5 !important; border-radius: 6px; }
+body.woocommerce-checkout #payment div.payment_box::before { border-bottom-color: #f4f4f5 !important; }
+.woocommerce-checkout #payment div.form-row.place-order { padding: 0.5rem 0 0; }
+.woocommerce-checkout #place_order {
+	width: 100%;
+	padding: 1.05rem;
+	background: var(--dfans-negro);
+	border-color: var(--dfans-negro);
+	color: #fff;
+	font-size: 1rem;
+}
+.woocommerce-checkout #place_order:hover { background: var(--dfans-rojo); border-color: var(--dfans-rojo); }
+
+.woocommerce-checkout .woocommerce-privacy-policy-text, .woocommerce-checkout .woocommerce-privacy-policy-text p { font-size: 0.8rem; line-height: 1.5; color: #52525b; }
+
+/* ---------- Secciones Match, Adultos y Niños ---------- */
+/* Filtros de la sección (temática y para quién). */
+.dfans-filtros {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin: 1.5rem 0 0.5rem;
+	padding: 1rem 1.25rem;
+	background: #faf9f7;
+	border: 1px solid #e7e5e4;
+	border-radius: 8px;
+}
+.dfans-filtro-grupo { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
+.dfans-filtro-titulo {
+	min-width: 5.5rem;
+	font-size: 0.75rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #52525b;
+}
+.dfans-chip {
+	padding: 0.45rem 0.85rem;
+	border: 1.5px solid #d4d4d8;
+	border-radius: 999px;
+	background: #fff;
+	color: var(--dfans-negro);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.dfans-chip:hover { border-color: var(--dfans-negro); }
+.dfans-chip.is-activa { background: var(--dfans-negro); border-color: var(--dfans-negro); color: #fff; }
+.dfans-chip:focus-visible { outline: 2px solid var(--dfans-rojo); outline-offset: 2px; }
+
+/* Encabezado de cada bloque (Colección Match / Solo adultos / Solo niños). */
+.dfans-seccion { margin-top: 3rem !important; }
+.dfans-seccion > h2 {
+	margin-bottom: 0.35rem;
+	font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+.dfans-seccion > h2 .dfans-tag {
+	display: inline-block;
+	margin-left: 0.6rem;
+	padding: 0.3rem 0.55rem;
+	background: var(--dfans-rojo);
+	color: #fff;
+	border-radius: 3px;
+	font-size: 0.7rem;
+	letter-spacing: 0.1em;
+	vertical-align: middle;
+}
+.dfans-seccion > p { margin-top: 0; color: #52525b; }
+
+/* Tarjetas: etiqueta MATCH y segunda foto al pasar el ratón. */
+.wc-block-components-product-image { position: relative; overflow: hidden; }
+.wc-block-components-product-image .dfans-img-alt {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0;
+	transition: opacity 0.3s;
+	pointer-events: none;
+}
+.wc-block-components-product-image:hover .dfans-img-alt { opacity: 1; }
+.dfans-badge-match {
+	position: absolute;
+	top: 0.6rem;
+	left: 0.6rem;
+	z-index: 2;
+	padding: 0.3rem 0.55rem;
+	background: var(--dfans-rojo);
+	color: #fff;
+	border-radius: 3px;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-size: 0.68rem;
+	font-weight: 800;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	pointer-events: none;
+}
+body.term-match-familiar .dfans-badge-match { display: none; }
+
+/* Producto sin sección: tallas agrupadas en "Adultos" y "Niños". */
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"])::before,
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"])::after {
+	flex-basis: 100%;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #71717a;
+}
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"])::before { content: "Adultos (unisex)"; order: 0; }
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"])::after { content: "Niños (unisex)"; order: 2; margin-top: 0.35rem; }
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"]) > .dfans-opcion { order: 1; }
+.dfans-opciones:has(> [data-valor="s"]):has(> [data-valor="10"]) > :is([data-valor="10"], [data-valor="12"], [data-valor="14"]) { order: 3; }
+.dfans-seccion-pagina .wp-block-group:has(> .dfans-filtros) + .dfans-seccion { margin-top: 1.25rem !important; }
+
+/* Producto: la línea de categorías repetía nombres (Anime, Anime…); la ruta de arriba ya la indica. */
+.single-product .wp-block-post-terms.taxonomy-product_cat { display: none; }
+.dfans-seccion > h2 { margin-top: 0; }
+
+/* Móvil: títulos de filtro en su propia línea y dos polos por fila en todos los listados
+   (secciones, Match familiar, tienda y "también te puede interesar"). */
+@media (max-width: 600px) {
+	.dfans-filtros { padding: 0.9rem 1rem; }
+	.dfans-filtro-titulo { flex-basis: 100%; min-width: 0; }
+	.wc-block-product-template { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 1.25rem 0.75rem !important; }
+	.wc-block-product .wp-block-post-title { font-size: 0.9rem !important; }
+	.wc-block-product .wp-block-woocommerce-product-button .wp-block-button__link { padding-inline: 0.5rem; font-size: 0.75rem; }
+	/* Etiqueta MATCH / corte más pequeña para no tapar la foto. */
+	.dfans-badge-match { top: 0.4rem; left: 0.4rem; padding: 0.22rem 0.4rem; font-size: 0.56rem; letter-spacing: 0.06em; }
+	/* Botones de talla de al menos 44 px para tocarlos cómodamente. */
+	.dfans-opcion { min-width: 44px; min-height: 44px; }
+}
+
+/* Paginación de los listados de polos: números como botones, la página actual en negro. */
+.wp-block-query-pagination {
+	gap: 0.5rem;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 2.5rem !important;
+}
+.wp-block-query-pagination-numbers { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wp-block-query-pagination .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.6rem;
+	height: 2.6rem;
+	margin: 0;
+	padding: 0 0.6rem;
+	border: 1.5px solid #d4d4d8;
+	border-radius: 6px;
+	background: #fff;
+	color: var(--dfans-negro);
+	font-size: 0.9rem;
+	font-weight: 700;
+	line-height: 1;
+	text-decoration: none;
+	transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.wp-block-query-pagination a.page-numbers:hover { border-color: var(--dfans-negro); }
+.wp-block-query-pagination .page-numbers.current { background: var(--dfans-negro); border-color: var(--dfans-negro); color: #fff; }
+.wp-block-query-pagination .page-numbers.dots { min-width: auto; border: 0; background: transparent; }
+.wp-block-query-pagination-next,
+.wp-block-query-pagination-previous {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	height: 2.6rem;
+	margin: 0 !important;
+	padding: 0 1.1rem;
+	border-radius: 6px;
+	background: var(--dfans-negro);
+	color: #fff !important;
+	font-size: 0.8rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background 0.15s;
+}
+.wp-block-query-pagination-next::after { content: "→"; }
+.wp-block-query-pagination-previous::before { content: "←"; }
+.wp-block-query-pagination-next:hover,
+.wp-block-query-pagination-previous:hover { background: var(--dfans-rojo); }
+.wp-block-query-pagination a:focus-visible { outline: 2px solid var(--dfans-rojo); outline-offset: 2px; }
+@media (max-width: 600px) {
+	/* En móvil, anterior/siguiente solo con la flecha (el texto se mantiene para lectores de pantalla). */
+	.wp-block-query-pagination { flex-wrap: nowrap; gap: 0.4rem; }
+	.wp-block-query-pagination-next,
+	.wp-block-query-pagination-previous { width: 2.6rem; padding: 0; justify-content: center; font-size: 0; gap: 0; }
+	.wp-block-query-pagination-next::after,
+	.wp-block-query-pagination-previous::before { font-size: 1rem; }
+}
+
+/* Exclusivos: etiqueta con el corte (Oversize, Baby tee, Regular, Manga mariposa) en negro. */
+.dfans-badge-corte { background: var(--dfans-negro); }
+.dfans-seccion-solo .dfans-seccion-intro, .dfans-seccion > p { max-width: 70ch; }
+
+/* Selector de orden de la tienda y de Match familiar, con el estilo de los campos. */
+.woocommerce-ordering select,
+.wc-block-catalog-sorting select {
+	padding: 0.5rem 0.75rem;
+	border: 1.5px solid #d4d4d8;
+	border-radius: 6px;
+	background: #fff;
+	color: var(--dfans-negro);
+	font-size: 0.85rem;
+}
+
+/* ---------- Fandom e interacción ---------- */
+:root {
+	--dfans-comic: 'Bangers', 'Manrope', system-ui, sans-serif;
+	--t-anime: #ff5a36;
+	--t-rock: #ffc21a;
+	--t-metal: #c3cad6;
+	--t-artistas: #b066ff;
+	--t-peliculas: #3d8bff;
+	--t-videojuegos: #2fd46a;
+	/* Trama de puntos estilo manga (clara para fondos oscuros, oscura para claros). */
+	--trama-clara: radial-gradient(rgba(255, 255, 255, 0.07) 1.2px, transparent 1.6px);
+	--trama-oscura: radial-gradient(rgba(11, 11, 12, 0.07) 1.2px, transparent 1.6px);
+}
+
+/* Barra de anuncios animada. */
+.dfans-anuncios {
+	overflow: hidden;
+	background: var(--dfans-rojo);
+	color: #fff;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+}
+.dfans-anuncios__pista { display: flex; width: max-content; animation: dfans-anuncios 38s linear infinite; }
+.dfans-anuncios:hover .dfans-anuncios__pista { animation-play-state: paused; }
+.dfans-anuncios ul { display: flex; margin: 0; padding: 0; list-style: none; }
+.dfans-anuncios li { padding: 0.5rem 1.6rem; white-space: nowrap; }
+.dfans-anuncios li::after { content: "✦"; margin-left: 3.2rem; opacity: 0.6; }
+@keyframes dfans-anuncios { to { transform: translateX(-50%); } }
+
+/* Etiquetas tipo sticker (eyebrows de sección y etiquetas Familia/Exclusivo). */
+.dfans-eyebrow {
+	display: inline-block;
+	padding: 0.35rem 0.7rem 0.25rem;
+	background: var(--dfans-rojo);
+	color: #fff !important;
+	font-family: var(--dfans-comic) !important;
+	font-weight: 400 !important;
+	font-size: 1rem !important;
+	letter-spacing: 0.12em !important;
+	border-radius: 4px;
+	transform: rotate(-2deg);
+	box-shadow: 3px 3px 0 var(--dfans-negro);
+}
+.dfans-hero .dfans-eyebrow { box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.18); }
+.dfans-seccion > h2 .dfans-tag,
+.dfans-tag {
+	font-family: var(--dfans-comic) !important;
+	font-weight: 400 !important;
+	font-size: 0.95rem !important;
+	letter-spacing: 0.1em !important;
+	padding: 0.35rem 0.6rem 0.25rem !important;
+	transform: rotate(-4deg);
+	box-shadow: 2px 2px 0 var(--dfans-negro);
+}
+
+/* Títulos de sección con sombra de cómic. */
+.dfans-seccion-cabecera h2,
+.dfans-seccion > h2,
+.dfans-quiz__cabecera h2 {
+	text-shadow: 3px 3px 0 rgba(224, 38, 47, 0.28);
+}
+
+/* Portada: trama manga y palabra que rota. */
+.dfans-hero { position: relative; isolation: isolate; }
+.dfans-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background-image: var(--trama-clara);
+	background-size: 14px 14px;
+	-webkit-mask-image: linear-gradient(110deg, transparent 30%, #000 75%);
+	mask-image: linear-gradient(110deg, transparent 30%, #000 75%);
+	pointer-events: none;
+}
+.dfans-rotativa {
+	display: inline-block;
+	transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.dfans-rotativa.is-saliendo { opacity: 0; transform: translateY(0.25em) rotate(-2deg); }
+.dfans-seccion--crema { background-image: var(--trama-oscura); background-size: 16px 16px; }
+.dfans-cta { background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.4px, transparent 1.8px) !important; background-size: 15px 15px !important; }
+
+/* Tarjetas de temática: trama, brillo del color y leve inclinación. */
+.dfans-cat::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	background-image: var(--trama-clara);
+	background-size: 12px 12px;
+	-webkit-mask-image: linear-gradient(to top, #000, transparent 70%);
+	mask-image: linear-gradient(to top, #000, transparent 70%);
+	pointer-events: none;
+}
+.dfans-cat > * { z-index: 1; }
+.dfans-cat:hover {
+	transform: translateY(-6px) rotate(-0.6deg);
+	box-shadow: 0 0 0 2px var(--c), 0 20px 45px -15px var(--c);
+}
+.dfans-cat h3 { font-family: var(--dfans-comic) !important; font-weight: 400 !important; letter-spacing: 0.04em; font-size: clamp(2rem, 3.6vw, 2.6rem) !important; }
+
+/* Filtros de temática con su color. */
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=anime"] { --t: var(--t-anime); }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=rock"] { --t: var(--t-rock); }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=metal"] { --t: #6b7280; }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=artistas"] { --t: var(--t-artistas); }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=peliculas"] { --t: var(--t-peliculas); }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica=videojuegos"] { --t: var(--t-videojuegos); }
+.dfans-chip[href*="tematica="]:hover { border-color: var(--t, var(--dfans-negro)); box-shadow: 0 0 0 1px var(--t, var(--dfans-negro)); }
+.dfans-chip[href*="tematica="].is-activa { background: var(--t, var(--dfans-negro)); border-color: var(--t, var(--dfans-negro)); color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35); }
+.dfans-chip { transition: transform 0.15s ease, border-color 0.15s, background 0.15s, color 0.15s; }
+.dfans-chip:hover { transform: translateY(-2px); }
+
+/* Tarjetas de producto: se elevan, la foto hace zoom y aparecen los botones. */
+.wc-block-product { transition: transform 0.25s ease; }
+.wc-block-product .wc-block-components-product-image {
+	border-radius: 10px;
+	transition: box-shadow 0.25s ease;
+}
+.wc-block-product .wc-block-components-product-image img { transition: transform 0.45s ease, opacity 0.3s; }
+.wc-block-product:hover { transform: translateY(-4px); }
+.wc-block-product:hover .wc-block-components-product-image { box-shadow: 0 16px 34px -14px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--dfans-rojo); }
+.wc-block-product:hover .wc-block-components-product-image img:not(.dfans-img-alt) { transform: scale(1.04); }
+
+/* Botón de favorito (corazón). */
+.dfans-fav {
+	position: absolute;
+	top: 0.55rem;
+	right: 0.55rem;
+	z-index: 3;
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.92);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+	cursor: pointer;
+	transition: transform 0.15s ease, background 0.15s;
+}
+.dfans-fav svg { width: 20px; height: 20px; fill: none; stroke: var(--dfans-negro); stroke-width: 2; transition: fill 0.15s, stroke 0.15s; }
+.dfans-fav:hover { transform: scale(1.1); }
+.dfans-fav.is-activo svg { fill: var(--dfans-rojo); stroke: var(--dfans-rojo); }
+.dfans-fav.is-pop { animation: dfans-pop 0.4s ease; }
+@keyframes dfans-pop { 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.dfans-fav:focus-visible, .dfans-vista:focus-visible { outline: 3px solid var(--dfans-rojo); outline-offset: 2px; }
+.dfans-fav--ficha {
+	position: static;
+	display: inline-flex;
+	gap: 0.4rem;
+	width: auto;
+	height: auto;
+	margin: 0.3rem 0 0.8rem;
+	padding: 0.45rem 0.9rem;
+	border: 1.5px solid #d4d4d8;
+	border-radius: 999px;
+	background: #fff;
+	box-shadow: none;
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+.dfans-fav--ficha:hover { transform: none; border-color: var(--dfans-rojo); }
+
+/* Botón "Vista rápida": aparece al pasar el ratón (en pantallas táctiles, solo el ícono). */
+.dfans-vista {
+	position: absolute;
+	left: 50%;
+	bottom: 0.7rem;
+	z-index: 3;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.55rem 1rem;
+	border: 0;
+	border-radius: 999px;
+	background: var(--dfans-negro);
+	color: #fff;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-size: 0.78rem;
+	font-weight: 700;
+	white-space: nowrap;
+	cursor: pointer;
+	opacity: 0;
+	transform: translate(-50%, 8px);
+	transition: opacity 0.2s ease, transform 0.2s ease, background 0.15s;
+}
+.dfans-vista svg { width: 16px; height: 16px; fill: currentColor; }
+.wc-block-product:hover .dfans-vista,
+.dfans-vista:focus-visible { opacity: 1; transform: translate(-50%, 0); }
+.dfans-vista:hover { background: var(--dfans-rojo); }
+@media (hover: none) {
+	.dfans-vista { opacity: 1; transform: none; left: auto; right: 0.55rem; bottom: 0.55rem; width: 38px; height: 38px; padding: 0; justify-content: center; border-radius: 50%; }
+	.dfans-vista span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+}
+
+/* Cabecera: favoritos con contador y versión compacta al bajar. */
+.dfans-fav-cabecera { position: relative; display: inline-grid; place-items: center; color: #fff; margin-right: 0.35rem; }
+.dfans-fav-cabecera svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+.dfans-fav-cabecera:hover { color: var(--dfans-rojo); }
+.dfans-fav-num {
+	position: absolute;
+	top: -7px;
+	right: -9px;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 4px;
+	border-radius: 999px;
+	background: var(--dfans-rojo);
+	color: #fff;
+	font-size: 0.68rem;
+	font-weight: 800;
+	line-height: 18px;
+	text-align: center;
+}
+.dfans-header > .wp-block-group > .wp-block-group { transition: padding 0.2s ease; }
+.dfans-scroll .dfans-header { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35); }
+.dfans-scroll .dfans-header > .wp-block-group > .wp-block-group { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; }
+
+/* Volver arriba. */
+.dfans-arriba {
+	position: fixed;
+	right: 1.1rem;
+	bottom: 1.1rem;
+	z-index: 90;
+	display: grid;
+	place-items: center;
+	width: 46px;
+	height: 46px;
+	padding: 0;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	background: var(--dfans-rojo);
+	box-shadow: 3px 3px 0 var(--dfans-negro);
+	cursor: pointer;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(10px);
+	transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+.dfans-arriba svg { width: 22px; height: 22px; fill: #fff; }
+.dfans-arriba.is-visible { opacity: 1; visibility: visible; transform: none; }
+.dfans-arriba:hover { transform: translateY(-2px); }
+
+/* Animaciones al hacer scroll (solo si el JS las activa). */
+.dfans-anim .dfans-revelar { opacity: 0; transform: translateY(24px); }
+.dfans-anim .dfans-revelar.is-revelado {
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.6s ease var(--dfans-retraso, 0ms), transform 0.6s ease var(--dfans-retraso, 0ms);
+}
+.dfans-anim .dfans-cat.is-revelado:hover { transform: translateY(-6px) rotate(-0.6deg); transition-delay: 0ms; }
+.dfans-anim .wc-block-product.is-revelado:hover { transform: translateY(-4px); transition-delay: 0ms; }
+
+/* Aviso flotante. */
+.dfans-aviso {
+	position: fixed;
+	left: 50%;
+	bottom: 1.4rem;
+	z-index: 1000;
+	max-width: calc(100vw - 2rem);
+	padding: 0.85rem 1.2rem;
+	border-radius: 10px;
+	background: var(--dfans-negro);
+	color: #fff;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+	font-size: 0.9rem;
+	opacity: 0;
+	visibility: hidden;
+	transform: translate(-50%, 12px);
+	transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+.dfans-aviso.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+.dfans-aviso a { color: #fff; font-weight: 700; text-decoration: underline; }
+
+/* Ventanas (vista rápida y guía de tallas). */
+.dfans-modal {
+	width: min(960px, calc(100vw - 2rem));
+	max-height: calc(100vh - 2rem);
+	padding: 0;
+	border: 0;
+	border-radius: 14px;
+	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.dfans-modal::backdrop { background: rgba(11, 11, 12, 0.7); backdrop-filter: blur(3px); }
+.dfans-modal[open] { animation: dfans-modal 0.25s ease; }
+@keyframes dfans-modal { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+.dfans-modal__cerrar {
+	position: absolute;
+	top: 0.6rem;
+	right: 0.6rem;
+	z-index: 2;
+	width: 40px;
+	height: 40px;
+	border: 0;
+	border-radius: 50%;
+	background: var(--dfans-negro);
+	color: #fff;
+	font-size: 1.5rem;
+	line-height: 1;
+	cursor: pointer;
+}
+.dfans-modal__cerrar:hover { background: var(--dfans-rojo); }
+.dfans-modal--vista iframe { display: block; width: 100%; height: min(82vh, 760px); border: 0; }
+.dfans-modal--guia { width: min(560px, calc(100vw - 2rem)); padding: 1.6rem 1.6rem 1.2rem; }
+.dfans-modal--guia h2 { margin: 0 0 0.4rem; font-family: var(--dfans-comic); font-weight: 400; font-size: 2rem; letter-spacing: 0.04em; }
+.dfans-guia__nota { color: #52525b; font-size: 0.85rem; }
+.dfans-guia__tabla { width: 100%; margin: 1rem 0; border-collapse: collapse; font-size: 0.92rem; }
+.dfans-guia__tabla caption { margin-bottom: 0.4rem; font-weight: 800; text-align: left; }
+.dfans-guia__tabla th, .dfans-guia__tabla td { padding: 0.55rem 0.7rem; border-bottom: 1px solid #e4e4e7; text-align: left; }
+.dfans-guia__tabla thead th { background: var(--dfans-negro); color: #fff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.dfans-guia__tabla tbody tr:nth-child(even) { background: #faf9f7; }
+.dfans-guia__boton {
+	margin-left: 0.7rem;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--dfans-negro);
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}
+.dfans-guia__boton:hover { color: var(--dfans-rojo); }
+
+/* Vista rápida: el producto sin cabecera, pie ni extras. */
+body.dfans-vista-rapida header.wp-block-template-part,
+body.dfans-vista-rapida footer.wp-block-template-part,
+body.dfans-vista-rapida .woocommerce-breadcrumb,
+body.dfans-vista-rapida .wp-block-woocommerce-product-details,
+body.dfans-vista-rapida .wp-block-woocommerce-related-products,
+body.dfans-vista-rapida .wc-tabs-wrapper,
+body.dfans-vista-rapida .related,
+body.dfans-vista-rapida .dfans-arriba { display: none !important; }
+body.dfans-vista-rapida main { padding-top: 1.2rem !important; margin-top: 0 !important; }
+
+/* Quiz "¿Cuál es tu fandom?". */
+.dfans-seccion-quiz { background: var(--dfans-negro); background-image: var(--trama-clara); background-size: 14px 14px; color: #fff; }
+.dfans-quiz {
+	display: grid;
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+	gap: 2.5rem;
+	align-items: center;
+}
+.dfans-quiz__cabecera h2 { margin: 0.6rem 0; font-size: clamp(2rem, 5vw, 3.2rem) !important; color: #fff; }
+.dfans-quiz__cabecera p:not(.dfans-eyebrow) { color: #d4d4d8; }
+.dfans-quiz__cuerpo {
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 1.8rem;
+	border: 2px solid #2a2a2e;
+	border-radius: 14px;
+	background: var(--dfans-carbon);
+	box-shadow: 6px 6px 0 var(--dfans-rojo);
+}
+.dfans-quiz__empezar,
+.dfans-boton {
+	display: inline-block;
+	padding: 0.9rem 1.6rem;
+	border: 2px solid var(--dfans-rojo);
+	border-radius: 6px;
+	background: var(--dfans-rojo);
+	color: #fff !important;
+	font-family: var(--wp--preset--font-family--manrope);
+	font-size: 0.9rem;
+	font-weight: 800;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	transition: transform 0.15s, box-shadow 0.15s;
+}
+.dfans-quiz__empezar { align-self: center; font-family: var(--dfans-comic); font-weight: 400; font-size: 1.6rem; letter-spacing: 0.08em; box-shadow: 4px 4px 0 #fff; }
+.dfans-quiz__empezar:hover, .dfans-boton:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 currentColor; }
+.dfans-boton--borde { background: transparent; color: #fff !important; border-color: #fff; }
+.dfans-quiz__paso { margin: 0; color: var(--dfans-gris); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.dfans-quiz__barra { height: 6px; margin: 0.5rem 0 1.2rem; border-radius: 999px; background: #2a2a2e; overflow: hidden; }
+.dfans-quiz__barra span { display: block; height: 100%; background: var(--dfans-rojo); transition: width 0.3s ease; }
+.dfans-quiz__pregunta { margin: 0 0 1rem; color: #fff; font-size: 1.35rem !important; }
+.dfans-quiz__opciones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+.dfans-quiz__opcion {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	min-height: 64px;
+	padding: 0.8rem 1rem;
+	border: 2px solid #3f3f46;
+	border-radius: 10px;
+	background: #1d1d20;
+	color: #fff;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-align: left;
+	cursor: pointer;
+	transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+.dfans-quiz__opcion span { font-size: 1.5rem; }
+.dfans-quiz__opcion:hover, .dfans-quiz__opcion:focus-visible { border-color: var(--dfans-rojo); background: #26262a; transform: translateY(-2px); outline: none; }
+.dfans-quiz__resultado { --t: var(--dfans-rojo); text-align: center; }
+.dfans-quiz__resultado.dfans-tema--anime { --t: var(--t-anime); }
+.dfans-quiz__resultado.dfans-tema--rock { --t: var(--t-rock); }
+.dfans-quiz__resultado.dfans-tema--metal { --t: var(--t-metal); }
+.dfans-quiz__resultado.dfans-tema--artistas { --t: var(--t-artistas); }
+.dfans-quiz__resultado.dfans-tema--peliculas-y-series { --t: var(--t-peliculas); }
+.dfans-quiz__resultado.dfans-tema--videojuegos { --t: var(--t-videojuegos); }
+.dfans-quiz__eres { margin: 0; font-family: var(--dfans-comic); font-size: 1.5rem; letter-spacing: 0.06em; color: #d4d4d8; }
+.dfans-quiz__tema {
+	margin: 0 0 0.6rem;
+	font-family: var(--dfans-comic);
+	font-size: clamp(3rem, 7vw, 4.4rem);
+	line-height: 1;
+	letter-spacing: 0.04em;
+	color: var(--t);
+	text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+	animation: dfans-pop 0.5s ease;
+}
+.dfans-quiz__acciones { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem; margin-top: 1.2rem; }
+.dfans-quiz__repetir { flex-basis: 100%; border: 0; background: none; color: var(--dfans-gris); text-decoration: underline; cursor: pointer; }
+@media (max-width: 781px) {
+	.dfans-quiz { grid-template-columns: 1fr; gap: 1.5rem; }
+	.dfans-quiz__opciones { grid-template-columns: 1fr; }
+	.dfans-quiz__cuerpo { padding: 1.3rem; min-height: 260px; }
+}
+
+/* Favoritos y vistos recientemente. */
+.dfans-mini-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.2rem; }
+.dfans-mini { display: flex; flex-direction: column; gap: 0.5rem; }
+.dfans-mini__img { display: block; overflow: hidden; border-radius: 10px; background: #f4f4f5; }
+.dfans-mini__img img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; transition: transform 0.4s ease; }
+.dfans-mini:hover .dfans-mini__img img { transform: scale(1.05); }
+.dfans-mini__info { display: flex; flex-direction: column; gap: 0.2rem; }
+.dfans-mini__nombre { color: var(--dfans-negro); font-weight: 700; font-size: 0.92rem; text-decoration: none; }
+.dfans-mini__nombre:hover { color: var(--dfans-rojo); }
+.dfans-mini__precio { font-weight: 800; font-size: 0.9rem; }
+.dfans-mini__quitar { align-self: flex-start; padding: 0; border: 0; background: none; color: #71717a; font-size: 0.8rem; text-decoration: underline; cursor: pointer; }
+.dfans-mini__quitar:hover { color: var(--dfans-rojo); }
+.dfans-vistos { margin-top: 3rem !important; margin-bottom: 3rem !important; }
+.dfans-vistos h2 { font-size: clamp(1.4rem, 2.5vw, 1.9rem) !important; text-transform: uppercase; text-shadow: 3px 3px 0 rgba(224, 38, 47, 0.28); }
+.dfans-favoritos__vacio { padding: 3rem 1rem; text-align: center; border: 2px dashed #d4d4d8; border-radius: 14px; }
+.dfans-favoritos__vacio .dfans-boton { margin-top: 0.8rem; }
+@media (max-width: 600px) {
+	.dfans-mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 0.75rem; }
+}
+
+/* Barra fija de compra en móvil. */
+.dfans-barra-compra { display: none; }
+@media (max-width: 781px) {
+	.dfans-barra-compra {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 95;
+		display: flex;
+		align-items: center;
+		gap: 0.8rem;
+		padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+		background: #fff;
+		border-top: 1px solid #e4e4e7;
+		box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.12);
+		transform: translateY(110%);
+		transition: transform 0.25s ease;
+	}
+	.dfans-barra-compra.is-visible { transform: none; }
+	.dfans-barra-compra__info { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+	.dfans-barra-compra__info strong { overflow: hidden; font-size: 0.85rem; white-space: nowrap; text-overflow: ellipsis; }
+	.dfans-barra-compra__precio { font-weight: 800; font-size: 0.9rem; }
+	.dfans-barra-compra__boton {
+		flex-shrink: 0;
+		min-height: 46px;
+		padding: 0 1.1rem;
+		border: 0;
+		border-radius: 8px;
+		background: var(--dfans-negro);
+		color: #fff;
+		font-size: 0.85rem;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+	body.single-product:has(.dfans-barra-compra.is-visible) .dfans-arriba { bottom: 5.2rem; }
+}
+
+/* Sin animaciones si el usuario lo prefiere. */
+@media (prefers-reduced-motion: reduce) {
+	.dfans-anuncios__pista { animation: none; flex-wrap: wrap; width: auto; }
+	.dfans-anuncios ul[aria-hidden] { display: none; }
+	.dfans-anuncios ul { flex-wrap: wrap; justify-content: center; }
+	.wc-block-product, .wc-block-product:hover, .dfans-cat:hover, .dfans-chip:hover { transform: none !important; }
+	.dfans-modal[open], .dfans-quiz__tema, .dfans-fav.is-pop { animation: none; }
+}
+
+/* En el checkout no se muestra "volver arriba": tapaba el botón "Realizar pedido". */
+body.woocommerce-checkout .dfans-arriba { display: none; }

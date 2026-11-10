@@ -27,6 +27,9 @@ use Throwable;
 
 /**
  * Class Handling feed files generation.
+ *
+ * @class   FeedGenerator
+ * @version 1.6.0
  */
 class FeedGenerator extends AbstractChainedJob {
 
@@ -110,7 +113,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Location buffers. On buffer for each local feed configuration.
 	 * We write to a buffer to limit the number disk writes.
 	 *
-	 * @var array $buffers Array of feed buffers.
+	 * @var string[] $buffers Array of feed buffers.
 	 */
 	private $buffers = array();
 
@@ -140,6 +143,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Initialize FeedGenerator actions and Action Scheduler hooks.
 	 *
 	 * @since 1.0.10
+	 * @return void
 	 */
 	public function init() {
 		// Initialize the action handlers.
@@ -328,6 +332,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 *
 	 * @since 1.0.10
 	 * @param integer $timestamp Next feed generator timestamp.
+	 * @return void
 	 */
 	public function schedule_next_generator_start( $timestamp ) {
 		as_unschedule_all_actions( self::ACTION_START_FEED_GENERATOR, array(), PINTEREST_FOR_WOOCOMMERCE_PREFIX );
@@ -338,6 +343,8 @@ class FeedGenerator extends AbstractChainedJob {
 
 	/**
 	 * Stop feed generator jobs.
+	 *
+	 * @return void
 	 */
 	public static function cancel_jobs() {
 		as_unschedule_all_actions( self::ACTION_START_FEED_GENERATOR, array(), PINTEREST_FOR_WOOCOMMERCE_PREFIX );
@@ -350,9 +357,11 @@ class FeedGenerator extends AbstractChainedJob {
 	 * action from a superseded cycle must not prevent a new cycle from starting.
 	 *
 	 * @since 1.0.10
+	 * @return void
 	 */
 	private function start_generation() {
 		if ( $this->is_generation_active() ) {
+			self::log( __( 'Feed generation is already active. Skipping the start.', 'pinterest-for-woocommerce' ) );
 			return;
 		}
 
@@ -365,6 +374,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Runs as the first step of the generation process.
 	 *
 	 * @since 1.0.10
+	 * @return void
 	 *
 	 * @throws Throwable Related to creating an empty feed temp file and populating the header possible issues.
 	 */
@@ -389,25 +399,27 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Handles the job chain start action.
 	 *
 	 * Enforces at most one active generation cycle: defers (marking the feed dirty) while the current
-	 * cycle is alive, otherwise mints a new cycle ID that propagates through the whole new chain.
+	 * cycle is alive, otherwise mints a new cycle ID, consumes the dirty flag and propagates the ID
+	 * through the whole new chain.
 	 *
 	 * @since 1.5.0
 	 *
 	 * @param array $args The args for the job.
+	 * @return void
 	 *
 	 * @throws Throwable Related to creating an empty feed temp file and populating the header possible issues.
 	 */
 	public function handle_start_action( array $args ) {
 		$start_lock = $this->acquire_start_lock();
 		if ( '' === $start_lock ) {
-			update_option( self::OPTION_FEED_DIRTY, 1, false );
+			$this->set_feed_dirty_flag( true );
 			self::log( __( 'Another feed generation start is in progress. Marked the feed dirty to regenerate afterward.', 'pinterest-for-woocommerce' ) );
 			return;
 		}
 
 		try {
 			if ( $this->is_current_cycle_alive() ) {
-				update_option( self::OPTION_FEED_DIRTY, 1, false );
+				$this->set_feed_dirty_flag( true );
 				self::log( __( 'Feed generation is already running. Marked the feed dirty to regenerate when the current cycle finishes.', 'pinterest-for-woocommerce' ) );
 				return;
 			}
@@ -422,7 +434,17 @@ class FeedGenerator extends AbstractChainedJob {
 			self::log( sprintf( __( 'Starting feed generation cycle `%s`.', 'pinterest-for-woocommerce' ), $cycle_id ) );
 
 			$this->handle_start();
-			$this->queue_batch( 1, $args );
+			// The cycle has started and reads the products from here on, so the changes flagged
+			// so far should be covered. Later edits set the flag again and handle_end() starts a
+			// follow-up cycle. A failed start leaves the flag set.
+			$this->mark_feed_clean();
+			try {
+				$this->queue_batch( 1, $args );
+			} catch ( Throwable $th ) {
+				// No batch was queued, so the cycle never reads the products: restore the flag.
+				$this->set_feed_dirty_flag( true );
+				throw $th;
+			}
 		} finally {
 			$this->release_start_lock( $start_lock );
 		}
@@ -435,6 +457,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 *
 	 * @param int   $batch_number The batch number for the new batch.
 	 * @param array $args         The args for the job.
+	 * @return void
 	 *
 	 * @throws Throwable Related to issue possible when creating an empty feed temp file and populating the header.
 	 */
@@ -471,6 +494,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * @since 1.5.0
 	 *
 	 * @param array $args The args for the job.
+	 * @return void
 	 *
 	 * @throws Throwable Related to adding the footer or renaming the files possible issues.
 	 */
@@ -488,6 +512,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Add XML footer to the feed files and copy the move the files from tmp to the final destination.
 	 *
 	 * @since 1.0.10
+	 * @return void
 	 *
 	 * @throws Throwable Related to adding the footer or renaming the files possible issues.
 	 */
@@ -509,10 +534,14 @@ class FeedGenerator extends AbstractChainedJob {
 		}
 		self::log( __( 'Feed generated successfully.', 'pinterest-for-woocommerce' ) );
 
-		// Check if feed is dirty and reschedule in necessary.
+		// A change flagged during this cycle needs a fresh cycle. This end action stays in
+		// progress for a moment after returning, and a restart due now could be claimed by a
+		// concurrent runner in that window and be deferred by the gate in start_generation().
+		// The delay keeps the restart out of that window; the flag stays set until the new
+		// cycle starts and consumes it, so a deferred restart still leaves it for the next
+		// product save or the daily start.
 		if ( $this->feed_is_dirty() ) {
-			$this->mark_feed_clean();
-			$this->schedule_next_generator_start( time() );
+			$this->schedule_next_generator_start( time() + MINUTE_IN_SECONDS );
 		}
 	}
 
@@ -595,6 +624,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 *
 	 * @param array $items The items of the current batch.
 	 * @param array $args  The args for the job.
+	 * @return void
 	 *
 	 * @throws FeedFileOperationsException In case there was an exception thrown when writing to a feed file.
 	 */
@@ -695,7 +725,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * @since 1.0.10
 	 */
 	public function mark_feed_dirty(): void {
-		update_option( self::OPTION_FEED_DIRTY, 1, false );
+		$this->set_feed_dirty_flag( true );
 		self::log( 'Feed is dirty.' );
 
 		if ( $this->is_generation_active() ) {
@@ -722,7 +752,26 @@ class FeedGenerator extends AbstractChainedJob {
 	 * @since 1.0.10
 	 */
 	public function mark_feed_clean(): void {
-		update_option( self::OPTION_FEED_DIRTY, 0, false );
+		$this->set_feed_dirty_flag( false );
+	}
+
+	/**
+	 * Writes the dirty flag.
+	 *
+	 * The flag is written from storefront requests, cron, Action Scheduler runners and WP-CLI,
+	 * and cleared by whichever process runs the chain start. update_option() skips the write
+	 * when the value matches its per-process options cache, so a long-lived process that
+	 * flagged the feed earlier would write nothing after a concurrent cycle consumed the flag,
+	 * and a long-lived runner would skip a later clear. Dropping the cached copy first forces
+	 * a fresh read from the database.
+	 *
+	 * @since 1.5.1
+	 *
+	 * @param bool $dirty Whether the feed needs regenerating.
+	 */
+	private function set_feed_dirty_flag( bool $dirty ): void {
+		wp_cache_delete( self::OPTION_FEED_DIRTY, 'options' );
+		update_option( self::OPTION_FEED_DIRTY, $dirty ? 1 : 0, false );
 	}
 
 	/**
@@ -1227,6 +1276,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 *
 	 * @param string|int|array $item A single item from the get_items_for_batch() method.
 	 * @param array            $args The args for the job.
+	 * @return void
 	 *
 	 * @throws Exception On error. The failure will be logged by Action Scheduler and the job chain will stop.
 	 */
@@ -1332,7 +1382,7 @@ class FeedGenerator extends AbstractChainedJob {
 	 * @since 1.2.14
 	 */
 	protected function is_timeout_error( array $error ): bool {
-		$is_error              = E_ERROR === $error['type'] ?? 0;
+		$is_error              = E_ERROR === ( $error['type'] ?? 0 );
 		$is_max_execution_time = strpos( $error['message'] ?? '', 'Maximum execution time' ) !== false;
 		return $is_error && $is_max_execution_time;
 	}
@@ -1341,9 +1391,10 @@ class FeedGenerator extends AbstractChainedJob {
 	 * Handle error on generate feed timeout.
 	 *
 	 * @since 1.2.14
-	 * @deprecated x.x.x
+	 * @deprecated 1.3.1
 	 *
 	 * @param int $action_id The ID of the action marked as failed.
+	 * @return void
 	 *
 	 * @throws Exception Related to max retries reached or missing arguments on the action.
 	 */

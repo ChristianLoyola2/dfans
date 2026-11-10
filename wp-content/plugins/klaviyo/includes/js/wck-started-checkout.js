@@ -32,6 +32,11 @@ var identify_object = {
 
 var klaviyo_cookie_id = '__kla_id';
 
+// Email of the last Started Checkout sent on this page view. Shared with the
+// Checkout block script (includes/blocks/src/events.js) so it can skip
+// sending another event for the same email.
+var kl_last_tracked_email = null;
+
 function buildProfileRequestPayload(event_attributes) {
   const topLevelAttributes = ['email', 'first_name', 'last_name'];
 
@@ -231,6 +236,9 @@ window.addEventListener("load", function () {
     }
 
     makePublicAPIcall('client/events/', buildEventRequestPayload(customer_properties, kl_checkout.event_data, metric_attributes));
+    if (customer_properties['email']) {
+      kl_last_tracked_email = customer_properties['email'];
+    }
   };
 
   var klCookie = getKlaviyoCookie();
@@ -251,6 +259,11 @@ window.addEventListener("load", function () {
     kl_checkout.email = JSON.parse(klCookie).email;
     WCK.trackStartedCheckout();
   } else {
+    // The Checkout block script tracks email and name entry itself. Attaching
+    // these listeners too would send a second Started Checkout per email.
+    if (window.kl_block_checkout_tracking) {
+      return;
+    }
     if (jQuery) {
       var { firstNameNodes, lastNameNodes, emailNodes } = getTrackingNodes();
       emailNodes.change(function () {

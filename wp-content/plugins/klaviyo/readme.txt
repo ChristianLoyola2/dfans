@@ -1,9 +1,9 @@
 === Klaviyo ===
 Contributors: klaviyo, bialecki, bawhalley
 Tags: analytics, email, marketing, klaviyo, woocommerce
-Requires at least: 5.2
+Requires at least: 6.2
 Tested up to: 7.0
-Stable tag: 3.8.3
+Stable tag: 3.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ For detailed instructions on integrating Klaviyo and WooCommerce please visit ou
 
 
 == Changelog ==
+= 3.9.0 2026-10-27 =
+* Changed - Register the checkout consent block with Block API version 3. WordPress 6.9 made version 2 deprecated and wrote a warning to the editor console. The block now renders inside the iframe editor.
+* Changed - Raise the minimum versions to PHP 7.4, WordPress 6.2 and WooCommerce 8.2, matching WooCommerce 8.2's requirements.
+* Fixed - Stop the Checkout block from recording two Started Checkout events for one email entry. The classic checkout script no longer listens to the Checkout block's email and name fields, and the Checkout block skips Started Checkout for an email already tracked on the page.
+* Security - Load `klaviyo.js` and the email signup widget assets over an explicit `https://` URL instead of a protocol-relative `//` URL. Storefronts no longer lose 50 points on the MDN HTTP Observatory subresource-integrity check.
+
 = 3.8.3 2026-08-17 =
 * Security - Sign outgoing custom/* webhooks (options, remove, consent) with an HMAC signature, matching WooCommerce's native webhook signing scheme.
 

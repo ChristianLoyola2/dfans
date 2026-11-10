@@ -17,6 +17,9 @@ use Pinterest_For_Woocommerce;
 
 /**
  * Class Handling Commerce Integration operations.
+ *
+ * @class   CommerceIntegration
+ * @version 1.6.1
  */
 class CommerceIntegration {
 
@@ -55,7 +58,7 @@ class CommerceIntegration {
 	 * Attempts to create Commerce Integration with Pinterest and schedules a retry in case of a failure.
 	 *
 	 * @param int $attempt Create Commerce Integration attempt number.
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function handle_create( $attempt = 0 ): array {
 		try {
@@ -83,7 +86,7 @@ class CommerceIntegration {
 							'Create Pinterest Commerce Integration retries has stopped. No further attempts to be scheduled.',
 							'pinterest-for-woocommerce'
 						),
-						esc_html( $e->get_pinterest_code() ),
+						esc_html( (string) $e->get_pinterest_code() ),
 						esc_html( $e->getMessage() ),
 					),
 					'error'
@@ -104,7 +107,7 @@ class CommerceIntegration {
 							'Create Pinterest Commerce Integration has failed due to Pinterest API code %1$s with message %2$s. Scheduling a retry attempt.',
 							'pinterest-for-woocommerce'
 						),
-						esc_html( $e->get_pinterest_code() ),
+						esc_html( (string) $e->get_pinterest_code() ),
 						esc_html( $e->getMessage() ),
 					),
 					'error'
@@ -167,7 +170,7 @@ class CommerceIntegration {
 						'Commerce Integration Sync has failed with Pinterest code %1$s and the message %2$s. Next attempt in a week.',
 						'pinterest-for-woocommerce'
 					),
-					esc_html( $e->get_pinterest_code() ),
+					esc_html( (string) $e->get_pinterest_code() ),
 					esc_html( $e->getMessage() )
 				),
 				'error'
@@ -181,10 +184,15 @@ class CommerceIntegration {
 	 *
 	 * @since 1.4.11
 	 * @param string $external_business_id External Business ID.
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function get_integration_data( $external_business_id = '' ): array {
 		global $wp_version;
+		/**
+		 * The WordPress version string.
+		 *
+		 * @var string $wp_version
+		 */
 
 		if ( empty( $external_business_id ) ) {
 			$external_business_id = self::generate_external_business_id();

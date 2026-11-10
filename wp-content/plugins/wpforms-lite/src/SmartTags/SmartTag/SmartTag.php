@@ -82,6 +82,7 @@ abstract class SmartTag {
 	 * Get a list of smart tag attributes.
 	 *
 	 * @since 1.6.7
+	 * @since 2.0.2.2 Quotes written as character references, as inside an encoded attribute value, are read too.
 	 *
 	 * @return array
 	 */
@@ -98,7 +99,7 @@ abstract class SmartTag {
 		 * (.+?) an attribute value within the quotes, and also the third capturing group. Any number of any characters except the new line. Lazy mode - match as few characters as possible to allow multiple attributes on one line.
 		 * \2 - repeat the second capturing group.
 		 */
-		preg_match_all( '/(\w+)=(["\'])(.+?)\2/', $this->smart_tag, $attributes );
+		preg_match_all( '/(\w+)=(["\'])(.+?)\2/', html_entity_decode( $this->smart_tag, ENT_QUOTES | ENT_HTML5, 'UTF-8' ), $attributes );
 		$this->attributes = array_combine( $attributes[1], $attributes[3] );
 
 		return $this->attributes;
@@ -329,6 +330,82 @@ abstract class SmartTag {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Sanitize a field value for the context the smart tag is processed in.
+	 *
+	 * Front-end markup gets plain text neutralized rather than passed through kses: kses rebuilds text
+	 * such as `< textarea data-msg="…">`, which survives the submission sanitizers, into a real tag.
+	 * Every other context keeps the `post` allowlist, since emails, subjects and URLs escape on their own.
+	 *
+	 * @since 2.0.3.1
+	 *
+	 * @param string $value Field value.
+	 * @param array  $field Field data.
+	 *
+	 * @return string
+	 */
+	protected function sanitize_field_value( string $value, array $field ): string {
+
+		$value = wp_unslash( $value );
+
+		if ( ! $this->is_markup_context() ) {
+			return wp_kses_post( $value );
+		}
+
+		if ( ! $this->is_html_field_value( $field ) ) {
+			return wpforms_neutralize_html_tags( $value );
+		}
+
+		return wp_kses( $value, wpforms_get_allowed_html_tags_for_smart_tag_value() );
+	}
+
+	/**
+	 * Determine whether the smart tag is processed for front-end markup.
+	 *
+	 * @since 2.0.3.1
+	 *
+	 * @return bool
+	 */
+	protected function is_markup_context(): bool {
+
+		$smart_tags = wpforms()->obj( 'smart_tags' );
+
+		return $smart_tags && in_array( $this->context, $smart_tags->get_markup_contexts(), true );
+	}
+
+	/**
+	 * Determine whether a field value carries HTML on purpose rather than plain text.
+	 *
+	 * Rich Text holds submitted HTML sanitized on submission, while the GDPR Agreement and Geolocation Map
+	 * values hold markup the form author wrote. Every other core field value is plain text.
+	 *
+	 * @since 2.0.3.1
+	 *
+	 * @param array $field Field data.
+	 *
+	 * @return bool
+	 */
+	private function is_html_field_value( array $field ): bool {
+
+		// HTML and Content fields stay out: their markup lives in the field settings, and in Lite
+		// their stored value is whatever the submitter posted for that field ID.
+		$types = [ 'richtext', 'gdpr-checkbox', 'map' ];
+
+		/**
+		 * Filter the field types whose value a smart tag prints as HTML in front-end markup.
+		 *
+		 * Any other field value is escaped as plain text there.
+		 *
+		 * @since 2.0.3.1
+		 *
+		 * @param array $types Field types.
+		 * @param array $field Field data.
+		 */
+		$types = (array) apply_filters( 'wpforms_smart_tags_smart_tag_is_html_field_value_types', $types, $field ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+
+		return in_array( $field['type'] ?? '', $types, true );
 	}
 
 	/**

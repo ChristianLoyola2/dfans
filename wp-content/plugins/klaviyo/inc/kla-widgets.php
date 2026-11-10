@@ -57,7 +57,7 @@ class Klaviyo_EmailSignUp_Widget extends WP_Widget {
 			echo $before_title . $title . $after_title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-		echo '<form id="kla_embed_' . esc_attr($this->id) . '" class="" action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">' . "\n";
+		echo '<form id="kla_embed_' . esc_attr($this->id) . '" class="" action="https://manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="https://manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">' . "\n";
 		echo '  <input type="hidden" name="g" value="' . esc_attr($list_id) . '">' . "\n";
 
 		if ( ! empty( $description ) ) {
@@ -75,7 +75,7 @@ class Klaviyo_EmailSignUp_Widget extends WP_Widget {
 		echo '    <div class="error_message" style="display:none;"></div>' . "\n";
 		echo '  </div>' . "\n";
 		echo '</form>' . "\n";
-		echo '<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>' . "\n"; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+		echo '<script type="text/javascript" src="https://www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>' . "\n"; // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 		echo '<script type="text/javascript">' . "\n";
 		echo '  KlaviyoSubscribe.attachToForms("#kla_embed_' . esc_attr($this->id) . '", {' . "\n";
 		echo '    hide_form_on_success: true' . "\n";

@@ -153,6 +153,7 @@ class Helpers {
 				'empty'      => esc_html__( 'I\'m not sure what to do with that.', 'wpforms-lite' ),
 				'rate_limit' => esc_html__( 'You\'ve hit your daily AI request limit.', 'wpforms-lite' ),
 			],
+			'errorCodes' => self::get_ai_response_error_codes(),
 			'warnings'  => [
 				'prohibited_code' => esc_html__( 'Prohibited code has been removed.', 'wpforms-lite' ),
 			],
@@ -182,6 +183,42 @@ class Helpers {
 	}
 
 	/**
+	 * Get translatable messages for known AI response error codes.
+	 *
+	 * The AI middleware can return a machine-readable `errorCode` for known,
+	 * structured failures instead of (or alongside) its own free-text message,
+	 * so the JS can show a properly translated message with a real link built
+	 * from data the middleware doesn't have (e.g. an admin settings URL) rather
+	 * than trusting AI-generated prose to be in the right language.
+	 *
+	 * Any code not present here falls back to `errors.default` on the JS side —
+	 * new codes can be added independently on the middleware without breaking
+	 * older plugin versions that don't recognize them yet.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @return array
+	 */
+	private static function get_ai_response_error_codes(): array {
+
+		return [
+			'geolocation_provider_not_configured' => sprintf(
+				wp_kses( /* translators: %s - WPForms Geolocation settings page link. */
+					__( 'The Map field needs a Places provider. Please configure Google Places or Mapbox in <a href="%s" target="_blank" rel="noopener noreferrer">WPForms → Settings → Geolocation</a> first.', 'wpforms-lite' ),
+					[
+						'a' => [
+							'href'   => [],
+							'target' => [],
+							'rel'    => [],
+						],
+					]
+				),
+				esc_url( add_query_arg( 'view', 'geolocation', admin_url( 'admin.php?page=wpforms-settings' ) ) )
+			),
+		];
+	}
+
+	/**
 	 * Get the license type.
 	 *
 	 * @since 1.9.4
@@ -205,5 +242,24 @@ class Helpers {
 	public static function is_license_active(): bool {
 
 		return wpforms_is_license_valid();
+	}
+
+	/**
+	 * Get the active payment gateway addons that have no form field.
+	 *
+	 * The AI middleware lists them as Payments-panel integrations, so the model
+	 * points the user to the panel instead of inventing a field for the gateway.
+	 *
+	 * @since 2.0.2.2
+	 *
+	 * @return array Addon slugs.
+	 */
+	public static function get_active_gateway_addons(): array {
+
+		$gateways = [
+			'paystack' => '\WPFormsPaystack\Loader',
+		];
+
+		return array_keys( array_filter( $gateways, 'class_exists' ) );
 	}
 }

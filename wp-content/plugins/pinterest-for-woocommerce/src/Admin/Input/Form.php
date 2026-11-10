@@ -15,6 +15,9 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Form
+ *
+ * @class   Form
+ * @version 1.6.1
  */
 class Form implements FormInterface {
 
@@ -44,7 +47,7 @@ class Form implements FormInterface {
 	/**
 	 * Parent form.
 	 *
-	 * @var FormInterface
+	 * @var FormInterface|null
 	 */
 	protected $parent;
 

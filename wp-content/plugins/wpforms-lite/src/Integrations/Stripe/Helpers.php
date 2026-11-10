@@ -2,6 +2,8 @@
 
 namespace WPForms\Integrations\Stripe;
 
+use WPForms\Helpers\Crypto;
+
 /**
  * Stripe related helper methods.
  *
@@ -15,6 +17,13 @@ class Helpers {
 	 * @since 1.8.2
 	 */
 	const CONNECTION_MODES = [ 'live', 'test' ];
+
+	/**
+	 * Option name holding the Stripe Connect access token per mode.
+	 *
+	 * @since 2.0.3
+	 */
+	private const OPTION_NAME_CONNECTIONS = 'wpforms_stripe_connections';
 
 	/**
 	 * Get field slug.
@@ -82,7 +91,7 @@ class Helpers {
 
 		$mode = self::validate_stripe_mode( $mode );
 
-		return wpforms_setting( "stripe-{$mode}-secret-key" ) && wpforms_setting( "stripe-{$mode}-publishable-key" );
+		return self::get_stripe_key( 'secret', $mode ) && self::get_stripe_key( 'publishable', $mode );
 	}
 
 	/**
@@ -148,6 +157,7 @@ class Helpers {
 	 * Get Stripe key from the WPForms settings.
 	 *
 	 * @since 1.8.2
+	 * @since 2.0.3 A secret key comes from the encrypted connection when one exists.
 	 *
 	 * @param string $type Key type (e.g. 'publishable' or 'secret').
 	 * @param string $mode Stripe mode (e.g. 'live' or 'test').
@@ -162,19 +172,86 @@ class Helpers {
 			return '';
 		}
 
-		$key = wpforms_setting( "stripe-{$mode}-{$type}-key" );
+		if ( $type === 'secret' ) {
+			$token = self::get_connect_token( $mode );
 
-		if ( ! empty( $key ) && is_string( $key ) ) {
-			return sanitize_text_field( $key );
+			// A stored connection wins over the setting, and its failure is not covered by falling
+			// back: a token that will not decrypt must not silently hand over a stale manual key.
+			if ( $token !== null ) {
+				return $token;
+			}
 		}
 
-		return '';
+		$key = wpforms_setting( "stripe-{$mode}-{$type}-key" );
+
+		if ( empty( $key ) || ! is_string( $key ) ) {
+			return '';
+		}
+
+		return sanitize_text_field( $key );
+	}
+
+	/**
+	 * Get the decrypted Stripe Connect access token for a mode.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $mode Stripe mode (e.g. 'live' or 'test').
+	 *
+	 * @return string|null Null when no connection is stored for the mode, so the caller can fall
+	 *                     back to the legacy manual key setting. Empty string when a connection is
+	 *                     stored but cannot be decrypted.
+	 */
+	private static function get_connect_token( string $mode ): ?string {
+
+		$connections = (array) get_option( self::OPTION_NAME_CONNECTIONS, [] );
+		$stored      = $connections[ $mode ]['access_token'] ?? '';
+
+		if ( ! is_string( $stored ) || $stored === '' ) {
+			return null;
+		}
+
+		$decrypted = Crypto::decrypt( $stored );
+
+		if ( ! is_string( $decrypted ) || $decrypted === '' ) {
+			return '';
+		}
+
+		return sanitize_text_field( $decrypted );
+	}
+
+	/**
+	 * Store or remove the Stripe Connect access token for a mode.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $token Plain access token. An empty value removes the connection.
+	 * @param string $mode  Stripe mode (e.g. 'live' or 'test').
+	 */
+	private static function set_connect_token( string $token, string $mode ): void {
+
+		$connections = (array) get_option( self::OPTION_NAME_CONNECTIONS, [] );
+
+		if ( $token === '' ) {
+			unset( $connections[ $mode ] );
+		} else {
+			$connections[ $mode ] = [ 'access_token' => Crypto::encrypt( $token ) ];
+		}
+
+		if ( empty( $connections ) ) {
+			delete_option( self::OPTION_NAME_CONNECTIONS );
+
+			return;
+		}
+
+		update_option( self::OPTION_NAME_CONNECTIONS, $connections );
 	}
 
 	/**
 	 * Set Stripe key from the WPForms settings.
 	 *
 	 * @since 1.8.2
+	 * @since 2.0.3 A secret key is stored as an encrypted connection instead of a setting.
 	 *
 	 * @param string $value Key string to set.
 	 * @param string $type  Key type (e.g. 'publishable' or 'secret').
@@ -190,9 +267,18 @@ class Helpers {
 			return false;
 		}
 
+		$value = sanitize_text_field( $value );
+
+		// Only Connect writes a secret key through here, so it goes to the encrypted connection.
+		// The legacy setting is cleared alongside it: leaving the previous plain text token behind
+		// would defeat the encryption, and a manual key is superseded by a live connection anyway.
+		if ( $type === 'secret' ) {
+			self::set_connect_token( $value, $mode );
+		}
+
 		$key              = "stripe-{$mode}-{$type}-key";
 		$settings         = (array) get_option( 'wpforms_settings', [] );
-		$settings[ $key ] = sanitize_text_field( $value );
+		$settings[ $key ] = $type === 'secret' ? '' : $value;
 
 		return wpforms_update_settings( $settings );
 	}
@@ -402,6 +488,67 @@ class Helpers {
 		_deprecated_function( __METHOD__, '1.9.5 of the WPForms plugin', 'wpforms_get_currency_multiplier()' );
 
 		return wpforms_get_currency_multiplier( $currency );
+	}
+
+	/**
+	 * Get the minimum charge amount of a currency, in major units.
+	 *
+	 * The documented Stripe minimums, see https://docs.stripe.com/currencies#minimum-and-maximum-charge-amounts.
+	 *
+	 * @since 2.0.2.2
+	 *
+	 * @param string $currency Currency code.
+	 *
+	 * @return float
+	 */
+	public static function get_currency_minimum( string $currency ): float {
+
+		$minimums = [
+			'USD' => 0.50,
+			'AED' => 2.00,
+			'ARS' => 0.50,
+			'AUD' => 0.50,
+			'BRL' => 0.50,
+			'CAD' => 0.50,
+			'CHF' => 0.50,
+			'COP' => 0.50,
+			'CZK' => 15.00,
+			'DKK' => 2.50,
+			'EUR' => 0.50,
+			'GBP' => 0.30,
+			'HKD' => 4.00,
+			'HUF' => 175.00,
+			'IDR' => 0.50,
+			'ILS' => 0.50,
+			'INR' => 0.50,
+			'JPY' => 50.00,
+			'KRW' => 50.00,
+			'MXN' => 10.00,
+			'MYR' => 2.00,
+			'NOK' => 3.00,
+			'NZD' => 0.50,
+			'PHP' => 0.50,
+			'PLN' => 2.00,
+			'RON' => 2.00,
+			'RUB' => 0.50,
+			'SEK' => 3.00,
+			'SGD' => 0.50,
+			'THB' => 10.00,
+			'ZAR' => 0.50,
+			'KES' => 1000.00,
+			'NGN' => 5000.00,
+		];
+
+		/**
+		 * Filter the Stripe minimum charge amounts per currency, in major units.
+		 *
+		 * @since 2.0.2.2
+		 *
+		 * @param array $minimums Minimum charge amounts keyed by the currency code.
+		 */
+		$minimums = (array) apply_filters( 'wpforms_integrations_stripe_helpers_get_currency_minimum', $minimums );
+
+		return (float) ( $minimums[ strtoupper( $currency ) ] ?? 0.50 );
 	}
 
 	/**

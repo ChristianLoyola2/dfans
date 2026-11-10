@@ -7,6 +7,7 @@
 
 use WPForms\Forms\Fields\Base\Frontend as FrontendBase;
 use WPForms\Forms\Fields\Helpers\RequirementsAlerts;
+use WPForms\Forms\Fields\Traits\MoveButtons as MoveButtonsTrait;
 use WPForms\Forms\Fields\Traits\MultiFieldMenu as MultiFieldMenuTrait;
 use WPForms\Forms\Fields\Traits\ReadOnlyField as ReadOnlyFieldTrait;
 use WPForms\Forms\IconChoices;
@@ -19,6 +20,7 @@ use WPForms\Integrations\AI\Helpers as AIHelpers;
  */
 abstract class WPForms_Field {
 
+	use MoveButtonsTrait;
 	use MultiFieldMenuTrait;
 	use ReadOnlyFieldTrait;
 
@@ -274,6 +276,27 @@ abstract class WPForms_Field {
 
 		// Add classes to the builder field preview.
 		add_filter( 'wpforms_field_preview_class', [ $this, 'preview_field_class' ], 10, 2 );
+
+		// Load assets.
+		add_action( 'wpforms_builder_enqueues', [ $this, 'other_option_builder_assets' ] );
+	}
+
+	/**
+	 * The other option builder assets.
+	 *
+	 * @since 2.0.3
+	 */
+	public function other_option_builder_assets(): void {
+
+		$min = wpforms_get_min_suffix();
+
+		wp_enqueue_script(
+			'wpforms-other-option-choice',
+			WPFORMS_PLUGIN_URL . "assets/js/admin/builder/other-option-choice{$min}.js",
+			[ 'jquery', 'wpforms-builder' ],
+			WPFORMS_VERSION,
+			false
+		);
 	}
 
 	/**
@@ -407,6 +430,8 @@ abstract class WPForms_Field {
 			return $properties;
 		}
 
+		$original = $properties;
+
 		// Iterate over each GET key, parse, and scrap data from there.
 		foreach ( $_GET as $key => $raw_value ) { // phpcs:ignore
 			preg_match( '/wpf(\d+)_(\d+)(.*)/i', $key, $matches );
@@ -475,7 +500,7 @@ abstract class WPForms_Field {
 			}
 		}
 
-		return $properties;
+		return $this->encode_shortcode_delimiters( $properties, $original );
 	}
 
 	/**
@@ -793,6 +818,8 @@ abstract class WPForms_Field {
 			return $properties;
 		}
 
+		$original = $properties;
+
 		// We got user submitted raw data (not processed, will be done later).
 		$raw_value = $_POST['wpforms']['fields'][ $field['id'] ]; // phpcs:ignore
 		$input     = 'primary';
@@ -812,6 +839,39 @@ abstract class WPForms_Field {
 			}
 		} else {
 			$properties = $this->get_field_populated_single_property_value( $raw_value, sanitize_key( $input ), $properties, $field );
+		}
+
+		return $this->encode_shortcode_delimiters( $properties, $original );
+	}
+
+	/**
+	 * Encode shortcode delimiters in the input values that population has changed.
+	 *
+	 * A form rendered before do_shortcode() runs on the_content has its markup re-scanned,
+	 * so a raw `[` in a submitted value executes. Browsers decode the entities back.
+	 *
+	 * @since 2.0.2.1
+	 *
+	 * @param array $properties Field properties after population.
+	 * @param array $original   Field properties before population.
+	 *
+	 * @return array Modified field properties.
+	 */
+	protected function encode_shortcode_delimiters( array $properties, array $original ): array {
+
+		if ( empty( $properties['inputs'] ) || ! is_array( $properties['inputs'] ) ) {
+			return $properties;
+		}
+
+		foreach ( $properties['inputs'] as $key => $input ) {
+			$value = $input['attr']['value'] ?? null;
+
+			// Admin-defined values are left alone: AMP choice bindings compare them as JSON strings.
+			if ( ! is_string( $value ) || $value === ( $original['inputs'][ $key ]['attr']['value'] ?? null ) ) {
+				continue;
+			}
+
+			$properties['inputs'][ $key ]['attr']['value'] = wpforms_encode_shortcode_delimiters( $value );
 		}
 
 		return $properties;
@@ -1802,7 +1862,7 @@ abstract class WPForms_Field {
 					$fld .= sprintf(
 						'<input type="text" name="%s[value]" value="%s" class="value wpforms-money-input" placeholder="%s">',
 						esc_attr( $base ),
-						esc_attr( wpforms_format_amount( wpforms_sanitize_amount( $value['value'] ) ) ),
+						esc_attr( wpforms_format_amount( $this->sanitize_form_amount( $value['value'] ) ) ),
 						wpforms_format_amount( 0 )
 					);
 					$fld .= '<a class="add" href="#"><i class="fa fa-plus-circle"></i></a><a class="remove" href="#"><i class="fa fa-minus-circle"></i></a>';
@@ -3225,7 +3285,7 @@ abstract class WPForms_Field {
 						}
 
 						$label  = $this->get_choices_label( $value['label'] ?? '', $key + 1, $field );
-						$label .= ! empty( $field['show_price_after_labels'] ) && isset( $value['value'] ) ? ' - ' . wpforms_format_amount( wpforms_sanitize_amount( $value['value'] ), true ) : '';
+						$label .= ! empty( $field['show_price_after_labels'] ) && isset( $value['value'] ) ? ' - ' . wpforms_format_amount( $this->sanitize_form_amount( $value['value'] ), true ) : '';
 
 						$options .= sprintf(
 							'<option value="%2$s" %1$s>%2$s</option>',
@@ -3281,7 +3341,7 @@ abstract class WPForms_Field {
 						);
 
 						$label  = $this->get_choices_label( $value['label'] ?? '', $key + 1, $field );
-						$label .= ! empty( $field['show_price_after_labels'] ) && isset( $value['value'] ) ? $this->get_price_after_label( $value['value'] ) : '';
+						$label .= ! empty( $field['show_price_after_labels'] ) && isset( $value['value'] ) ? $this->get_price_after_label( wpforms_format_amount( $this->sanitize_form_amount( $value['value'] ) ) ) : '';
 
 						if ( $with_images ) {
 
@@ -3358,8 +3418,8 @@ abstract class WPForms_Field {
 
 					$output .= '</ul>';
 
-					// Multiple choice: Another option.
-					if ( $type === 'radio' ) {
+					// Multiple choice: The other option.
+					if ( wpforms_field_supports_other_choice( $field ) ) {
 
 						$placeholder   = ! empty( $field['other_placeholder'] ) ? $field['other_placeholder'] : '';
 						$default_value = ( ! empty( $field['show_values'] ) && isset( $value['value'] ) && $value['value'] !== '' ) ? $value['value'] : '';
@@ -3525,12 +3585,14 @@ abstract class WPForms_Field {
 
 		$prev    = ob_get_clean();
 		$preview = sprintf(
-			'<div class="wpforms-field wpforms-field-%1$s %2$s %3$s" id="wpforms-field-%4$s" data-field-id="%4$s" data-field-type="%1$s">',
+			'<div class="wpforms-field wpforms-field-%1$s %2$s %3$s" id="wpforms-field-%4$s" data-field-id="%4$s" data-field-type="%1$s" tabindex="0">',
 			esc_attr( $field_type ),
 			esc_attr( $field_required ),
 			esc_attr( $field_class ),
 			$field_id
 		);
+
+		$preview .= $this->get_move_buttons_html();
 
 		/**
 		 * Allow the duplicate button to be hidden.
@@ -3542,13 +3604,13 @@ abstract class WPForms_Field {
 		 */
 		if ( (bool) apply_filters( 'wpforms_field_new_display_duplicate_button', true, $field ) ) { // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
 			$preview .= sprintf(
-				'<a href="#" class="wpforms-field-duplicate" title="%s"><i class="fa fa-files-o" aria-hidden="true"></i></a>',
+				'<a href="#" role="button" tabindex="-1" class="wpforms-field-duplicate" title="%1$s" aria-label="%1$s"><i class="fa fa-files-o" aria-hidden="true"></i></a>',
 				esc_attr__( 'Duplicate Field', 'wpforms-lite' )
 			);
 		}
 
 		$preview .= sprintf(
-			'<a href="#" class="wpforms-field-delete" title="%s"><i class="fa fa-trash-o"></i></a>',
+			'<a href="#" role="button" tabindex="-1" class="wpforms-field-delete" title="%1$s" aria-label="%1$s"><i class="fa fa-trash-o" aria-hidden="true"></i></a>',
 			esc_attr__( 'Delete Field', 'wpforms-lite' )
 		);
 
@@ -4307,6 +4369,47 @@ abstract class WPForms_Field {
 	protected function is_other_submission( $field_submit ): bool {
 
 		return is_array( $field_submit ) && ! empty( $field_submit['other'] );
+	}
+
+	/**
+	 * Validate the Other choice free-text value.
+	 *
+	 * When the Other choice is selected, its text input is required, but a
+	 * whitespace-only value passes the client-side required check. Enforce a
+	 * non-empty trimmed value server-side. Read-only fields are skipped because
+	 * saving a read-only field strips the required flag.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param int          $field_id     Field ID.
+	 * @param string|array $field_submit Submitted value.
+	 * @param array        $form_data    Form data.
+	 */
+	protected function validate_other_choice_value( $field_id, $field_submit, array $form_data ): void {
+
+		$field_id = (int) $field_id;
+		$field    = isset( $form_data['fields'][ $field_id ] ) ? (array) $form_data['fields'][ $field_id ] : [];
+
+		if ( ! empty( $field['read_only'] ) ) {
+			return;
+		}
+
+		// A non-scalar Other value can only come from a hand-crafted request; treat it as absent.
+		if ( ! is_array( $field_submit ) || ! isset( $field_submit['other'] ) || ! is_scalar( $field_submit['other'] ) ) {
+			return;
+		}
+
+		[ , $has_other ] = $this->build_choices_allowlist( $field );
+
+		if ( ! $has_other ) {
+			return;
+		}
+
+		if ( trim( (string) $field_submit['other'] ) !== '' ) {
+			return;
+		}
+
+		wpforms()->obj( 'process' )->errors[ $form_data['id'] ][ $field_id ] = wpforms_get_required_label();
 	}
 
 	/**
@@ -5130,15 +5233,74 @@ abstract class WPForms_Field {
 	/**
 	 * Get formatted price after label.
 	 *
+	 * The amount is expected in the current currency's format, as the field properties carry it in
+	 * `data-amount`; a stored value must be converted with `sanitize_form_amount()` before the call.
+	 *
 	 * @since 1.9.2
 	 *
-	 * @param float $amount Amount.
+	 * @param float|string $amount Amount in the current currency's format.
 	 *
 	 * @return string
 	 */
 	protected function get_price_after_label( $amount ): string {
 
 		return sprintf( ' - <span class="wpforms-currency-symbol">%s</span>', wpforms_format_amount( wpforms_sanitize_amount( $amount ), true ) );
+	}
+
+	/**
+	 * Sanitize an amount stored in the form data, parsing it with the form's saved currency.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param mixed      $amount    Stored amount, cast to a string.
+	 * @param array|null $form_data Form data and settings, when available in the calling context.
+	 *
+	 * @return string Sanitized amount with a dot as the decimal separator.
+	 */
+	protected function sanitize_form_amount( $amount, ?array $form_data = null ): string {
+
+		if ( $form_data === null ) {
+			$form_data = $this->form_data;
+		}
+
+		if ( empty( $form_data ) && class_exists( 'WPForms_Builder', false ) ) {
+			$form_data = WPForms_Builder::instance()->form_data;
+		}
+
+		return wpforms_sanitize_form_amount( $amount, is_array( $form_data ) ? $form_data : [] );
+	}
+
+	/**
+	 * Get the label of the payment choice whose amount matches a prefilled value.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string $raw_value Raw prefilled value.
+	 * @param array  $choices   Field choices.
+	 *
+	 * @return string|null
+	 */
+	protected function get_payment_choice_label_by_amount( $raw_value, array $choices ) {
+
+		$formatted = wpforms_format_amount( wpforms_sanitize_amount( $raw_value ) );
+
+		// Only machine format or the site currency's exact display format is an amount.
+		// Other separator mixes are ambiguous, e.g. `1,200.00` under a comma-decimal currency, and would preselect a wrong choice.
+		if ( ! is_numeric( $raw_value ) && $formatted !== $raw_value ) {
+			return null;
+		}
+
+		foreach ( $choices as $choice ) {
+			// The URL value is in the site currency, a stored choice amount is in the form's saved one.
+			if ( wpforms_format_amount( $this->sanitize_form_amount( $choice['value'] ?? '' ) ) === $formatted ) {
+				$label = (string) ( $choice['label'] ?? '' );
+
+				// An empty label matches the first empty-labelled choice, not necessarily this one.
+				return sanitize_text_field( $label ) === '' ? null : $label;
+			}
+		}
+
+		return null;
 	}
 
 	/**

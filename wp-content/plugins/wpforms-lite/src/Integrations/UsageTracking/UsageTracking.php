@@ -7,6 +7,8 @@ use WPForms\Admin\Builder\Templates;
 use WPForms\Integrations\AI\Helpers as AIHelpers;
 use WPForms\Integrations\IntegrationInterface;
 use WPForms\Integrations\LiteConnect\Integration;
+use WPForms\Lite\Reports\EntriesWindow;
+use WPForms\Migrations\Tasks\AntiSpamUpgradeTask;
 use WPForms\SetupChecklist\Checklist;
 use WPForms\SetupChecklist\CompletionDetector;
 use WPForms\SetupChecklist\Config;
@@ -27,6 +29,20 @@ class UsageTracking implements IntegrationInterface {
 	 * @since 1.6.1
 	 */
 	const SETTINGS_SLUG = 'usage-tracking-enabled';
+
+	/**
+	 * The 7-day entries period.
+	 *
+	 * @since 2.0.2.2
+	 */
+	private const PERIOD_7DAYS = '7days';
+
+	/**
+	 * The 30-day entries period.
+	 *
+	 * @since 2.0.2.2
+	 */
+	private const PERIOD_30DAYS = '30days';
 
 	/**
 	 * Indicate if current integration is allowed to load.
@@ -163,7 +179,7 @@ class UsageTracking implements IntegrationInterface {
 		$forms                = $this->get_all_forms();
 		$forms_total          = count( $forms );
 		$form_templates_total = count( $this->get_all_forms( 'wpforms-template' ) );
-		$entries_total        = $this->get_entries_total();
+		$entries_total        = (int) $this->get_entries_total();
 		$form_fields_count    = $this->get_form_fields_count( $forms );
 
 		$data = [
@@ -196,12 +212,11 @@ class UsageTracking implements IntegrationInterface {
 			'wpforms_entries_avg'            => $this->get_entries_avg( $forms_total, $entries_total ),
 			'wpforms_entries_median'         => $this->get_entries_median( $forms ),
 			'wpforms_entries_total'          => $entries_total,
-			'wpforms_entries_last_7days'     => $this->get_entries_total( '7days' ),
-			'wpforms_entries_last_30days'    => $this->get_entries_total( '30days' ),
 			'wpforms_forms_total'            => $forms_total,
 			'wpforms_form_fields_count'      => $form_fields_count,
 			'wpforms_form_templates_total'   => $form_templates_total,
 			'wpforms_form_antispam_stat'     => $this->get_form_antispam_stat( $forms ),
+			'wpforms_antispam_upgrade'       => AntiSpamUpgradeTask::get_stats(),
 			'wpforms_qr_code_stat'           => $this->get_qr_code_stat( $forms ),
 			'wpforms_challenge_stats'        => get_option( 'wpforms_challenge', [] ),
 			'wpforms_lite_installed_date'    => $this->get_installed( $activated_dates, 'lite' ),
@@ -226,10 +241,24 @@ class UsageTracking implements IntegrationInterface {
 			'wpforms_disabled_entries_count' => count( $this->get_forms_with_disabled_entries( $forms ) ),
 			'wpforms_addons_dates'           => $this->get_addons_dates_data(),
 			'wpforms_adoption_tooltips'      => $this->get_adoption_tooltips_data(),
+			'wpforms_email_summaries'        => $this->get_email_summaries_data(),
 			'wpforms_setup_checklist'        => $this->get_setup_checklist_data(),
 		];
 
 		$data = $this->add_promotion_plugin_data( $data );
+
+		$entries_last_7days  = $this->get_entries_total( self::PERIOD_7DAYS );
+		$entries_last_30days = $this->get_entries_total( self::PERIOD_30DAYS );
+
+		// Lite counts these from a rolling window that only becomes meaningful once it is old
+		// enough to cover the period, so an unknown count omits the key instead of sending zero.
+		if ( $entries_last_7days !== null ) {
+			$data['wpforms_entries_last_7days'] = $entries_last_7days;
+		}
+
+		if ( $entries_last_30days !== null ) {
+			$data['wpforms_entries_last_30days'] = $entries_last_30days;
+		}
 
 		if ( ! empty( $first_form_date ) ) {
 			$data['wpforms_forms_first_created'] = $first_form_date;
@@ -406,6 +435,10 @@ class UsageTracking implements IntegrationInterface {
 					'mercado_pago-test-public-key',
 					'mercado_pago-live-access-token',
 					'mercado_pago-live-public-key',
+					'paystack-test-secret-key',
+					'paystack-test-public-key',
+					'paystack-live-secret-key',
+					'paystack-live-public-key',
 					'square-location-id-sandbox',
 					'square-location-id-production',
 					'geolocation-google-places-api-key',
@@ -557,15 +590,7 @@ class UsageTracking implements IntegrationInterface {
 					return false;
 				}
 
-				$active_integrations = [];
-
-				foreach ( $form->post_content['providers'] as $provider_slug => $connections ) {
-					if ( ! empty( $connections ) ) {
-						$active_integrations[] = $provider_slug;
-					}
-				}
-
-				return $active_integrations;
+				return self::get_connected_providers( (array) $form->post_content['providers'] );
 			},
 			$forms
 		);
@@ -577,6 +602,28 @@ class UsageTracking implements IntegrationInterface {
 		}
 
 		return array_count_values( $integrations );
+	}
+
+	/**
+	 * The providers a form actually uses: those with at least one connection.
+	 *
+	 * @since 2.0.2.1
+	 *
+	 * @param array $providers The form's `providers` data, keyed by provider slug.
+	 *
+	 * @return array Provider slugs, in the form's order.
+	 */
+	public static function get_connected_providers( array $providers ): array {
+
+		$connected = [];
+
+		foreach ( $providers as $slug => $connections ) {
+			if ( ! empty( $connections ) ) {
+				$connected[] = (string) $slug;
+			}
+		}
+
+		return $connected;
 	}
 
 	/**
@@ -786,9 +833,9 @@ class UsageTracking implements IntegrationInterface {
 	 * @param string $period Which period should be counted? Possible values: 7days, 30days.
 	 *                       Everything else will mean "all" entries.
 	 *
-	 * @return int
+	 * @return int|null Null when the count for the requested period is unknown.
 	 */
-	private function get_entries_total( string $period = 'all' ): int {
+	public function get_entries_total( string $period = 'all' ): ?int {
 
 		if ( ! wpforms()->is_pro() ) {
 			return $this->get_entries_total_lite( $period );
@@ -804,7 +851,7 @@ class UsageTracking implements IntegrationInterface {
 		}
 
 		switch ( $period ) {
-			case '7days':
+			case self::PERIOD_7DAYS:
 				$args = [
 					'date' => [
 						gmdate( 'Y-m-d', strtotime( '-7 days' ) ),
@@ -813,7 +860,7 @@ class UsageTracking implements IntegrationInterface {
 				];
 				break;
 
-			case '30days':
+			case self::PERIOD_30DAYS:
 				$args = [
 					'date' => [
 						gmdate( 'Y-m-d', strtotime( '-30 days' ) ),
@@ -836,24 +883,19 @@ class UsageTracking implements IntegrationInterface {
 	 * @param string $period Which period should be counted? Possible values: 7days, 30days.
 	 *                       Everything else will mean "all" entries.
 	 *
-	 * @return int
+	 * @return int|null Null when the rolling window is younger than the requested period.
 	 */
-	private function get_entries_total_lite( string $period = 'all' ): int {
+	private function get_entries_total_lite( string $period = 'all' ): ?int {
 
-		if ( $period === '7days' || $period === '30days' ) {
-			return 0;
+		if ( $period === self::PERIOD_7DAYS ) {
+			return ( new EntriesWindow() )->get_total( 7 );
 		}
 
-		global $wpdb;
+		if ( $period === self::PERIOD_30DAYS ) {
+			return ( new EntriesWindow() )->get_total( 30 );
+		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$count = $wpdb->get_var(
-			"SELECT SUM(meta_value)
-				FROM $wpdb->postmeta
-				WHERE meta_key = 'wpforms_entries_count';"
-		);
-
-		return (int) $count;
+		return EntriesWindow::get_lifetime_total();
 	}
 
 	/**
@@ -1250,6 +1292,7 @@ class UsageTracking implements IntegrationInterface {
 	private function get_form_antispam_stat( array $forms ): array { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		$stat = [
+			'honeypot'           => 0,
 			'antispam'           => 0,
 			'antispam_v3'        => 0,
 			'akismet'            => 0,
@@ -1262,6 +1305,11 @@ class UsageTracking implements IntegrationInterface {
 
 		foreach ( $forms as $form ) {
 			$settings = $form->post_content['settings'] ?? [];
+
+			// Counted ahead of the gate below: a honeypot-only form carries neither
+			// `antispam` nor `antispam_v3`, so the gate drops it and the legacy
+			// honeypot cohort stays invisible in telemetry.
+			$stat['honeypot'] += ! empty( $settings['honeypot'] ) ? 1 : 0;
 
 			// Skip forms with disabled anti-spam settings.
 			if ( empty( $settings['antispam'] ) && empty( $settings['antispam_v3'] ) ) {
@@ -1404,6 +1452,25 @@ class UsageTracking implements IntegrationInterface {
 		 * @param array $addons_dates Addons dates data.
 		 */
 		return (array) apply_filters( 'wpforms_integrations_usage_tracking_usage_tracking_get_addons_dates', [] );
+	}
+
+	/**
+	 * Get weekly summary email block counters.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @return array
+	 */
+	private function get_email_summaries_data(): array {
+
+		/**
+		 * Filter weekly summary email block counters for usage tracking.
+		 *
+		 * @since 2.0.3
+		 *
+		 * @param array $events Per-block event counters.
+		 */
+		return (array) apply_filters( 'wpforms_integrations_usage_tracking_usage_tracking_get_email_summaries_data', [] );
 	}
 
 	/**

@@ -21,6 +21,10 @@ $css    = file_get_contents( $base . 'css/secciones-match-adultos-ninos.css' );
 if ( file_exists( $base . 'css/fandom-interaccion.css' ) ) {
 	$css = rtrim( $css ) . "\n\n" . ltrim( file_get_contents( $base . 'css/fandom-interaccion.css' ) );
 }
+// Bloque "Rediseño 2026" (09/11/2026): siempre al final, ajusta todo lo anterior.
+if ( file_exists( $base . 'css/rediseno-2026.css' ) ) {
+	$css = rtrim( $css ) . "\n\n" . ltrim( file_get_contents( $base . 'css/rediseno-2026.css' ) );
+}
 if ( ! $codigo || ! $css ) {
 	exit( "ERROR: no se pudieron leer los archivos.\n" );
 }

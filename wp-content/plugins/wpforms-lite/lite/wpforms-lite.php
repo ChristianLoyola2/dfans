@@ -17,8 +17,10 @@ use WPForms\Db\Analytics\Forms;
 use WPForms\Db\Analytics\Snapshots;
 use WPForms\Db\Payments\Meta as PaymentsMeta;
 use WPForms\Db\Payments\Payment;
+use WPForms\Db\ProductEvents\Queue as ProductEventsQueue;
 use WPForms\Lite\Integrations\LiteConnect\Integration as LiteConnectIntegration;
 use WPForms\Lite\Integrations\LiteConnect\LiteConnect;
+use WPForms\Lite\Reports\EntriesWindow;
 use WPForms\Logger\Repository;
 use WPForms\Tasks\Meta as TasksMeta;
 
@@ -35,12 +37,13 @@ class WPForms_Lite {
 	 * @since 1.9.0
 	 */
 	public const CUSTOM_TABLES = [
-		'wpforms_payments'            => Payment::class,
-		'wpforms_payment_meta'        => PaymentsMeta::class,
-		'wpforms_tasks_meta'          => TasksMeta::class,
-		'wpforms_logs'                => Repository::class,
-		'wpforms_analytics_snapshots' => Snapshots::class,
-		'wpforms_analytics_forms'     => Forms::class,
+		'wpforms_payments'             => Payment::class,
+		'wpforms_payment_meta'         => PaymentsMeta::class,
+		'wpforms_tasks_meta'           => TasksMeta::class,
+		'wpforms_logs'                 => Repository::class,
+		'wpforms_analytics_snapshots'  => Snapshots::class,
+		'wpforms_analytics_forms'      => Forms::class,
+		'wpforms_product_events_queue' => ProductEventsQueue::class,
 	];
 
 	/**
@@ -928,6 +931,9 @@ class WPForms_Lite {
 		if ( wpforms_is_form_template( $form_id ) ) {
 			return;
 		}
+
+		// Must run before the lifetime meta increment below: the window seeds its start from the pre-submission count.
+		( new EntriesWindow() )->record();
 
 		if ( add_post_meta( $form_id, 'wpforms_entries_count', 1, true ) ) {
 			return;

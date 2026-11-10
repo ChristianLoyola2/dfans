@@ -4,13 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
+class ComposerStaticInitc1de69b76030d115c5b8ac0d51904f46
 {
     public static $prefixLengthsPsr4 = array (
         'M' =>
         array (
             'MercadoPago\\Woocommerce\\' => 24,
-            'MercadoPago\\PP\\Sdk\\' => 19,
         ),
     );
 
@@ -19,101 +18,32 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'MercadoPago\\PP\\Sdk\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/mp-plugins/php-sdk/src',
-        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'MercadoPago\\PP\\Sdk\\Common\\AbstractCollection' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Common/AbstractCollection.php',
-        'MercadoPago\\PP\\Sdk\\Common\\AbstractEntity' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Common/AbstractEntity.php',
-        'MercadoPago\\PP\\Sdk\\Common\\Config' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Common/Config.php',
-        'MercadoPago\\PP\\Sdk\\Common\\Constants' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Common/Constants.php',
-        'MercadoPago\\PP\\Sdk\\Common\\Manager' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Common/Manager.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Exchange\\Exchange' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Exchange/Exchange.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Identification\\CreateSellerFunnelBase' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Identification/CreateSellerFunnelBase.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Identification\\ResponseCreateSellerFunnelBase' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Identification/ResponseCreateSellerFunnelBase.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Identification\\UpdateSellerFunnelBase' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Identification/UpdateSellerFunnelBase.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\MerchantOrder\\Collector' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/MerchantOrder/Collector.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\MerchantOrder\\MerchantOrder' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/MerchantOrder/MerchantOrder.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Monitoring\\DatadogEvent' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Monitoring/DatadogEvent.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Monitoring\\Platform' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Monitoring/Platform.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Monitoring\\RegisterErrorLog' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Monitoring/RegisterErrorLog.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\Notification' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/Notification.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\PaymentDetails' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/PaymentDetails.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\PaymentDetailsList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/PaymentDetailsList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\PaymentMethodInfo' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/PaymentMethodInfo.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\Refund' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/Refund.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\RefundList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/RefundList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\RefundNotifying' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/RefundNotifying.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Notification\\RefundNotifyingList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Notification/RefundNotifyingList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Onboarding\\Application' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Onboarding/Application.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Onboarding\\Onboarding' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Onboarding/Onboarding.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Onboarding\\User' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Onboarding/User.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\PaymentMethods\\FinancialInstitution' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/PaymentMethods/FinancialInstitution.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\PaymentMethods\\FinancialInstitutionList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/PaymentMethods/FinancialInstitutionList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\PaymentMethods\\PaymentMethod' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/PaymentMethods/PaymentMethod.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\PaymentMethods\\PaymentMethods' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/PaymentMethods/PaymentMethods.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\PaymentMethods\\PaymentMethodsList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/PaymentMethods/PaymentMethodsList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\AdditionalInfo' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/AdditionalInfo.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\AdditionalInfoAddress' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/AdditionalInfoAddress.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\AdditionalInfoPayer' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/AdditionalInfoPayer.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Address' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Address.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\ApplicationData' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/ApplicationData.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\BankInfo' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/BankInfo.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Identification' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Identification.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Item' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Item.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\ItemList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/ItemList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Location' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Location.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Multipayment' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Multipayment.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\MultipaymentV2' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/MultipaymentV2.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\MultipaymentV21' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/MultipaymentV21.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Payer' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Payer.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Payment' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Payment.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\PaymentV2' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/PaymentV2.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\PaymentV21' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/PaymentV21.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Phone' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Phone.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\PointOfInteraction' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/PointOfInteraction.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\ReceiverAddress' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/ReceiverAddress.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Seller' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Seller.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Shipments' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Shipments.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\Tracking' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/Tracking.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\TransactionData' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/TransactionData.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\TransactionDetails' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/TransactionDetails.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\TransactionInfo' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/TransactionInfo.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Payment\\TransactionInfoList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Payment/TransactionInfoList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Address' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Address.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\BackUrl' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/BackUrl.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\DifferentialPricing' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/DifferentialPricing.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ExcludedPaymentMethod' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ExcludedPaymentMethod.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ExcludedPaymentMethodList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ExcludedPaymentMethodList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ExcludedPaymentType' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ExcludedPaymentType.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ExcludedPaymentTypeList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ExcludedPaymentTypeList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\FreeMethod' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/FreeMethod.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\FreeMethodList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/FreeMethodList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Item' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Item.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ItemList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ItemList.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Payer' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Payer.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\PayerIdentification' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/PayerIdentification.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\PaymentMethod' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/PaymentMethod.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Phone' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Phone.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Preference' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Preference.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\ReceiverAddress' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/ReceiverAddress.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Shipment' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Shipment.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\Track' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/Track.php',
-        'MercadoPago\\PP\\Sdk\\Entity\\Preference\\TrackList' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Entity/Preference/TrackList.php',
-        'MercadoPago\\PP\\Sdk\\Exceptions\\ApiException' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Exceptions/ApiException.php',
-        'MercadoPago\\PP\\Sdk\\HttpClient\\HttpClient' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/HttpClient/HttpClient.php',
-        'MercadoPago\\PP\\Sdk\\HttpClient\\HttpClientInterface' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/HttpClient/HttpClientInterface.php',
-        'MercadoPago\\PP\\Sdk\\HttpClient\\Requester\\CurlRequester' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/HttpClient/Requester/CurlRequester.php',
-        'MercadoPago\\PP\\Sdk\\HttpClient\\Requester\\RequesterInterface' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/HttpClient/Requester/RequesterInterface.php',
-        'MercadoPago\\PP\\Sdk\\HttpClient\\Response' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/HttpClient/Response.php',
-        'MercadoPago\\PP\\Sdk\\Interfaces\\EntityInterface' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Interfaces/EntityInterface.php',
-        'MercadoPago\\PP\\Sdk\\Interfaces\\RequesterEntityInterface' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Interfaces/RequesterEntityInterface.php',
-        'MercadoPago\\PP\\Sdk\\Sdk' => __DIR__ . '/..' . '/mp-plugins/php-sdk/src/Sdk.php',
         'MercadoPago\\Woocommerce\\Admin\\Settings' => __DIR__ . '/../..' . '/src/Admin/Settings.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\CoreApi' => __DIR__ . '/../..' . '/src/Api/Core/CoreApi.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\CoreApiClient' => __DIR__ . '/../..' . '/src/Api/Core/CoreApiClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\CoreRequestContext' => __DIR__ . '/../..' . '/src/Api/Core/CoreRequestContext.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Exceptions\\ApiException' => __DIR__ . '/../..' . '/src/Api/Core/Exceptions/ApiException.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\ExchangeClient' => __DIR__ . '/../..' . '/src/Api/Core/ExchangeClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\FunnelClient' => __DIR__ . '/../..' . '/src/Api/Core/FunnelClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\LegacyPayloadSerializer' => __DIR__ . '/../..' . '/src/Api/Core/LegacyPayloadSerializer.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\ApiModel' => __DIR__ . '/../..' . '/src/Api/Core/Models/ApiModel.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\ExchangeRate' => __DIR__ . '/../..' . '/src/Api/Core/Models/ExchangeRate.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\FunnelRegistration' => __DIR__ . '/../..' . '/src/Api/Core/Models/FunnelRegistration.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\Notification' => __DIR__ . '/../..' . '/src/Api/Core/Models/Notification.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\Payment' => __DIR__ . '/../..' . '/src/Api/Core/Models/Payment.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\Models\\Preference' => __DIR__ . '/../..' . '/src/Api/Core/Models/Preference.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\NotificationsClient' => __DIR__ . '/../..' . '/src/Api/Core/NotificationsClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\PayloadNormalizer' => __DIR__ . '/../..' . '/src/Api/Core/PayloadNormalizer.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\PaymentsClient' => __DIR__ . '/../..' . '/src/Api/Core/PaymentsClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Core\\PreferencesClient' => __DIR__ . '/../..' . '/src/Api/Core/PreferencesClient.php',
+        'MercadoPago\\Woocommerce\\Api\\Http\\HttpClientInterface' => __DIR__ . '/../..' . '/src/Api/Http/HttpClientInterface.php',
+        'MercadoPago\\Woocommerce\\Api\\Http\\HttpResponse' => __DIR__ . '/../..' . '/src/Api/Http/HttpResponse.php',
+        'MercadoPago\\Woocommerce\\Api\\Http\\TransportException' => __DIR__ . '/../..' . '/src/Api/Http/TransportException.php',
+        'MercadoPago\\Woocommerce\\Api\\Http\\WordPressHttpClient' => __DIR__ . '/../..' . '/src/Api/Http/WordPressHttpClient.php',
         'MercadoPago\\Woocommerce\\Blocks\\AbstractBlock' => __DIR__ . '/../..' . '/src/Blocks/AbstractBlock.php',
         'MercadoPago\\Woocommerce\\Blocks\\BasicBlock' => __DIR__ . '/../..' . '/src/Blocks/BasicBlock.php',
         'MercadoPago\\Woocommerce\\Blocks\\CreditsBlock' => __DIR__ . '/../..' . '/src/Blocks/CreditsBlock.php',
@@ -140,7 +70,6 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
         'MercadoPago\\Woocommerce\\Exceptions\\RejectedPaymentException' => __DIR__ . '/../..' . '/src/Exceptions/RejectedPaymentException.php',
         'MercadoPago\\Woocommerce\\Exceptions\\ResponseStatusException' => __DIR__ . '/../..' . '/src/Exceptions/ResponseStatusException.php',
         'MercadoPago\\Woocommerce\\Funnel\\Funnel' => __DIR__ . '/../..' . '/src/Funnel/Funnel.php',
-        'MercadoPago\\Woocommerce\\Funnel\\UpdateSellerFunnelBase' => __DIR__ . '/../..' . '/src/Funnel/UpdateSellerFunnelBase.php',
         'MercadoPago\\Woocommerce\\Gateways\\AbstractGateway' => __DIR__ . '/../..' . '/src/Gateways/AbstractGateway.php',
         'MercadoPago\\Woocommerce\\Gateways\\BasicGateway' => __DIR__ . '/../..' . '/src/Gateways/BasicGateway.php',
         'MercadoPago\\Woocommerce\\Gateways\\CreditsGateway' => __DIR__ . '/../..' . '/src/Gateways/CreditsGateway.php',
@@ -162,6 +91,7 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
         'MercadoPago\\Woocommerce\\Helpers\\Country' => __DIR__ . '/../..' . '/src/Helpers/Country.php',
         'MercadoPago\\Woocommerce\\Helpers\\CredentialsStates' => __DIR__ . '/../..' . '/src/Helpers/CredentialsStates.php',
         'MercadoPago\\Woocommerce\\Helpers\\CreditsEnabled' => __DIR__ . '/../..' . '/src/Helpers/CreditsEnabled.php',
+        'MercadoPago\\Woocommerce\\Helpers\\CreditsPresentation' => __DIR__ . '/../..' . '/src/Helpers/CreditsPresentation.php',
         'MercadoPago\\Woocommerce\\Helpers\\Cron' => __DIR__ . '/../..' . '/src/Helpers/Cron.php',
         'MercadoPago\\Woocommerce\\Helpers\\Currency' => __DIR__ . '/../..' . '/src/Helpers/Currency.php',
         'MercadoPago\\Woocommerce\\Helpers\\CurrentUser' => __DIR__ . '/../..' . '/src/Helpers/CurrentUser.php',
@@ -187,6 +117,7 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
         'MercadoPago\\Woocommerce\\Helpers\\RefundStatusCodes' => __DIR__ . '/../..' . '/src/Helpers/RefundStatusCodes.php',
         'MercadoPago\\Woocommerce\\Helpers\\RefundValidationError' => __DIR__ . '/../..' . '/src/Helpers/RefundValidationError.php',
         'MercadoPago\\Woocommerce\\Helpers\\Requester' => __DIR__ . '/../..' . '/src/Helpers/Requester.php',
+        'MercadoPago\\Woocommerce\\Helpers\\SdkLocale' => __DIR__ . '/../..' . '/src/Helpers/SdkLocale.php',
         'MercadoPago\\Woocommerce\\Helpers\\Session' => __DIR__ . '/../..' . '/src/Helpers/Session.php',
         'MercadoPago\\Woocommerce\\Helpers\\Strings' => __DIR__ . '/../..' . '/src/Helpers/Strings.php',
         'MercadoPago\\Woocommerce\\Helpers\\SubscriptionsCredentialsValidator' => __DIR__ . '/../..' . '/src/Helpers/SubscriptionsCredentialsValidator.php',
@@ -229,6 +160,7 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
         'MercadoPago\\Woocommerce\\Order\\OrderMetadata' => __DIR__ . '/../..' . '/src/Order/OrderMetadata.php',
         'MercadoPago\\Woocommerce\\Order\\OrderShipping' => __DIR__ . '/../..' . '/src/Order/OrderShipping.php',
         'MercadoPago\\Woocommerce\\Order\\OrderStatus' => __DIR__ . '/../..' . '/src/Order/OrderStatus.php',
+        'MercadoPago\\Woocommerce\\Order\\PaymentReconciliation' => __DIR__ . '/../..' . '/src/Order/PaymentReconciliation.php',
         'MercadoPago\\Woocommerce\\Order\\RefundReconciliationLock' => __DIR__ . '/../..' . '/src/Order/RefundReconciliationLock.php',
         'MercadoPago\\Woocommerce\\Refund\\RefundHandler' => __DIR__ . '/../..' . '/src/Refund/RefundHandler.php',
         'MercadoPago\\Woocommerce\\Startup' => __DIR__ . '/../..' . '/src/Startup.php',
@@ -260,9 +192,9 @@ class ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2cbef7d43bc272823d4d80b299eb68ed::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc1de69b76030d115c5b8ac0d51904f46::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc1de69b76030d115c5b8ac0d51904f46::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc1de69b76030d115c5b8ac0d51904f46::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -6,6 +6,7 @@
 // phpcs:enable Generic.Commenting.DocComment.MissingShort
 
 // phpcs:ignore WPForms.PHP.UseStatement.UnusedUseStatement
+use WPForms\Admin\Settings\Captcha\ConfigurationError;
 use WPForms\Emails\Mailer;
 use WPForms\Emails\Notifications;
 
@@ -532,7 +533,7 @@ class WPForms_Process {
 			}
 
 			// Check if the form was submitted too quickly.
-			$this->time_limit_check();
+			$this->time_limit_check( $entry );
 
 			// Check for spam.
 			$this->process_spam_check( $entry );
@@ -634,6 +635,15 @@ class WPForms_Process {
 			'url_referer' => isset( $_POST['url_referer'] ) ? esc_url_raw( wp_unslash( $_POST['url_referer'] ) ) : '',
 			'user_id'     => get_current_user_id(),
 		];
+
+		$language = wpforms_is_collecting_ip_allowed( $this->form_data ) ? wpforms_get_visitor_language() : '';
+
+		// The visitor's language is request telemetry like the IP and the User Agent, so it
+		// follows the same GDPR switch. Stored only when the request carries it, otherwise
+		// every entry would keep an empty row.
+		if ( $language !== '' ) {
+			$this->form_data['entry_meta']['language'] = $language;
+		}
 
 		// Save meta data.
 		$this->save_meta( $this->entry_id, $this->form_data['id'] );
@@ -957,8 +967,11 @@ class WPForms_Process {
 	 * Check if the form was submitted too quickly.
 	 *
 	 * @since 1.8.3
+	 * @since 2.0.2 Added the `$entry` argument, which carries the signed render time token.
+	 *
+	 * @param array $entry Submitted form data.
 	 */
-	private function time_limit_check() {
+	private function time_limit_check( array $entry ) {
 
 		/**
 		 * Allow bypassing the time limit check.
@@ -984,27 +997,20 @@ class WPForms_Process {
 			return;
 		}
 
-		//phpcs:disable WordPress.Security.NonceVerification.Missing
-		$start = ! empty( $_POST['start_timestamp'] ) ? absint( $_POST['start_timestamp'] ) : 0;
-		$end   = ! empty( $_POST['end_timestamp'] ) ? absint( $_POST['end_timestamp'] ) : 0;
-		//phpcs:enable WordPress.Security.NonceVerification.Missing
-
-		// Filter out empty fields.
-		$fields = array_filter(
-			$this->fields,
-			static function ( $field ) {
-
-				return ! empty( $field['value'] );
-			}
-		);
-
-		// Skip the time limit check if the form was submitted with prefilled values.
-		if ( $start === 0 && ! empty( $fields ) ) {
+		// AMP pages run no plugin JavaScript and an AMP cache can serve the same document for days,
+		// so the render time such a page carries can never be refreshed. The antispam token check
+		// skips AMP for the same reason.
+		if ( wpforms_is_amp() ) {
 			return;
 		}
 
-		// If the form was submitted too quickly, add an error.
-		if ( ( $end - $start ) < $duration || $start === 0 ) {
+		$time_token = sanitize_text_field( $entry['time_token'] ?? '' );
+
+		// The render time comes from the signed token, so it cannot be forged on the client.
+		$start = wpforms()->obj( 'token' )->verify_time_token( $time_token, absint( $this->form_data['id'] ) );
+
+		// If the render time is unknown or the form was submitted too quickly, add an error.
+		if ( $start === 0 || ( time() - $start ) < $duration ) {
 			$this->errors[ $this->form_data['id'] ]['header'] = esc_html__( 'Please wait a little longer before submitting. We’re running a quick security check.', 'wpforms-lite' );
 		}
 	}
@@ -1057,8 +1063,11 @@ class WPForms_Process {
 	 */
 	public function process_spam_check( $entry ) {
 
-		// CAPTCHA check.
-		$this->process_captcha( $entry );
+		// CAPTCHA check. A CAPTCHA configuration error is a hard form error, and letting Akismet run after it
+		// would allow its spam error to overwrite that error once spam entries are not stored.
+		if ( $this->process_captcha( $entry ) ) {
+			return;
+		}
 
 		if ( $this->spam_reason ) {
 			return;
@@ -1106,22 +1115,23 @@ class WPForms_Process {
 	 *
 	 * @since 1.8.0
 	 * @since 1.8.3 Removed $captcha_settings parameter.
+	 * @since 2.0.2 Returns whether the CAPTCHA provider reported a configuration error.
 	 *
 	 * @param array $entry Form submission raw data ($_POST).
 	 *
-	 * @return void
+	 * @return bool True when the provider rejected the site's secret key or could not be reached.
 	 */
-	private function process_captcha( $entry ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	private function process_captcha( $entry ): bool { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		// Skip if spam was already detected.
 		if ( $this->spam_reason ) {
-			return;
+			return false;
 		}
 
 		$captcha_settings = wpforms_get_captcha_settings();
 
 		if ( ! $this->allow_process_captcha( $entry, $captcha_settings ) ) {
-			return;
+			return false;
 		}
 
 		$provider = $captcha_settings['provider'];
@@ -1129,7 +1139,7 @@ class WPForms_Process {
 		$current_captcha = $this->get_captcha( $provider );
 
 		if ( empty( $current_captcha ) ) {
-			return;
+			return false;
 		}
 
 		$verify_url_raw   = $current_captcha['verify_url_raw'];
@@ -1158,7 +1168,7 @@ class WPForms_Process {
 		if ( ! $token ) {
 			$this->errors[ $this->form_data['id'] ]['recaptcha'] = $error;
 
-			return;
+			return false;
 		}
 
 		/*
@@ -1198,6 +1208,22 @@ class WPForms_Process {
 
 		$response_body = json_decode( wp_remote_retrieve_body( $response ), false );
 
+		$config_error = $this->get_captcha_config_error( $response, $response_body );
+
+		if ( $config_error !== '' ) {
+			// The visitor did nothing wrong here, so the submission is blocked with a regular form error
+			// and is never recorded as spam. The site owner is informed by the admin notice instead.
+			$this->errors[ $this->form_data['id'] ]['recaptcha'] = $error;
+
+			return $this->handle_captcha_config_error( $config_error, $response, $response_body, $captcha_settings );
+		}
+
+		// The provider accepted the secret key, so a stored configuration error is outdated.
+		// The call does not write anything when nothing is flagged.
+		if ( ! empty( $response_body->success ) ) {
+			ConfigurationError::clear();
+		}
+
 		if (
 			empty( $response_body->success ) ||
 			( $is_recaptcha_v3 && $response_body->score <= wpforms_setting( 'recaptcha-v3-threshold', '0.4' ) )
@@ -1212,6 +1238,95 @@ class WPForms_Process {
 
 			$this->spam_reason = $captcha_provider;
 		}
+
+		return false;
+	}
+
+	/**
+	 * Log a CAPTCHA site configuration problem and flag it for the site owner.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @param string         $config_error     Configuration problem detected in the response.
+	 * @param array|WP_Error $response         Response of the CAPTCHA verification request.
+	 * @param mixed          $response_body    Decoded response body.
+	 * @param array          $captcha_settings CAPTCHA settings the verification request was made with.
+	 *
+	 * @return bool Always true, telling the caller a configuration error was handled.
+	 */
+	private function handle_captcha_config_error( string $config_error, $response, $response_body, array $captcha_settings ): bool {
+
+		$captcha_provider = $this->get_captcha( $captcha_settings['provider'] )['provider'] ?? '';
+		$error_codes      = $this->get_captcha_error_codes( $response_body );
+
+		if ( $error_codes ) {
+			// The provider's own codes are the whole diagnostic, so they are logged as they came.
+			$details = $error_codes;
+		} elseif ( is_wp_error( $response ) ) {
+			$details = $response->get_error_message();
+		} else {
+			// An unrecognized payload is logged as it is, minus the secret key the request echoes.
+			$details = str_replace( $captcha_settings['secret_key'], '[redacted]', wp_remote_retrieve_body( $response ) );
+		}
+
+		wpforms_log(
+			'CAPTCHA Configuration Error',
+			[
+				'provider' => $captcha_provider,
+				'reason'   => $config_error,
+				'response' => $details,
+			],
+			[
+				'type'    => [ 'error' ],
+				'form_id' => $this->form_data['id'],
+			]
+		);
+
+		ConfigurationError::flag( $config_error, $captcha_provider );
+
+		return true;
+	}
+
+	/**
+	 * Retrieve the error codes a CAPTCHA verification response reports.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @param mixed $response_body Decoded response body.
+	 *
+	 * @return array Error codes as the provider sent them, empty when the optional field is absent.
+	 */
+	private function get_captcha_error_codes( $response_body ): array {
+
+		return isset( $response_body->{'error-codes'} ) ? (array) $response_body->{'error-codes'} : [];
+	}
+
+	/**
+	 * Detect whether a CAPTCHA verification response reports a site configuration problem.
+	 *
+	 * A provider rejecting the site's secret key, or not answering at all, tells nothing about the
+	 * visitor, so such a response must not end up as a spam verdict.
+	 *
+	 * @since 2.0.2
+	 *
+	 * @param array|WP_Error $response      Response of the CAPTCHA verification request.
+	 * @param mixed          $response_body Decoded response body.
+	 *
+	 * @return string One of 'invalid-secret', 'unreachable', or an empty string when the response
+	 *                carries no sign of a configuration problem.
+	 */
+	private function get_captcha_config_error( $response, $response_body ): string {
+
+		if ( is_wp_error( $response ) || ! is_object( $response_body ) ) {
+			return 'unreachable';
+		}
+
+		// None of the supported providers uses any of these codes for anything but a secret key problem,
+		// which is why a single provider-agnostic set is enough. The field itself is optional everywhere.
+		$secret_error_codes = [ 'invalid-input-secret', 'missing-input-secret', 'sitekey-secret-mismatch' ];
+		$error_codes        = array_filter( $this->get_captcha_error_codes( $response_body ), 'is_string' );
+
+		return array_intersect( $secret_error_codes, $error_codes ) ? 'invalid-secret' : '';
 	}
 
 	/**
@@ -1837,10 +1952,6 @@ class WPForms_Process {
 
 		foreach ( $notifications as $notification_id => $notification ) :
 
-			if ( empty( $notification['email'] ) ) {
-				continue;
-			}
-
 			$is_active = ! isset( $notification['enable'] ) || (int) $notification['enable'] !== 0;
 
 			/**
@@ -1862,6 +1973,13 @@ class WPForms_Process {
 			);
 
 			if ( ! $is_active ) {
+				continue;
+			}
+
+			// Checked before the process filter so its consumers never see a blank Send To.
+			if ( empty( $notification['email'] ) ) {
+				$this->log_notification_not_sent( '', $context, $notification_id, (array) $notification, $form_data );
+
 				continue;
 			}
 
@@ -1892,8 +2010,7 @@ class WPForms_Process {
 					esc_html__( 'New %s Entry', 'wpforms-lite' ),
 					$form_data['settings']['form_title']
 				);
-			$email['address']        = explode( ',', wpforms_process_smart_tags( $notification['email'], $form_data, $fields, $this->entry_id, 'notification-send-to-email' ) );
-			$email['address']        = array_filter( array_map( 'sanitize_email', $email['address'] ) );
+			$email['address']        = $this->get_notification_send_to( $notification, $form_data, $fields, $notification_id );
 			$email['sender_address'] = ! empty( $notification['sender_address'] ) ? $notification['sender_address'] : get_option( 'admin_email' );
 			$email['sender_name']    = ! empty( $notification['sender_name'] ) ? $notification['sender_name'] : get_bloginfo( 'name' );
 			$email['replyto']        = ! empty( $notification['replyto'] ) ? $notification['replyto'] : false;
@@ -1901,18 +2018,7 @@ class WPForms_Process {
 			$email['template']       = ! empty( $notification['template'] ) ? $notification['template'] : '';
 
 			if ( $is_carboncopy_enabled && ! empty( $notification['carboncopy'] ) ) {
-				$email['carboncopy'] = explode(
-					',',
-					wpforms_process_smart_tags(
-						$notification['carboncopy'],
-						$form_data,
-						$fields,
-						$this->entry_id,
-						'notification-carboncopy',
-						[ 'to_email' => $email['address'] ]
-					)
-				);
-				$email['carboncopy'] = array_filter( array_map( 'sanitize_email', $email['carboncopy'] ) );
+				$email['carboncopy'] = $this->get_notification_carboncopy( $notification, $form_data, $fields, $notification_id, $email['address'] );
 			}
 
 			/**
@@ -1927,6 +2033,13 @@ class WPForms_Process {
 			 * @param int    $notification_id Notification ID.
 			 */
 			$email = apply_filters( 'wpforms_entry_email_atts', $email, $fields, $entry, $form_data, $notification_id ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+
+			// The resolved value is left out because the record is forced and may hold submitter input.
+			if ( empty( $email['address'] ) ) {
+				$this->log_notification_not_sent( $notification['email'], $context, $notification_id, $notification, $form_data );
+
+				continue;
+			}
 
 			// Create a new email.
 			$emails = ( new Notifications() )->init( $email['template'] );
@@ -1963,6 +2076,144 @@ class WPForms_Process {
 				$emails->send( trim( $address ), $email['subject'], $email['message'] );
 			}
 		endforeach;
+	}
+
+	/**
+	 * Get the valid Send To addresses of a notification, logging the invalid ones removed.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param array      $notification    Notification settings.
+	 * @param array      $form_data       Form data and settings.
+	 * @param array      $fields          List of fields.
+	 * @param int|string $notification_id Notification ID.
+	 *
+	 * @return array
+	 */
+	private function get_notification_send_to( array $notification, array $form_data, $fields, $notification_id ): array {
+
+		$send_to_list    = explode( ',', wpforms_process_smart_tags( $notification['email'], $form_data, $fields, $this->entry_id, 'notification-send-to-email' ) );
+		$addresses       = array_filter( array_map( 'sanitize_email', $send_to_list ) );
+		$invalid_send_to = array_filter( array_map( 'trim', array_diff_key( $send_to_list, $addresses ) ) );
+
+		// With no valid address left, the caller writes the not-sent record instead.
+		if ( $invalid_send_to && $addresses ) {
+			$this->log_notification_recipients_issue(
+				/* translators: %1$s - notification ID, %2$s - notification name. */
+				__( 'Notification #%1$s ("%2$s"): invalid Send To addresses were removed.', 'wpforms-lite' ),
+				[
+					'send_to' => $notification['email'],
+					'removed' => array_values( $invalid_send_to ),
+				],
+				$notification_id,
+				$notification,
+				$form_data
+			);
+		}
+
+		return $addresses;
+	}
+
+	/**
+	 * Get the valid CC addresses of a notification, logging the invalid ones removed.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param array      $notification    Notification settings.
+	 * @param array      $form_data       Form data and settings.
+	 * @param array      $fields          List of fields.
+	 * @param int|string $notification_id Notification ID.
+	 * @param array      $to_email        Valid Send To addresses.
+	 *
+	 * @return array
+	 */
+	private function get_notification_carboncopy( array $notification, array $form_data, $fields, $notification_id, array $to_email ): array {
+
+		$cc_list = explode(
+			',',
+			wpforms_process_smart_tags(
+				$notification['carboncopy'],
+				$form_data,
+				$fields,
+				$this->entry_id,
+				'notification-carboncopy',
+				[ 'to_email' => $to_email ]
+			)
+		);
+
+		$carboncopy = array_filter( array_map( 'sanitize_email', $cc_list ) );
+		$invalid_cc = array_filter( array_map( 'trim', array_diff_key( $cc_list, $carboncopy ) ) );
+
+		if ( $invalid_cc ) {
+			$this->log_notification_recipients_issue(
+				/* translators: %1$s - notification ID, %2$s - notification name. */
+				__( 'Notification #%1$s ("%2$s"): invalid CC addresses were removed.', 'wpforms-lite' ),
+				[
+					'carboncopy' => $notification['carboncopy'],
+					'removed'    => array_values( $invalid_cc ),
+				],
+				$notification_id,
+				$notification,
+				$form_data
+			);
+		}
+
+		return $carboncopy;
+	}
+
+	/**
+	 * Log a notification not sent for having no valid recipient address.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string     $send_to         Configured Send To value.
+	 * @param string     $context         In which context this email is sent.
+	 * @param int|string $notification_id Notification ID.
+	 * @param array      $notification    Notification settings.
+	 * @param array      $form_data       Form data and settings.
+	 */
+	private function log_notification_not_sent( $send_to, $context, $notification_id, array $notification, array $form_data ): void {
+
+		$this->log_notification_recipients_issue(
+			/* translators: %1$s - notification ID, %2$s - notification name. */
+			__( 'Notification #%1$s ("%2$s") was not sent: no valid recipient address.', 'wpforms-lite' ),
+			[
+				'send_to' => $send_to,
+				'context' => $context,
+			],
+			$notification_id,
+			$notification,
+			$form_data,
+			true
+		);
+	}
+
+	/**
+	 * Log a notification recipients issue.
+	 *
+	 * @since 2.0.3
+	 *
+	 * @param string     $title           Title format string with notification ID and name placeholders.
+	 * @param array      $details         Log record details.
+	 * @param int|string $notification_id Notification ID.
+	 * @param array      $notification    Notification settings.
+	 * @param array      $form_data       Form data and settings.
+	 * @param bool       $force           Whether to write the record even when logging is disabled.
+	 */
+	private function log_notification_recipients_issue( string $title, array $details, $notification_id, array $notification, array $form_data, bool $force = false ): void {
+
+		$notification_name = ! empty( $notification['notification_name'] ) ? $notification['notification_name'] : __( 'Default Notification', 'wpforms-lite' );
+
+		wpforms_log(
+			sprintf( $title, $notification_id, $notification_name ),
+			$details,
+			[
+				'type'    => [ 'entry', 'error' ],
+				'parent'  => $this->entry_id,
+				'form_id' => $form_data['id'] ?? 0,
+				'force'   => $force,
+			]
+		);
 	}
 
 	/**
@@ -2325,6 +2576,7 @@ class WPForms_Process {
 	 * Validate action value for ajax form submission.
 	 *
 	 * @since 1.9.3
+	 * @since 2.0.2.1 Added the wp_doing_ajax() requirement.
 	 *
 	 * @return bool
 	 */
@@ -2335,8 +2587,10 @@ class WPForms_Process {
 			return true;
 		}
 
+		// The action parameter alone is supplied by the request, so a native POST can forge it.
+		// Only the AJAX endpoint reaches process() through wp_ajax_wpforms_submit.
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		return ! empty( $_POST['action'] ) && $_POST['action'] === 'wpforms_submit';
+		return wp_doing_ajax() && ! empty( $_POST['action'] ) && $_POST['action'] === 'wpforms_submit';
 	}
 
 	/**

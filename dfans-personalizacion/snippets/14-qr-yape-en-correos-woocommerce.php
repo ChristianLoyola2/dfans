@@ -2,7 +2,7 @@
 /**
  * Snippet #14: QR Yape en correos WooCommerce
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 03/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 10/11/2026. La copia activa está en la base de datos.
  */
 
 /**

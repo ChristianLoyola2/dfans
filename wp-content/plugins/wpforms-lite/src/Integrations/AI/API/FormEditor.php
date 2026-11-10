@@ -3,6 +3,7 @@
 namespace WPForms\Integrations\AI\API;
 
 use WPForms\Integrations\AI\Admin\Ajax\Forms as FormsAjax;
+use WPForms\Integrations\AI\Admin\Builder\FormEditor as BuilderFormEditor;
 use WPForms\Integrations\AI\Helpers;
 
 /**
@@ -104,17 +105,21 @@ class FormEditor extends API {
 		array $history
 	): array {
 
+		// Tell the middleware whether this builder can execute the restore scope.
+		$allowed_scopes = ( new BuilderFormEditor() )->get_allowed_scopes();
+
 		$body = [
-			'scope'           => $scope,
-			'sessionId'       => $session_id,
-			'form'            => $this->get_prepared_form_data( $form_data ),
-			'prompt'          => $this->prepare_prompt( $prompt ),
-			'lite'            => ! wpforms()->is_pro(),
-			'addons'          => $this->get_addons(),
-			'gdpr'            => wpforms_setting( 'gdpr' ),
-			'pagebreak'       => true,
-			'debug'           => defined( 'WPFORMS_AI_DEBUG' ) && WPFORMS_AI_DEBUG,
-			'global_settings' => $this->get_global_settings(),
+			'scope'            => $scope,
+			'sessionId'        => $session_id,
+			'form'             => $this->get_prepared_form_data( $form_data ),
+			'prompt'           => $this->prepare_prompt( $prompt ),
+			'lite'             => ! wpforms()->is_pro(),
+			'addons'           => $this->get_addons(),
+			'gdpr'             => wpforms_setting( 'gdpr' ),
+			'pagebreak'        => true,
+			'debug'            => defined( 'WPFORMS_AI_DEBUG' ) && WPFORMS_AI_DEBUG,
+			'global_settings'  => $this->get_global_settings(),
+			'supports_restore' => isset( $allowed_scopes['restore'] ),
 		];
 
 		// Analyze scope includes the conversation history.
@@ -136,11 +141,12 @@ class FormEditor extends API {
 
 		$addons_obj = wpforms()->obj( 'addons' );
 
-		if ( ! $addons_obj ) {
-			return [];
-		}
+		// Active payment gateways without a field are reported so the AI can point to the Payments panel.
+		$addons = Helpers::get_active_gateway_addons();
 
-		$addons = [];
+		if ( ! $addons_obj ) {
+			return $addons;
+		}
 
 		// Get the current version of the Quiz addon.
 		$quiz_version = defined( 'WPFORMS_QUIZ_VERSION' ) ? WPFORMS_QUIZ_VERSION : '';
@@ -166,29 +172,6 @@ class FormEditor extends API {
 		}
 
 		return $addons;
-	}
-
-	/**
-	 * Get global settings to pass to the AI middleware.
-	 *
-	 * @since 1.10.1
-	 *
-	 * @return array
-	 */
-	private function get_global_settings(): array {
-
-		$captcha  = wpforms_get_captcha_settings();
-		$provider = $captcha['provider'] ?? 'none';
-
-		return [
-			'captcha' => [
-				'provider'       => $provider,
-				'configured'     => $provider !== 'none'
-									&& ! empty( $captcha['site_key'] )
-									&& ! empty( $captcha['secret_key'] ),
-				'recaptcha_type' => $provider === 'recaptcha' ? ( $captcha['recaptcha_type'] ?? null ) : null,
-			],
-		];
 	}
 
 	/**

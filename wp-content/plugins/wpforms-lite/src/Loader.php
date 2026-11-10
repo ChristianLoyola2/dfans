@@ -4,7 +4,7 @@ namespace WPForms;
 
 use WPForms\Analytics\Analytics;
 use WPForms\Db\Analytics\DB as AnalyticsDB;
-use WPForms\Pro\Analytics\Analytics as ProAnalytics;
+use WPForms\Pro\Analytics\Analytics as ProAnalytics; // Pro symbol; every usage below is guarded by is_pro() at runtime.
 
 /**
  * WPForms Class Loader.
@@ -79,9 +79,39 @@ class Loader {
 			'name' => 'Emails\Summaries',
 		];
 
+		// Weekly summary metrics; the Lite or Pro implementation is resolved here.
+		$this->classes[] = [
+			'name' => 'Emails\Summaries\Data',
+			'id'   => 'emails_summaries_data',
+			'hook' => false,
+		];
+
+		$this->classes[] = [
+			'name' => 'Emails\Summaries\Milestones',
+			'id'   => 'emails_summaries_milestones',
+		];
+
+		$this->classes[] = [
+			'name' => 'Emails\Summaries\Tracking',
+			'id'   => 'emails_summaries_tracking',
+		];
+
 		$this->classes[] = [
 			'name' => 'Helpers\Plugin',
 			'id'   => 'plugin',
+		];
+
+		// Always-on — binds invalidation hooks that fire on front-end requests.
+		$this->classes[] = [
+			'name' => 'Admin\Dashboard\Cache',
+			'id'   => 'dashboard_cache',
+			'hook' => false,
+		];
+
+		// Feeds the Dashboard tasks into the Tasks manager via `wpforms_tasks_get_tasks`.
+		$this->classes[] = [
+			'name' => 'Admin\Dashboard\Tasks',
+			'id'   => 'dashboard_tasks',
 		];
 	}
 
@@ -212,6 +242,14 @@ class Loader {
 				'id'   => 'notice',
 			],
 			[
+				'name' => 'Admin\AntiSpamUpgrade',
+			],
+			[
+				'name' => 'Admin\Settings\Captcha\ConfigurationError',
+				'id'   => 'captcha_configuration_error',
+				'run'  => 'hooks',
+			],
+			[
 				'name' => 'Admin\MediaLibrary',
 				'hook' => 'admin_init',
 			],
@@ -301,6 +339,28 @@ class Loader {
 				'condition' => wpforms_is_admin_ajax(),
 			],
 			[
+				'name'      => 'Admin\Dashboard\Ajax',
+				'id'        => 'dashboard_ajax',
+				'hook'      => 'admin_init',
+				'run'       => 'hooks',
+				'condition' => wpforms_is_admin_ajax(),
+			],
+			[
+				'name'      => 'Admin\Addons\Install',
+				'hook'      => 'admin_init',
+				'run'       => 'hooks',
+				'condition' => wpforms_is_admin_ajax(),
+			],
+			[
+				'name'      => 'Admin\Dashboard\Heartbeat',
+				'id'        => 'dashboard_heartbeat',
+				'hook'      => 'admin_init',
+				'run'       => 'hooks',
+				// wp_doing_ajax(), not wpforms_is_admin_ajax() — the WP heartbeat action
+				// is 'heartbeat', not 'wpforms_*', so the WPForms-specific check rejects it.
+				'condition' => wpforms()->is_pro() && wp_doing_ajax(),
+			],
+			[
 				'name'      => 'Admin\Tools\Importers',
 				'hook'      => 'admin_init',
 				'run'       => 'load',
@@ -381,6 +441,17 @@ class Loader {
 			],
 			[
 				'name' => 'Admin\Builder\PurgeEntries',
+			],
+			[
+				'name' => 'Admin\Dashboard\Page',
+				'id'   => 'dashboard_page',
+			],
+			[
+				'name'      => 'Admin\Dashboard\StripeConnect',
+				'id'        => 'dashboard_stripe_connect',
+				'hook'      => 'init',
+				'run'       => 'hooks',
+				'condition' => is_admin(),
 			]
 		);
 	}
@@ -897,6 +968,16 @@ class Loader {
 				'id'   => 'tasks_meta',
 				'hook' => false,
 				'run'  => false,
+			],
+			// Armed here rather than by UpgradeBase::run_async() so the admin
+			// notice can re-run it after the migration is already recorded, and
+			// so the action callback is registered on WP-Cron requests too.
+			// init() returns immediately while the status option is unset.
+			[
+				'name'     => 'Migrations\Tasks\AntiSpamUpgradeTask',
+				'id'       => 'antispam_upgrade_task',
+				'hook'     => 'init',
+				'priority' => PHP_INT_MAX,
 			]
 		);
 	}

@@ -2,7 +2,7 @@
 /**
  * Snippet #29: D'FANS - Fandom e interacción
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 03/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 10/11/2026. La copia activa está en la base de datos.
  */
 
 /*
@@ -37,11 +37,11 @@ add_action( 'wp_body_open', function () {
 		return;
 	}
 	$avisos = array(
-		'🚚 Envíos a todo el Perú',
-		'💜 Paga fácil con Yape',
-		'👨‍👩‍👧 Colección Match: el mismo polo para toda la familia',
-		'⭐ Nuevos exclusivos para él, ella, niño y niña',
-		'📍 Recojo gratis en Gamarra',
+		'Envíos a todo el Perú',
+		'Paga con tarjeta, Yape o transferencia',
+		'Colección Match: el mismo polo para toda la familia',
+		'Nuevos exclusivos para él, ella, niño y niña',
+		'Recojo gratis en Gamarra',
 	);
 	$lista = '';
 	foreach ( $avisos as $aviso ) {
@@ -134,7 +134,7 @@ add_action( 'wp_footer', function () {
 // Quiz "¿Cuál es tu fandom?" (lo arma el JS).
 add_shortcode( 'dfans_quiz', function () {
 	return '<div class="dfans-quiz alignwide" data-adultos="' . esc_url( home_url( '/product-category/ropa-de-adultos/' ) ) . '" data-ninos="' . esc_url( home_url( '/product-category/ropa-para-ninos/' ) ) . '">'
-		. '<div class="dfans-quiz__cabecera"><p class="dfans-eyebrow">Quiz</p><h2>¿Cuál es tu fandom?</h2>'
+		. '<div class="dfans-quiz__cabecera"><h2>¿Cuál es tu fandom?</h2>'
 		. '<p>Responde 3 preguntas rápidas y te recomendamos tus polos.</p></div>'
 		. '<div class="dfans-quiz__cuerpo" aria-live="polite"><button type="button" class="dfans-quiz__empezar">¡Empezar!</button></div></div>';
 } );
@@ -321,7 +321,7 @@ add_action( 'wp_footer', function () {
 				var d = datosDeTarjeta(boton);
 				d.nombre = d.nombre.trim();
 				favs.unshift(d);
-				aviso('♥ Guardado en favoritos · <a href="<?php echo esc_url( home_url( '/favoritos/' ) ); ?>">Ver favoritos</a>');
+				aviso('Guardado en favoritos. <a href="<?php echo esc_url( home_url( '/favoritos/' ) ); ?>">Ver favoritos</a>');
 				if (!reducir) {
 					boton.classList.remove('is-pop');
 					void boton.offsetWidth;
@@ -369,7 +369,7 @@ add_action( 'wp_footer', function () {
 		});
 		window.addEventListener('message', function (ev) {
 			if (ev.origin === location.origin && ev.data && ev.data.dfans === 'agregado') {
-				aviso('🛒 ' + esc(ev.data.texto.replace(/Ver carrito\s*$/, '')) + ' · <a href="<?php echo esc_url( wc_get_cart_url() ); ?>">Ver carrito</a>');
+				aviso(esc(ev.data.texto.replace(/Ver carrito\s*$/, '')) + ' <a href="<?php echo esc_url( wc_get_cart_url() ); ?>">Ver carrito</a>');
 			}
 		});
 		// Cerrar ventanas: botón × o clic fuera del contenido.
@@ -438,6 +438,8 @@ add_action( 'wp_footer', function () {
 				paso++;
 				if (paso < PREGUNTAS.length) { pintarPregunta(); } else { pintarResultado(); }
 			});
+			// La primera pregunta se muestra de entrada (sin pantalla de "Empezar").
+			pintarPregunta();
 		}
 
 		// 7. Ficha de producto.
@@ -523,7 +525,7 @@ add_action( 'wp_footer', function () {
 			var bGuia = document.createElement('button');
 			bGuia.type = 'button';
 			bGuia.className = 'dfans-guia__boton';
-			bGuia.innerHTML = '<span aria-hidden="true">📏</span> Guía de tallas';
+			bGuia.textContent = 'Guía de tallas';
 			bGuia.addEventListener('click', function () { guia.showModal(); });
 			etiquetaTalla.insertAdjacentElement('afterend', bGuia);
 			// Enlace directo a la guía: /producto/...#guia-tallas

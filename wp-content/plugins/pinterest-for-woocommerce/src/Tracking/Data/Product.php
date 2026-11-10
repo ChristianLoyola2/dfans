@@ -13,14 +13,16 @@ use Automattic\WooCommerce\Pinterest\Tracking\Data;
 /**
  * Product data class. Hold product related data for event.
  *
- * @since 1.4.0
+ * @class   Product
+ * @since   1.4.0
+ * @version 1.6.1
  */
 class Product extends Data {
 
 	/**
 	 * Product WooCommerce id.
 	 *
-	 * @var string
+	 * @var int|string
 	 */
 	private $id;
 
@@ -48,7 +50,7 @@ class Product extends Data {
 	/**
 	 * Product price.
 	 *
-	 * @var string
+	 * @var float|int|string
 	 */
 	private $price;
 
@@ -62,19 +64,19 @@ class Product extends Data {
 	/**
 	 * Number of products.
 	 *
-	 * @var string
+	 * @var float|int|string
 	 */
 	private $quantity;
 
 	/**
-	 * @param string $event_id  A unique event ID.
-	 * @param string $id        Product ID.
-	 * @param string $name      Product name.
-	 * @param string $category  Product categories.
-	 * @param string $brand     Product brand.
-	 * @param string $price     Product price.
-	 * @param string $currency  Product currency.
-	 * @param string $quantity  Product quantity.
+	 * @param string           $event_id  A unique event ID.
+	 * @param int|string       $id        Product ID.
+	 * @param string           $name      Product name.
+	 * @param string           $category  Product categories.
+	 * @param string           $brand     Product brand.
+	 * @param float|int|string $price     Product price.
+	 * @param string           $currency  Product currency.
+	 * @param float|int|string $quantity  Product quantity.
 	 */
 	public function __construct( $event_id, $id, $name, $category, $brand, $price, $currency, $quantity ) {
 		parent::__construct( $event_id );
@@ -88,14 +90,14 @@ class Product extends Data {
 	}
 
 	/**
-	 * @return mixed Get Product ID.
+	 * @return int|string Get Product ID.
 	 */
 	public function get_id() {
 		return $this->id;
 	}
 
 	/**
-	 * @return mixed Get Product name.
+	 * @return string Get Product name.
 	 */
 	public function get_name() {
 		return $this->name;
@@ -109,7 +111,7 @@ class Product extends Data {
 	}
 
 	/**
-	 * @return mixed Product brand.
+	 * @return string Product brand.
 	 */
 	public function get_brand() {
 		return $this->brand;
@@ -123,7 +125,7 @@ class Product extends Data {
 	}
 
 	/**
-	 * @return mixed Get Product currency code.
+	 * @return string Get Product currency code.
 	 */
 	public function get_currency() {
 		return $this->currency;

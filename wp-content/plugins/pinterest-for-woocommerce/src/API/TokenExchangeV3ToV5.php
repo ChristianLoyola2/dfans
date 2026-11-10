@@ -22,7 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * V3 to V5 token exchange class.
  * Contains the methods API methods and the update procedure.
  *
- * @since 1.4.0
+ * @class   TokenExchangeV3ToV5
+ * @since   1.4.0
+ * @version 1.6.1
  */
 class TokenExchangeV3ToV5 extends APIV5 {
 
@@ -41,7 +43,11 @@ class TokenExchangeV3ToV5 extends APIV5 {
 
 		// Try to exchange the token.
 		try {
-			$response = APIV5::exchange_token();
+			/*
+			 * Called through this class, not APIV5: the request must go to the V3 API domain
+			 * with the V3 token, and both are resolved from the class the call starts on.
+			 */
+			$response = self::exchange_token();
 			if ( 'success' !== $response['status'] ) {
 				throw new Exception(
 					sprintf(
@@ -110,7 +116,7 @@ class TokenExchangeV3ToV5 extends APIV5 {
 	 *
 	 * @since 1.4.0
 	 *
-	 * @return string $token The V3 token.
+	 * @return mixed The stored V3 token data, with its access token decrypted.
 	 */
 	public static function get_token() {
 		$token = Pinterest_For_Woocommerce()::get_data( 'token', true );

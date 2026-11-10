@@ -21,6 +21,9 @@ use Throwable;
 
 /**
  * Pinterest Conversions API support.
+ *
+ * @class   Conversions
+ * @version 1.6.0
  */
 class Conversions extends Tracker {
 
@@ -30,6 +33,13 @@ class Conversions extends Tracker {
 	 * @var string
 	 */
 	private const CLICK_ID_SESSION_KEY = 'pinterest_for_woocommerce_click_id';
+
+	/**
+	 * Maximum accepted click ID length in bytes. Longer values are discarded.
+	 *
+	 * @var int
+	 */
+	private const CLICK_ID_MAX_LENGTH = 512;
 
 	/**
 	 * User data for the Conversions API.
@@ -62,31 +72,32 @@ class Conversions extends Tracker {
 	 * @param string $event_name Tracking event name.
 	 * @param Data   $data       Tracking event data class.
 	 *
-	 * @throws Throwable In case of an API error.
+	 * @throws Throwable In case of an API error, after logging it at error level.
 	 *
-	 * @return void
+	 * @return bool True after a dispatch, false when the event was skipped because no ad account is configured.
 	 */
 	public function track_event( string $event_name, Data $data ) {
 		$data = $this->prepare_request_data( $event_name, $data );
 
 		try {
-			$this->send_request( $event_name, $data );
+			if ( ! $this->send_request( $event_name, $data ) ) {
+				return false;
+			}
 
-			/* translators: 1: Conversions API event name, 2: JSON encoded event data. */
 			$messages = sprintf(
-				'Sending Pinterest Conversions API event %1$s with a payload: %2$s',
-				$event_name,
-				wp_json_encode( $data )
+				'Sending Pinterest Conversions API event %s.',
+				$event_name
 			);
 			Logger::log( $messages, 'debug', 'conversions' );
+
+			return true;
 		} catch ( Throwable $e ) {
-			/* translators: 1: Conversions API event name, 2: JSON encoded event data, 3: Error code, 4: Error message. */
 			$messages = sprintf(
-				'Sending Pinterest Conversions API event %1$s with a payload %2$s has failed with the error %3$d code and %4$s message',
+				'Sending Pinterest Conversions API event %1$s has failed with the error %2$d code and %3$s message',
 				$event_name,
-				wp_json_encode( $data ),
 				$e->getCode(),
-				$e->getMessage()
+				// The upstream message is free text: keep it on one line and bounded.
+				mb_substr( sanitize_text_field( $e->getMessage() ), 0, 200 )
 			);
 			Logger::log( $messages, 'error', 'conversions' );
 
@@ -222,8 +233,13 @@ class Conversions extends Tracker {
 	 *
 	 * The landing-page `epik` parameter is the freshest source. Beacon requests
 	 * carry the landing page as the event source URL, so its query string is
-	 * checked before the current request. Pinterest's `_epik` cookie and the
-	 * WooCommerce session retain the click ID for later events.
+	 * checked before the current request. AJAX and form add-to-cart requests
+	 * do not carry it themselves, so the referer is checked next when it is on
+	 * this site; for add-to-cart requests that is usually the landing page, as
+	 * long as the browser's referrer policy keeps the query string. Pinterest's `_epik` cookie and the WooCommerce
+	 * session retain the click ID for later events.
+	 *
+	 * @since 1.6.0 Reads the click ID from the referer.
 	 *
 	 * @param string $event_source_url Optional URL where the event occurred.
 	 *
@@ -232,18 +248,26 @@ class Conversions extends Tracker {
 	private static function maybe_get_click_id( string $event_source_url = '' ) {
 		$click_id = self::get_click_id_from_url( $event_source_url );
 
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only attribution parameter.
+		if ( false === $click_id && isset( $_GET['epik'] ) && is_string( $_GET['epik'] ) ) {
+			$click_id = self::normalize_click_id( wp_unslash( $_GET['epik'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in normalize_click_id().
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
 		if ( false === $click_id ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only attribution parameter.
-			if ( isset( $_GET['epik'] ) && is_string( $_GET['epik'] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only attribution parameter.
-				$click_id = sanitize_text_field( wp_unslash( $_GET['epik'] ) );
-			} elseif ( isset( $_COOKIE['_epik'] ) && is_string( $_COOKIE['_epik'] ) ) {
-				$click_id = sanitize_text_field( wp_unslash( $_COOKIE['_epik'] ) );
+			$referer = (string) wp_get_referer();
+			// wp_get_referer() also accepts other allowed redirect hosts; only this site's pages count.
+			if ( wp_parse_url( $referer, PHP_URL_HOST ) === strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) ) ) {
+				$click_id = self::get_click_id_from_url( $referer );
 			}
 		}
 
+		if ( false === $click_id && isset( $_COOKIE['_epik'] ) && is_string( $_COOKIE['_epik'] ) ) {
+			$click_id = self::normalize_click_id( wp_unslash( $_COOKIE['_epik'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized in normalize_click_id().
+		}
+
 		$session = function_exists( 'WC' ) && isset( WC()->session ) ? WC()->session : false;
-		if ( false !== $click_id && '' !== $click_id ) {
+		if ( false !== $click_id ) {
 			if ( $session ) {
 				$session->set( self::CLICK_ID_SESSION_KEY, $click_id );
 			}
@@ -255,9 +279,46 @@ class Conversions extends Tracker {
 			return false;
 		}
 
-		$click_id = $session->get( self::CLICK_ID_SESSION_KEY );
+		$stored   = $session->get( self::CLICK_ID_SESSION_KEY );
+		$click_id = self::normalize_click_id( $stored );
+		if ( false === $click_id && null !== $stored ) {
+			// Evict values stored before validation existed so they stop being re-serialized.
+			$session->__unset( self::CLICK_ID_SESSION_KEY );
+		}
 
-		return is_string( $click_id ) && '' !== $click_id ? $click_id : false;
+		return $click_id;
+	}
+
+	/**
+	 * Normalizes a visitor-supplied click ID.
+	 *
+	 * Values changed by sanitize_text_field() are discarded rather than stored
+	 * mutated, and over-length values are discarded rather than truncated: in
+	 * both cases the result could not match anything at Pinterest.
+	 *
+	 * @param mixed $value Raw click ID value.
+	 *
+	 * @return string|false Click ID, or false when empty, mutated by sanitization or longer than CLICK_ID_MAX_LENGTH.
+	 */
+	private static function normalize_click_id( $value ) {
+		if ( ! is_string( $value ) ) {
+			return false;
+		}
+
+		// Bound the length before sanitizing: sanitize_text_field() decodes percent
+		// sequences in a loop, so an unbounded value is expensive to clean up, and an
+		// over-length value should be reported whether or not sanitizing would alter it.
+		if ( strlen( $value ) > self::CLICK_ID_MAX_LENGTH ) {
+			Logger::log( sprintf( 'Discarding Pinterest click ID longer than %d bytes.', self::CLICK_ID_MAX_LENGTH ), 'debug', 'conversions' );
+			return false;
+		}
+
+		$sanitized = sanitize_text_field( $value );
+		if ( $sanitized !== $value || '' === $sanitized ) {
+			return false;
+		}
+
+		return $sanitized;
 	}
 
 	/**
@@ -275,7 +336,7 @@ class Conversions extends Tracker {
 
 		wp_parse_str( $query, $params );
 
-		return isset( $params['epik'] ) && is_string( $params['epik'] ) ? sanitize_text_field( $params['epik'] ) : false;
+		return self::normalize_click_id( $params['epik'] ?? null );
 	}
 
 	/**
@@ -386,12 +447,13 @@ class Conversions extends Tracker {
 	 * @param array  $data       Event data.
 	 *
 	 * @throws Throwable|Exception If any exception during the request happen.|If response was not successful enough.
-	 * @return void
+	 * @return bool False when no ad account is configured, true after a successful dispatch.
 	 */
 	private function send_request( string $event_name, array $data ) {
 		$ad_account_id = Pinterest_For_WooCommerce()::get_setting( 'tracking_advertiser' );
 		if ( empty( $ad_account_id ) ) {
-			return;
+			Logger::log( 'Skipping Pinterest Conversions API event ' . $event_name . ': no ad account (tracking_advertiser) is configured.', 'debug', 'conversions' );
+			return false;
 		}
 
 		$response = APIV5::send_conversions_api_event( $ad_account_id, $data );
@@ -423,5 +485,7 @@ class Conversions extends Tracker {
 				);
 			}
 		}
+
+		return true;
 	}
 }

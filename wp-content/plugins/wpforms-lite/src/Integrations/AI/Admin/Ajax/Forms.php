@@ -29,6 +29,16 @@ class Forms extends Base {
 	];
 
 	/**
+	 * Value of `$data['source']` handed to Form::add() for a form the generator built.
+	 *
+	 * A key of its own rather than `template`, which the creation filters look up in the
+	 * template catalog and would apply if a template ever took that slug.
+	 *
+	 * @since 2.0.2.1
+	 */
+	public const CREATION_SOURCE = 'ai';
+
+	/**
 	 * The addon fields.
 	 *
 	 * @since 1.9.4
@@ -41,6 +51,7 @@ class Forms extends Base {
 		'ranking'            => 'surveys-polls',
 		'signature'          => 'signatures',
 		'payment-coupon'     => 'coupons',
+		'map'                => 'geolocation',
 	];
 
 	/**
@@ -350,7 +361,11 @@ class Forms extends Base {
 		$form_data['fields']   = $this->prepare_fields_data( $form_data );
 		$form_data['settings'] = $this->prepare_form_settings( $form_data );
 		$form_data             = $this->randomize_graded_quiz_choices( $form_data );
-		$form_data['field_id'] = count( $form_data['fields'] ) + 1;
+
+		// A follow-up prompt that removes a field leaves a gap in the IDs, so the field
+		// count can be lower than the highest ID already in use.
+		$field_keys            = array_map( 'absint', array_keys( $form_data['fields'] ) );
+		$form_data['field_id'] = $field_keys ? max( $field_keys ) + 1 : 1;
 
 		$meta               = [];
 		$meta['template']   = 'generate';
@@ -368,7 +383,8 @@ class Forms extends Base {
 
 		// Add a new form if it is a new form.
 		if ( empty( $form_id ) ) {
-			$form_id = $form_obj->add( $form_data['form_title'] );
+			// Tells a wpforms_create_form listener this form came from the generator.
+			$form_id = $form_obj->add( $form_data['form_title'], [], [ 'source' => self::CREATION_SOURCE ] );
 		}
 
 		// Check if the form was created.

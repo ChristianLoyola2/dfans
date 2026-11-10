@@ -22,7 +22,7 @@ $gs  = json_decode( get_post( 29 )->post_content, true );
 $css = $gs['styles']['css'] ?? '';
 file_put_contents( "$dest/css/estilos-globales-css-adicional.css", "/* CSS adicional de los estilos globales (post 29), exportado el " . date( 'd/m/Y' ) . " */\n" . $css );
 echo 'css ', strlen( $css ), " bytes\n";
-foreach ( array( 60 => 'portada-inicio', 111 => 'cabecera', 112 => 'pie', 1102 => 'plantilla-ropa-de-adultos', 1103 => 'plantilla-ropa-para-ninos' ) as $id => $n ) {
+foreach ( array( 60 => 'portada-inicio', 111 => 'cabecera', 112 => 'pie', 4 => 'menu', 1102 => 'plantilla-ropa-de-adultos', 1103 => 'plantilla-ropa-para-ninos', 1509 => 'plantilla-404', 1487 => 'pagina-favoritos' ) as $id => $n ) {
 	$p = get_post( $id );
 	if ( $p ) {
 		file_put_contents( "$dest/bloques/$n.html", $p->post_content );

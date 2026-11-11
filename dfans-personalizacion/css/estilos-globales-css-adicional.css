@@ -1,4 +1,4 @@
-/* CSS adicional de los estilos globales (post 29), exportado el 10/11/2026 */
+/* CSS adicional de los estilos globales (post 29), exportado el 11/11/2026 */
 /* ================================
    D'FANS — ESTILOS PERSONALIZADOS
    ================================ */
@@ -2404,4 +2404,374 @@ form.cart .quantity .qty { width: 4.4rem; min-height: 52px; border: 1px solid va
 	.wc-block-product .wc-block-components-product-image img,
 	.dfans-fandoms__foto,
 	.dfans-header .wp-block-navigation .wp-block-navigation-item__content::after { transition: none !important; }
+}
+
+
+/* ---------- Rediseño 2026 v3: streetwear oscuro ---------- */
+/* Tercera versión (10/11/2026). Va al final, después de la v2, y la vuelve oscura sin borrarla.
+   Negro polo de fondo, algodón para el texto y las acciones, carbón para los paneles.
+   El color lo ponen las fotos; el rojo solo marca "Match" y los errores.
+   Archivo en tres anchos: muy ancha en títulos, condensada en el índice de fandoms, normal en textos.
+   Copia de la v2 sola en backups/rediseno/rediseno-2026.v2.css. */
+:root {
+	--dfans-papel: #000000;
+	--dfans-prenda: #1a1a1a;
+	--dfans-tinta: #f2f2ef;
+	--dfans-tinta-2: #a3a39e;
+	--dfans-linea: #2e2e2c;
+	--dfans-linea-fuerte: #4a4a47;
+	--dfans-grafito: #1a1a1a;
+	--dfans-campo: #111111;
+	--dfans-match: #e0262f;
+	--wp--preset--color--base: #000000;
+	--wp--preset--color--contrast: #f2f2ef;
+	--wp--preset--color--accent-4: #a3a39e;
+	--wp--preset--color--accent-5: #1a1a1a;
+	color-scheme: dark;
+}
+html, body { background: #000 !important; color: var(--dfans-tinta); }
+::selection { background: var(--dfans-tinta); color: #000; }
+
+/* Títulos: Archivo muy ancha y negra. */
+body h1, body h2,
+body .wp-block-query-title,
+.single-product main .wp-block-post-title {
+	font-stretch: 125%;
+	font-weight: 900 !important;
+	letter-spacing: -0.035em !important;
+	line-height: 0.92 !important;
+}
+body h1, body .wp-block-query-title { font-size: clamp(2.8rem, 6.4vw, 5.6rem) !important; }
+body h2 { font-size: clamp(2rem, 4.4vw, 3.6rem) !important; }
+body h3 { font-stretch: 100%; font-weight: 800 !important; }
+body .wp-block-post-title { color: var(--dfans-tinta); }
+
+/* Botones: algodón lleno con texto negro, o con borde. */
+.wp-block-button__link,
+.dfans-boton { color: #000 !important; }
+.wp-block-button__link:hover,
+.dfans-boton:hover { background: #fff !important; border-color: #fff !important; color: #000 !important; }
+.dfans-b-secundario .wp-block-button__link,
+.dfans-boton--borde { background: transparent !important; color: var(--dfans-tinta) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.dfans-b-secundario .wp-block-button__link:hover,
+.dfans-boton--borde:hover { background: var(--dfans-tinta) !important; border-color: var(--dfans-tinta) !important; color: #000 !important; }
+.woocommerce .button,
+.woocommerce button.button,
+.wc-block-components-button:not(.is-link) { background: var(--dfans-tinta) !important; color: #000 !important; border-color: var(--dfans-tinta) !important; }
+.woocommerce .button:hover,
+.woocommerce button.button:hover,
+.wc-block-components-button:not(.is-link):hover { background: #fff !important; color: #000 !important; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline-color: var(--dfans-tinta) !important; }
+
+/* Campos de formulario oscuros. */
+body input[type="text"], body input[type="email"], body input[type="tel"], body input[type="password"],
+body input[type="number"], body input[type="search"], body input[type="url"], body select, body textarea,
+body .input-text {
+	background-color: var(--dfans-campo) !important;
+	color: var(--dfans-tinta) !important;
+	border-color: var(--dfans-linea-fuerte) !important;
+}
+body input::placeholder, body textarea::placeholder { color: #7a7a76 !important; opacity: 1; }
+body input:focus, body select:focus, body textarea:focus, body .input-text:focus { border-color: var(--dfans-tinta) !important; box-shadow: 0 0 0 1px var(--dfans-tinta) !important; outline: none; }
+.select2-container--default .select2-selection--single { min-height: 48px; background: var(--dfans-campo) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.select2-container--default .select2-selection--single .select2-selection__rendered { color: var(--dfans-tinta) !important; line-height: 46px !important; }
+.select2-dropdown { background: var(--dfans-prenda) !important; color: var(--dfans-tinta) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted[data-selected] { background: var(--dfans-tinta) !important; color: #000 !important; }
+.select2-search--dropdown .select2-search__field { background: var(--dfans-campo) !important; color: var(--dfans-tinta) !important; }
+
+/* Avisos de WooCommerce. */
+.woocommerce-info, .woocommerce-message, .woocommerce-error, .woocommerce-notice,
+.wc-block-components-notice-banner {
+	background: var(--dfans-prenda) !important;
+	color: var(--dfans-tinta) !important;
+	border-color: var(--dfans-linea-fuerte) !important;
+}
+.woocommerce-error, .wc-block-components-notice-banner.is-error { border-left: 3px solid var(--dfans-match) !important; }
+.woocommerce-info::before, .woocommerce-message::before { color: var(--dfans-tinta) !important; }
+
+/* ---------- Cabecera ---------- */
+.dfans-anuncios { background: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-anuncios a { color: #000 !important; }
+.dfans-anuncios li::after { color: #8a8a85; }
+.dfans-header {
+	background: rgba(0, 0, 0, 0.9) !important;
+	border-bottom: 1px solid var(--dfans-linea) !important;
+}
+.dfans-header .wc-block-mini-cart__badge { border-color: #000 !important; background: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-header .wp-block-navigation .wp-block-navigation-item__content::after { background: var(--dfans-tinta); }
+.dfans-header .wc-block-mini-cart__button:hover,
+.dfans-header .wc-block-customer-account a:hover,
+.dfans-fav-cabecera:hover,
+.dfans-header .wp-block-site-title a:hover { color: #fff !important; opacity: 0.75; }
+.dfans-header .wp-block-navigation__responsive-container.is-menu-open { background: #000 !important; color: var(--dfans-tinta) !important; }
+body.woocommerce-checkout header.wp-block-template-part:not(:has(.dfans-header)) { background: #000 !important; }
+.wc-block-components-drawer,
+.wc-block-mini-cart__drawer .components-modal__content { background: var(--dfans-prenda) !important; color: var(--dfans-tinta) !important; }
+.wc-block-components-drawer__close { color: var(--dfans-tinta) !important; }
+
+/* ---------- Portada: la familia a pantalla completa ---------- */
+.dfans-h3 { position: relative; padding: 0 !important; margin-block: 0 !important; background: #000; overflow: hidden; }
+.dfans-h3__fotos {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 2px;
+	height: min(88vh, 900px);
+	min-height: 540px;
+	margin: 0 !important;
+	max-width: none !important;
+}
+.dfans-h3__fotos > figure { position: relative; height: 100%; margin: 0 !important; overflow: hidden; background: var(--dfans-prenda); }
+.dfans-h3__fotos a { display: block; height: 100%; }
+.dfans-h3__fotos img { display: block; width: 100%; height: 100% !important; object-fit: cover; object-position: center 22%; transition: transform 0.6s ease; }
+.dfans-h3__fotos a:hover img { transform: scale(1.03); }
+.dfans-h3__fotos figcaption {
+	position: absolute;
+	top: 1rem;
+	left: 1rem;
+	z-index: 2;
+	margin: 0 !important;
+	padding: 0.25rem 0.55rem;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff !important;
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+.dfans-h3::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(to top, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.6) 30%, rgba(0, 0, 0, 0) 60%);
+	pointer-events: none;
+}
+.dfans-h3__texto {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 3;
+	margin: 0 !important;
+	max-width: none !important;
+	padding: 0 var(--wp--style--root--padding-right, 1.5rem) clamp(2rem, 4.5vw, 3.8rem) var(--wp--style--root--padding-left, 1.5rem);
+	pointer-events: none;
+}
+.dfans-h3__marco { max-width: var(--wp--style--global--wide-size, 1340px) !important; margin: 0 auto !important; }
+.dfans-h3__marco > * { pointer-events: auto; }
+.dfans-h3 h1 {
+	max-width: 12ch;
+	margin: 0 0 1.5rem !important;
+	color: #fff !important;
+	font-size: clamp(3rem, 8.6vw, 8.8rem) !important;
+	font-stretch: 125%;
+	line-height: 0.86 !important;
+	letter-spacing: -0.045em !important;
+}
+.dfans-h3__bajada { display: flex !important; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1.2rem 2.5rem; margin: 0 !important; }
+.dfans-h3__bajada > * { margin: 0 !important; }
+.dfans-h3__bajada p { max-width: 34rem; color: #d9d9d5 !important; font-size: 1.1rem; line-height: 1.5; }
+.dfans-h3 .wp-block-buttons { gap: 0.6rem; }
+.dfans-h3 .dfans-b-secundario .wp-block-button__link { border-color: rgba(255, 255, 255, 0.55) !important; color: #fff !important; }
+
+/* Secciones de la portada. */
+.dfans-p-cabecera { margin-bottom: 2.2rem !important; }
+.dfans-p-cabecera h2 { max-width: 16ch; }
+.dfans-p-cabecera a { color: var(--dfans-tinta); text-underline-offset: 0.25em; }
+.dfans-p-nuevos .wc-block-product-template { row-gap: 2.6rem !important; column-gap: 1rem !important; }
+.dfans-p-fandoms { background: var(--dfans-prenda) !important; color: var(--dfans-tinta); }
+.dfans-fandoms__item { border-top-color: var(--dfans-linea-fuerte) !important; }
+.dfans-fandoms__item:last-child { border-bottom-color: var(--dfans-linea-fuerte) !important; }
+.dfans-fandoms__nombre { font-size: clamp(3rem, 7vw, 6.4rem); }
+.dfans-p-cortes__grilla { gap: 1rem; }
+.dfans-p-corte figure { border-radius: 2px; }
+.dfans-p-corte h3 { font-stretch: 125%; font-size: 1.4rem !important; }
+.dfans-p-quiz, .dfans-seccion-quiz { background: #000 !important; border-top: 1px solid var(--dfans-linea); }
+.dfans-quiz__cuerpo { background: var(--dfans-prenda) !important; border-color: var(--dfans-linea) !important; }
+.dfans-quiz__opcion { background: transparent !important; border-color: var(--dfans-linea-fuerte) !important; }
+.dfans-quiz__opcion:hover,
+.dfans-quiz__opcion:focus-visible { background: rgba(242, 242, 239, 0.06) !important; border-color: var(--dfans-tinta) !important; }
+.dfans-p-visita { background: var(--dfans-prenda); border-top: 0 !important; }
+.dfans-p-visita h3 { font-stretch: 125%; }
+
+/* ---------- Pie ---------- */
+.dfans-footer { background: #000 !important; border-top: 1px solid var(--dfans-linea); }
+.dfans-pill { border-color: var(--dfans-linea-fuerte); }
+
+/* ---------- Tarjetas de producto ---------- */
+.wc-block-product .wc-block-components-product-image { border-radius: 2px !important; background: var(--dfans-prenda); }
+.wc-block-product .wp-block-post-title,
+.wc-block-product .wp-block-post-title a { color: var(--dfans-tinta) !important; font-size: 1rem !important; }
+.wc-block-product .wp-block-woocommerce-product-price,
+.wc-block-product .wc-block-components-product-price { color: var(--dfans-tinta-2) !important; }
+.dfans-badge-match { background: var(--dfans-match) !important; color: #fff !important; }
+.dfans-badge-corte { background: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-fav:not(.dfans-fav--ficha) { background: rgba(0, 0, 0, 0.6) !important; color: #fff !important; border-color: transparent !important; }
+.dfans-vista { background: var(--dfans-tinta) !important; color: #000 !important; }
+
+/* Filtros y paginación. */
+.dfans-chip { background: transparent !important; border-color: var(--dfans-linea-fuerte) !important; }
+.dfans-chip:hover { border-color: var(--dfans-tinta) !important; }
+.dfans-chip.is-activa { background: var(--dfans-tinta) !important; border-color: var(--dfans-tinta) !important; color: #000 !important; }
+.woocommerce-result-count, .wc-block-product-results-count { color: var(--dfans-tinta-2) !important; }
+.wp-block-query-pagination .page-numbers { border-color: var(--dfans-linea-fuerte) !important; color: var(--dfans-tinta) !important; }
+.wp-block-query-pagination .page-numbers.current { background: var(--dfans-tinta) !important; color: #000 !important; }
+.wp-block-query-pagination-next,
+.wp-block-query-pagination-previous { background: transparent !important; border-color: var(--dfans-linea-fuerte) !important; }
+.wp-block-query-pagination-next:hover,
+.wp-block-query-pagination-previous:hover { background: var(--dfans-tinta) !important; color: #000 !important; }
+
+/* ---------- Ficha de producto ---------- */
+.single-product main .wp-block-post-title { font-size: clamp(2.4rem, 4.6vw, 4rem) !important; }
+.woocommerce-product-gallery .flex-viewport,
+.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:first-child img { border-radius: 2px; }
+/* Tallas como etiquetas de prenda. */
+.dfans-opcion {
+	min-width: 3.6rem;
+	min-height: 48px;
+	background: transparent !important;
+	border: 1px solid var(--dfans-linea-fuerte) !important;
+	border-radius: 2px !important;
+	color: var(--dfans-tinta) !important;
+	font-stretch: 112%;
+	font-weight: 700 !important;
+}
+.dfans-opcion:hover { border-color: var(--dfans-tinta) !important; }
+.dfans-opcion.is-activa { background: var(--dfans-tinta) !important; border-color: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-opcion:disabled,
+.dfans-opcion.is-agotada { color: #5d5d59 !important; text-decoration: line-through; }
+form.cart .quantity .qty { background: var(--dfans-campo) !important; color: var(--dfans-tinta) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.single_add_to_cart_button { flex: 1 1 14rem; background: var(--dfans-tinta) !important; color: #000 !important; font-size: 1.02rem !important; }
+.single_add_to_cart_button:hover { background: #fff !important; color: #000 !important; }
+.single_add_to_cart_button.disabled,
+.single_add_to_cart_button:disabled { background: #2a2a28 !important; color: #85857f !important; }
+.dfans-fav--ficha { background: transparent !important; color: var(--dfans-tinta) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.dfans-guia__tabla thead th { background: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-guia__tabla td, .dfans-guia__tabla th { border-color: var(--dfans-linea) !important; }
+
+/* La etiqueta cosida: datos reales del polo, como la etiqueta del cuello. */
+.dfans-etiqueta {
+	position: relative;
+	margin: 1.6rem 0 0;
+	padding: 1.2rem 1.3rem 1.1rem;
+	border-radius: 3px;
+	background: var(--dfans-prenda);
+	color: var(--dfans-tinta);
+}
+.dfans-etiqueta::before {
+	content: "";
+	position: absolute;
+	inset: 5px;
+	border: 1px dashed var(--dfans-linea-fuerte);
+	border-radius: 2px;
+	pointer-events: none;
+}
+.dfans-etiqueta__marca { margin: 0 0 0.8rem !important; font-family: var(--dfans-comic) !important; font-size: 1.5rem; letter-spacing: 0.04em; line-height: 1; }
+.dfans-etiqueta dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.45rem 1.2rem; margin: 0; font-size: 0.95rem; }
+.dfans-etiqueta dt { color: var(--dfans-tinta-2); }
+.dfans-etiqueta dd { margin: 0; font-weight: 600; }
+.dfans-etiqueta dd a { color: inherit; text-underline-offset: 0.2em; }
+.dfans-ficha-info li::before { background: var(--dfans-tinta); }
+.woocommerce-tabs ul.tabs li, .wc-tabs li { background: transparent !important; border: 0 !important; }
+.woocommerce-tabs ul.tabs li a, .wc-tabs li a { color: var(--dfans-tinta-2) !important; }
+.woocommerce-tabs ul.tabs li.active a, .wc-tabs li.active a { color: var(--dfans-tinta) !important; }
+.woocommerce-tabs ul.tabs::before, .woocommerce-tabs ul.tabs li::before, .woocommerce-tabs ul.tabs li::after { display: none !important; }
+.woocommerce-tabs table.shop_attributes th, .woocommerce-tabs table.shop_attributes td { border-color: var(--dfans-linea) !important; color: var(--dfans-tinta) !important; background: transparent !important; }
+
+/* ---------- Carrito ---------- */
+.wp-block-woocommerce-cart .wp-block-woocommerce-cart-totals-block { background: var(--dfans-prenda) !important; }
+.wc-block-cart__submit-button { background: var(--dfans-tinta) !important; color: #000 !important; }
+.wc-block-cart__submit-button:hover { background: #fff !important; }
+.wc-block-components-quantity-selector { background: var(--dfans-campo) !important; border-color: var(--dfans-linea-fuerte) !important; }
+.wc-block-components-quantity-selector::after { border-color: var(--dfans-linea-fuerte) !important; }
+.wc-block-components-quantity-selector input,
+.wc-block-components-quantity-selector button { background: transparent !important; color: var(--dfans-tinta) !important; }
+.wc-block-cart-items, .wc-block-cart-items td, .wc-block-cart-items th { border-color: var(--dfans-linea) !important; }
+.wc-block-components-product-metadata, .wc-block-components-product-details { color: var(--dfans-tinta-2) !important; }
+.wc-block-components-totals-wrapper { border-color: var(--dfans-linea-fuerte) !important; }
+.wc-block-components-text-input input, .wc-block-components-text-input label { color: var(--dfans-tinta) !important; }
+
+/* ---------- Checkout ---------- */
+.woocommerce-checkout #order_review { background: var(--dfans-prenda) !important; }
+.woocommerce-checkout table.shop_table, .woocommerce-checkout table.shop_table th, .woocommerce-checkout table.shop_table td { border-color: var(--dfans-linea-fuerte) !important; color: var(--dfans-tinta) !important; }
+#dfans-tipo-entrega label { background: transparent !important; border-color: var(--dfans-linea-fuerte) !important; color: var(--dfans-tinta) !important; }
+#dfans-tipo-entrega label:has(input:checked) { background: var(--dfans-prenda) !important; border-color: var(--dfans-tinta) !important; box-shadow: 0 0 0 1px var(--dfans-tinta) !important; }
+.woocommerce-checkout #payment { background: transparent !important; border-radius: 0 !important; }
+.woocommerce-checkout #payment ul.payment_methods { border-color: var(--dfans-linea-fuerte) !important; }
+.woocommerce-checkout #payment ul.payment_methods li { background: transparent !important; border-color: var(--dfans-linea-fuerte) !important; color: var(--dfans-tinta) !important; }
+.woocommerce-checkout #payment div.payment_box { background: var(--dfans-campo) !important; color: var(--dfans-tinta) !important; }
+.woocommerce-checkout #payment div.payment_box::before { border-bottom-color: var(--dfans-campo) !important; }
+.woocommerce-checkout #place_order { background: var(--dfans-tinta) !important; border-color: var(--dfans-tinta) !important; color: #000 !important; }
+.woocommerce-checkout #place_order:hover { background: #fff !important; }
+.woocommerce-terms-and-conditions-wrapper, .woocommerce-privacy-policy-text { color: var(--dfans-tinta-2); }
+.woocommerce-terms-and-conditions-wrapper a, .woocommerce-privacy-policy-text a { color: var(--dfans-tinta) !important; }
+.dfans-pago-seguro { flex: 1 0 100%; width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; margin: 0.9rem 0 0; color: var(--dfans-tinta-2); font-size: 0.9rem; }
+.dfans-pago-seguro__candado { width: 16px; height: 16px; background: currentColor; -webkit-mask: var(--i-candado) center / contain no-repeat; mask: var(--i-candado) center / contain no-repeat; }
+.dfans-pago-seguro span.dfans-pill { margin: 0; color: var(--dfans-tinta); }
+:root { --i-candado: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill-rule='evenodd' d='M7 10V7a5 5 0 0 1 10 0v3h1.5A1.5 1.5 0 0 1 20 11.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20.5v-9A1.5 1.5 0 0 1 5.5 10zm2 0h6V7a3 3 0 0 0-6 0z'/%3E%3C/svg%3E"); }
+/* Pedido recibido. */
+.woocommerce-order-overview, .woocommerce-order-details, .woocommerce-customer-details address { border-color: var(--dfans-linea-fuerte) !important; color: var(--dfans-tinta) !important; }
+
+/* ---------- Mi cuenta ---------- */
+.woocommerce-account .u-columns .u-column1,
+.woocommerce-account .u-columns .u-column2 { background: var(--dfans-prenda) !important; border-color: var(--dfans-linea) !important; }
+.woocommerce-account .button,
+.woocommerce-account button[type="submit"] { background: var(--dfans-tinta) !important; color: #000 !important; }
+.woocommerce-account .button:hover,
+.woocommerce-account button[type="submit"]:hover { background: #fff !important; }
+.woocommerce-MyAccount-navigation li a:hover,
+.woocommerce-MyAccount-navigation li.is-active a { background: var(--dfans-prenda) !important; }
+.dfans-tarjeta { background: var(--dfans-prenda); border-color: var(--dfans-linea); }
+.dfans-estado--on-hold, .dfans-estado--pending { background: #3a2b0a; color: #f3c46b; }
+.dfans-estado--processing { background: #0f2040; color: #93b8ff; }
+.dfans-estado--completed { background: #0d2a18; color: #74d69a; }
+.dfans-estado--cancelled, .dfans-estado--failed, .dfans-estado--refunded { background: #3a0f10; color: #ff8f8f; }
+.woocommerce-orders-table__row--status-on-hold .woocommerce-orders-table__cell-order-status,
+.woocommerce-orders-table__row--status-pending .woocommerce-orders-table__cell-order-status { color: #f3c46b; }
+.woocommerce-orders-table__row--status-processing .woocommerce-orders-table__cell-order-status { color: #93b8ff; }
+.woocommerce-orders-table__row--status-completed .woocommerce-orders-table__cell-order-status { color: #74d69a; }
+.woocommerce-orders-table__row--status-cancelled .woocommerce-orders-table__cell-order-status,
+.woocommerce-orders-table__row--status-failed .woocommerce-orders-table__cell-order-status { color: #ff8f8f; }
+.woocommerce-account .woocommerce-orders-table .button { background: transparent !important; color: var(--dfans-tinta) !important; }
+.woocommerce-account .woocommerce-orders-table .button:hover { background: var(--dfans-tinta) !important; color: #000 !important; }
+.dfans-reclamo .wp-element-button,
+.dfans-404 .wp-block-search__button { color: #000 !important; }
+
+/* Restos del CSS más antiguo con texto negro o fondos blancos fijos. */
+.woocommerce .price,
+.wc-block-components-product-price,
+.wp-block-woocommerce-product-price,
+.wp-block-woocommerce-cart .wc-block-components-product-name,
+.wc-block-components-product-name,
+.dfans-mini__nombre { color: var(--dfans-tinta) !important; }
+.dfans-paso, .dfans-familia-card { background: var(--dfans-prenda) !important; color: var(--dfans-tinta); }
+.woocommerce-account table.shop_table { background: transparent !important; }
+#dfans-recojo-info { background: var(--dfans-prenda) !important; color: var(--dfans-tinta) !important; border-color: var(--dfans-linea-fuerte) !important; }
+body.woocommerce-checkout #payment div.payment_box { background: var(--dfans-campo) !important; color: var(--dfans-tinta) !important; }
+body.woocommerce-checkout #payment div.payment_box::before { border-bottom-color: var(--dfans-campo) !important; }
+.dfans-guia__tabla tbody tr:nth-child(even) { background: var(--dfans-prenda) !important; }
+.dfans-barra-compra { background: rgba(0, 0, 0, 0.94) !important; color: var(--dfans-tinta) !important; border-top: 1px solid var(--dfans-linea) !important; }
+.dfans-por-completar { color: #000 !important; }
+.dfans-modal, .dfans-modal__caja, .dfans-modal__contenido { background: var(--dfans-prenda) !important; color: var(--dfans-tinta) !important; }
+
+.dfans-fav:not(.is-activo) svg { stroke: currentColor !important; }
+.dfans-arriba { background: var(--dfans-tinta) !important; color: #000 !important; box-shadow: none !important; }
+.dfans-arriba:hover { background: #fff !important; }
+
+/* ---------- Celular ---------- */
+@media (max-width: 781px) {
+	.dfans-h3__fotos { grid-template-columns: repeat(2, minmax(0, 1fr)); height: auto; min-height: 0; }
+	.dfans-h3__fotos > figure { height: auto; }
+	.dfans-h3__fotos a { height: auto; }
+	.dfans-h3__fotos img { height: auto !important; aspect-ratio: 4 / 5; }
+	.dfans-h3::after { display: none; }
+	.dfans-h3__texto { position: static; padding-top: 1.8rem; padding-bottom: 2.6rem; }
+	.dfans-h3 h1 { font-size: clamp(2.6rem, 12vw, 3.6rem) !important; max-width: none; margin-bottom: 1rem !important; }
+	.dfans-h3__bajada { display: block !important; }
+	.dfans-h3__bajada p { margin-bottom: 1.2rem !important; }
+	body h1, body .wp-block-query-title { font-size: clamp(2.4rem, 11vw, 3.2rem) !important; }
+	body h2 { font-size: clamp(1.8rem, 8vw, 2.4rem) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.dfans-h3__fotos img { transition: none !important; }
 }

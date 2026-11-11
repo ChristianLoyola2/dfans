@@ -2,7 +2,7 @@
 /**
  * Snippet #31: D'FANS - Rediseño visual
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 10/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 11/11/2026. La copia activa está en la base de datos.
  */
 
 /*
@@ -46,6 +46,44 @@ add_action( 'woocommerce_after_add_to_cart_form', function () {
 		. '<li class="dfans-ficha-info--pago"><span>Paga con tarjeta, Yape o transferencia bancaria.</span></li>'
 		. '<li class="dfans-ficha-info--cambio"><span>¿No te quedó? <a href="' . $cambios . '">Cambia tu talla</a>.</span></li>'
 		. '</ul>';
+
+	// La etiqueta cosida (v3): solo datos que la tienda ya tiene (línea, corte, fandom, tallas y origen).
+	global $product;
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+	$id    = $product->get_id();
+	$filas = array();
+	$filas['Línea'] = has_term( 'match-familiar', 'product_cat', $id )
+		? '<a href="' . esc_url( home_url( '/product-category/match-familiar/' ) ) . '">Match familiar</a>: el mismo diseño en adulto y niño'
+		: 'Exclusivo D’FANS';
+	$corte = wp_get_post_terms( $id, 'pa_corte', array( 'fields' => 'names' ) );
+	if ( $corte && ! is_wp_error( $corte ) ) {
+		$filas['Corte'] = esc_html( implode( ', ', $corte ) );
+	}
+	foreach ( wc_get_product_term_ids( $id, 'product_cat' ) as $cat ) {
+		$tema = function_exists( 'dfans_tematica_de_categoria' ) ? dfans_tematica_de_categoria( $cat ) : null;
+		if ( $tema ) {
+			$filas['Fandom'] = esc_html( DFANS_TEMATICAS[ preg_replace( '/-ninos$/', '', $tema->slug ) ] );
+			break;
+		}
+	}
+	$tallas = wc_get_product_terms( $id, 'pa_talla', array( 'fields' => 'names' ) );
+	if ( $tallas && ! is_wp_error( $tallas ) ) {
+		$filas['Tallas'] = esc_html( implode( ' · ', $tallas ) );
+	}
+	$filas['Hecho en'] = 'Gamarra, La Victoria, Lima';
+	echo '<div class="dfans-etiqueta" role="group" aria-label="Etiqueta del polo"><p class="dfans-etiqueta__marca" aria-hidden="true">D’FANS</p><dl>';
+	foreach ( $filas as $dt => $dd ) {
+		echo '<dt>' . esc_html( $dt ) . '</dt><dd>' . $dd . '</dd>';
+	}
+	echo '</dl></div>';
+} );
+
+// Checkout (v3): cómo se paga, junto al botón de confirmar.
+add_action( 'woocommerce_review_order_after_submit', function () {
+	echo '<p class="dfans-pago-seguro"><span class="dfans-pago-seguro__candado" aria-hidden="true"></span>Pago seguro con'
+		. ' <span class="dfans-pill">Tarjeta (Mercado Pago)</span><span class="dfans-pill">Yape</span><span class="dfans-pill">Transferencia</span></p>';
 } );
 
 

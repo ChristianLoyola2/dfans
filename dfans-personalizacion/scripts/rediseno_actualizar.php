@@ -29,7 +29,9 @@ $pos   = strpos( $j['styles']['css'], $marca );
 if ( false === $pos ) {
 	exit( "ERROR: falta el bloque Rediseño 2026 en el CSS global.\n" );
 }
-$j['styles']['css'] = rtrim( substr( $j['styles']['css'], 0, $pos ) ) . "\n\n" . ltrim( file_get_contents( $base . 'css/rediseno-2026.css' ) );
+$j['styles']['css'] = rtrim( substr( $j['styles']['css'], 0, $pos ) ) . "\n\n" . ltrim( file_get_contents( $base . 'css/rediseno-2026.css' ) ) . ( file_exists( $base . 'css/rediseno-2026-v3.css' ) ? "
+
+" . file_get_contents( $base . 'css/rediseno-2026-v3.css' ) : '' );
 wp_update_post( array( 'ID' => 29, 'post_content' => wp_slash( wp_json_encode( $j, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) ) ) );
 global $wpdb;
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_wc\\_related\\_%' OR option_name LIKE '\\_transient\\_timeout\\_wc\\_related\\_%'" );

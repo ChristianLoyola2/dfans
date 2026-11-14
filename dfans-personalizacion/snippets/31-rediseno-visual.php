@@ -2,7 +2,7 @@
 /**
  * Snippet #31: D'FANS - Rediseño visual
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 11/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 14/11/2026. La copia activa está en la base de datos.
  */
 
 /*
@@ -21,6 +21,45 @@
 add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'dfans-titulos', 'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap', array(), null );
 } );
+
+// v4 (13/11/2026): el logo usa Archivo; la fuente de cómic (Bangers) ya no se carga.
+add_action( 'wp_enqueue_scripts', function () {
+	wp_dequeue_style( 'dfans-bangers' );
+}, 100 );
+
+// v4: tarjetas con fotos uniformes. Se usa una imagen más grande (medium_large) recortada a 3:4 por CSS,
+// y en los polos Match fuera de una sección la foto principal es una persona con el polo
+// (hombre o mujer, alternando) y la foto en percha queda para el paso del mouse.
+add_filter( 'render_block_woocommerce/product-image', function ( $html, $block, $instance ) {
+	$product_id = $instance->context['postId'] ?? 0;
+	$producto   = $product_id ? wc_get_product( $product_id ) : null;
+	if ( ! $producto || ! $html || ! preg_match( '/<img\b[^>]*>/', $html, $m ) ) {
+		return $html;
+	}
+	$clase   = preg_match( '/\bclass="([^"]*)"/', $m[0], $c ) ? $c[1] : '';
+	$imagen  = (int) $producto->get_image_id();
+	$hover   = '';
+	$fotos   = function_exists( 'dfans_fotos' ) ? dfans_fotos( $product_id ) : null;
+	$seccion = function_exists( 'dfans_seccion' ) ? dfans_seccion() : '';
+	if ( $fotos && ! $seccion ) {
+		$para = ( function_exists( 'dfans_filtro_tienda' ) && is_shop() ) ? dfans_filtro_tienda( 'para' ) : '';
+		if ( ! $para || ! isset( $fotos[ $para ] ) ) {
+			$para = 0 === $product_id % 2 ? 'hombre' : 'mujer';
+		}
+		$hover  = wp_get_attachment_image( $imagen, 'medium_large', false, array( 'class' => 'dfans-img-alt', 'loading' => 'lazy', 'alt' => '' ) );
+		$imagen = (int) $fotos[ $para ]['delantera'];
+	}
+	if ( ! $imagen ) {
+		return $html;
+	}
+	$nueva = wp_get_attachment_image( $imagen, 'medium_large', false, array(
+		'class'   => trim( $clase . ' dfans-img-principal' ),
+		'loading' => 'lazy',
+		'alt'     => $producto->get_name(),
+		'sizes'   => '(max-width: 781px) 50vw, 33vw',
+	) );
+	return $nueva ? preg_replace( '/<img\b[^>]*>/', $nueva . $hover, $html, 1 ) : $html;
+}, 5, 3 );
 
 add_filter( 'wp_resource_hints', function ( $urls, $tipo ) {
 	if ( 'preconnect' === $tipo ) {
@@ -370,4 +409,41 @@ add_action( 'wp_footer', function () {
 	</script>
 	<?php
 }, 40 );
+
+/*
+ * v10 (13/11/2026): logo oficial de D'FANS en todo el sitio.
+ * El bloque «título del sitio» (cabecera y cabecera del checkout) y el párrafo del pie
+ * muestran la imagen del logo en lugar del texto. Las imágenes están en Medios.
+ */
+function dfans_logo_url( $nombre ) {
+	static $cache = array();
+	if ( ! isset( $cache[ $nombre ] ) ) {
+		global $wpdb;
+		$id                 = (int) $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s ORDER BY post_id DESC LIMIT 1", '%/' . $wpdb->esc_like( $nombre ) . '.png' ) );
+		$cache[ $nombre ] = $id ? wp_get_attachment_url( $id ) : '';
+	}
+	return $cache[ $nombre ];
+}
+
+add_filter( 'render_block_core/site-title', function ( $html ) {
+	$logo = dfans_logo_url( 'dfans-logo-texto-blanco' );
+	if ( ! $logo ) {
+		return $html;
+	}
+	$img = '<img class="dfans-logo" src="' . esc_url( $logo ) . '" alt="D’FANS" width="404" height="250">';
+	// Reemplaza solo el texto del enlace; se mantienen la etiqueta, las clases y el enlace al inicio.
+	$nuevo = preg_replace( '#(<a\b[^>]*>).*?(</a>)#s', '$1' . $img . '$2', $html, 1, $hechos );
+	return $hechos ? $nuevo : $html;
+}, 20 );
+
+add_filter( 'render_block_core/paragraph', function ( $html, $block ) {
+	if ( empty( $block['attrs']['className'] ) || false === strpos( $block['attrs']['className'], 'dfans-footer-logo' ) ) {
+		return $html;
+	}
+	$logo = dfans_logo_url( 'dfans-logo-completo' );
+	if ( ! $logo ) {
+		return $html;
+	}
+	return '<p class="dfans-footer-logo"><a href="' . esc_url( home_url( '/' ) ) . '" aria-label="D’FANS, ir al inicio"><img class="dfans-logo-pie" src="' . esc_url( $logo ) . '" alt="D’FANS" width="403" height="809" loading="lazy"></a></p>';
+}, 20, 2 );
 

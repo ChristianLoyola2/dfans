@@ -1,4 +1,4 @@
-/* CSS adicional de los estilos globales (post 29), exportado el 11/11/2026 */
+/* CSS adicional de los estilos globales (post 29), exportado el 14/11/2026 */
 /* ================================
    D'FANS — ESTILOS PERSONALIZADOS
    ================================ */
@@ -2774,4 +2774,835 @@ body.woocommerce-checkout #payment div.payment_box::before { border-bottom-color
 }
 @media (prefers-reduced-motion: reduce) {
 	.dfans-h3__fotos img { transition: none !important; }
+}
+
+
+/* ---------- Rediseño 2026 v4: streetwear refinado ---------- */
+/* Cuarta versión (13/11/2026). Va después de la v3 (que hace oscura toda la tienda) y la afina:
+   negro suave, títulos en mayúsculas condensadas y medianas (no gigantes), etiquetas pequeñas
+   espaciadas, botones rectos, fotos 3:4 uniformes, logo en Archivo ancha (sin la letra de cómic)
+   y una barra de anuncios quieta. Copia de la v3 sola en backups/rediseno/rediseno-2026.v3-solo.css. */
+:root {
+	--dfans-papel: #0b0b0b;
+	--dfans-prenda: #151515;
+	--dfans-campo: #101010;
+	--dfans-tinta: #ededea;
+	--dfans-tinta-2: #9b9b96;
+	--dfans-linea: #242424;
+	--dfans-linea-fuerte: #3b3b39;
+	--dfans-comic: 'Archivo', system-ui, sans-serif;
+	--wp--preset--color--base: #0b0b0b;
+	--wp--preset--color--accent-5: #151515;
+	--i-tienda: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 4h18l1 5a3 3 0 0 1-5 2.2A3 3 0 0 1 12 11a3 3 0 0 1-5 .2A3 3 0 0 1 2 9zm1 9.5a4.9 4.9 0 0 0 3-.2V20h4v-4h2v4h4v-6.7a4.9 4.9 0 0 0 3 .2V22H4z'/%3E%3C/svg%3E");
+}
+html, body { background: var(--dfans-papel) !important; }
+body { font-size: 1rem; letter-spacing: 0.005em; }
+
+/* ---------- Letra ---------- */
+body h1, body h2,
+body .wp-block-query-title,
+.single-product main .wp-block-post-title {
+	font-stretch: 85%;
+	font-weight: 800 !important;
+	letter-spacing: -0.005em !important;
+	line-height: 0.98 !important;
+	text-transform: uppercase !important;
+}
+body h1, body .wp-block-query-title { font-size: clamp(2.2rem, 4vw, 3.4rem) !important; }
+body h2 { font-size: clamp(1.5rem, 2.4vw, 2.1rem) !important; }
+body h3 { font-stretch: 100%; font-weight: 700 !important; font-size: 1.02rem !important; letter-spacing: 0 !important; text-transform: none !important; line-height: 1.3 !important; }
+/* Textos largos (páginas legales, cuenta) sin mayúsculas. */
+.page:not(.home) .wp-block-post-content > h2,
+.dfans-panel__saludo h2,
+.woocommerce-MyAccount-content h2 { text-transform: none !important; font-stretch: 100%; letter-spacing: -0.01em !important; }
+
+body .wp-block-post-title:not(.wc-block-product .wp-block-post-title) { text-transform: uppercase !important; font-stretch: 85%; font-weight: 800 !important; }
+.wc-block-grid__product-title, .wc-block-grid__product-link { font-size: 0.78rem !important; font-weight: 700 !important; letter-spacing: 0.08em !important; text-transform: uppercase !important; }
+.wc-block-grid__product-price { font-size: 0.85rem !important; }
+
+/* ---------- Botones rectos ---------- */
+.wp-block-button__link,
+.dfans-boton,
+.woocommerce .button,
+.woocommerce button.button,
+.wc-block-components-button:not(.is-link),
+.single_add_to_cart_button,
+.woocommerce-checkout #place_order,
+.wc-block-cart__submit-button {
+	border-radius: 0 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.12em !important;
+	font-size: 0.78rem !important;
+	font-weight: 700 !important;
+	font-stretch: 100%;
+}
+.wp-block-button__link,
+.dfans-boton { min-height: 50px; padding: 0.95rem 1.8rem !important; }
+.dfans-b-secundario .wp-block-button__link,
+.dfans-boton--borde { border: 1px solid var(--dfans-linea-fuerte) !important; }
+input, select, textarea, .input-text, .select2-selection { border-radius: 0 !important; }
+.dfans-arriba { border-radius: 0 !important; }
+
+/* ---------- Barra de anuncios quieta ---------- */
+.dfans-anuncios {
+	background: var(--dfans-prenda) !important;
+	color: var(--dfans-tinta-2) !important;
+	border-bottom: 1px solid var(--dfans-linea);
+	font-size: 0.68rem !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.14em !important;
+	text-transform: uppercase;
+}
+.dfans-anuncios__pista { animation: none !important; width: 100% !important; justify-content: center; }
+.dfans-anuncios ul[aria-hidden] { display: none !important; }
+.dfans-anuncios ul { flex-wrap: nowrap !important; justify-content: center; }
+.dfans-anuncios li { padding: 0.55rem 1.5rem !important; }
+.dfans-anuncios li::after { content: none !important; }
+.dfans-anuncios li:nth-child(3),
+.dfans-anuncios li:nth-child(4) { display: none; }
+.dfans-anuncios li:nth-child(2),
+.dfans-anuncios li:nth-child(5) { border-left: 1px solid var(--dfans-linea-fuerte); }
+
+/* ---------- Cabecera: logo a la izquierda, menú al centro, iconos a la derecha ---------- */
+.dfans-header { background: rgba(11, 11, 11, 0.94) !important; border-bottom: 1px solid var(--dfans-linea) !important; }
+.dfans-header .alignwide { min-height: 64px; }
+.dfans-header .alignwide > .wp-block-group { flex: 1 1 auto; }
+.dfans-header .alignwide > .wp-block-group > .wp-block-navigation { margin-inline: auto !important; }
+.dfans-header .wp-block-site-title,
+.dfans-header .wp-block-site-title a,
+body.woocommerce-checkout header.wp-block-template-part:not(:has(.dfans-header)) .wp-block-site-title a,
+.dfans-footer-logo,
+.dfans-footer-logo a {
+	font-family: var(--dfans-letra) !important;
+	font-stretch: 125%;
+	font-weight: 900 !important;
+	font-size: 1.3rem !important;
+	letter-spacing: 0.08em !important;
+	text-transform: uppercase !important;
+	text-decoration: none !important;
+}
+.dfans-footer-logo, .dfans-footer-logo a { font-size: 1.6rem !important; }
+.dfans-header .wp-block-navigation {
+	font-size: 0.74rem !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.15em !important;
+	text-transform: uppercase !important;
+	gap: 0.4rem 2rem;
+}
+.dfans-header .wp-block-navigation .wp-block-navigation-item__content::after { height: 1px; bottom: -0.45rem; }
+.dfans-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content { font-size: 1.4rem !important; letter-spacing: 0.06em; }
+
+/* ---------- Portada ---------- */
+.home .wp-block-post-content > * { margin-block: 0 !important; }
+.dfans-p { padding-top: clamp(4rem, 7vw, 6.5rem); padding-bottom: clamp(4rem, 7vw, 6.5rem); }
+.dfans-p-cabecera { display: flex !important; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.6rem 2rem; margin-bottom: 2rem !important; }
+.dfans-p-cabecera > * { margin: 0 !important; }
+.dfans-p-ver a,
+.dfans-p-cabecera p a {
+	color: var(--dfans-tinta);
+	font-size: 0.74rem;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	text-decoration: underline;
+	text-underline-offset: 0.45em;
+	text-decoration-thickness: 1px;
+}
+
+/* Hero: panel de texto a la izquierda y las dos fotos (adulto y niña) a la derecha, sin tapar los polos. */
+.dfans-h4 {
+	position: relative;
+	display: grid !important;
+	grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.6fr);
+	grid-template-areas: "texto fotos";
+	height: calc(100svh - 104px);
+	min-height: 580px;
+	max-height: 960px;
+	margin-block: 0 !important;
+	padding: 0 !important;
+	background: var(--dfans-papel);
+	overflow: hidden;
+}
+.dfans-h4 > * { margin: 0 !important; max-width: none !important; }
+.dfans-h4__fotos { grid-area: fotos; display: grid !important; grid-template-columns: 1fr 1fr; gap: 2px; height: 100%; }
+.dfans-h4__fotos > figure { position: relative; height: 100%; margin: 0 !important; overflow: hidden; background: var(--dfans-prenda); }
+.dfans-h4__fotos a { display: block; height: 100%; }
+.dfans-h4__fotos img { display: block; width: 100%; height: 100% !important; object-fit: cover; object-position: center 22%; transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.dfans-h4__fotos a:hover img { transform: scale(1.025); }
+.dfans-h4__texto {
+	grid-area: texto;
+	display: flex !important;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3.4vw, 3.6rem) clamp(2.5rem, 5vw, 4.5rem) var(--wp--style--root--padding-left, 1.5rem) !important;
+}
+.dfans-h4__marco { max-width: 30rem !important; margin: 0 !important; }
+.dfans-h4__marco > * { margin: 0 !important; }
+.dfans-h4 h1 { max-width: 12ch; margin-bottom: 1.2rem !important; color: #fff !important; font-size: clamp(2.4rem, 3.9vw, 4.1rem) !important; line-height: 0.94 !important; }
+.dfans-h4__marco > p { max-width: 28rem; margin-bottom: 2rem !important; color: var(--dfans-tinta-2) !important; font-size: 1rem; line-height: 1.6; }
+.dfans-h4 .wp-block-buttons { gap: 0.6rem; }
+.dfans-h4 .dfans-b-secundario .wp-block-button__link { border-color: var(--dfans-linea-fuerte) !important; color: #fff !important; }
+.dfans-h4 .dfans-b-secundario .wp-block-button__link:hover { background: #fff !important; color: #000 !important; }
+@media (prefers-reduced-motion: no-preference) {
+	.dfans-h4__fotos img { animation: dfans-h4-entra 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+	.dfans-h4__marco > * { animation: dfans-h4-texto 0.9s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+	.dfans-h4__marco > p { animation-delay: 0.35s; }
+	.dfans-h4__marco > .wp-block-buttons { animation-delay: 0.45s; }
+}
+@keyframes dfans-h4-entra { from { transform: scale(1.06); opacity: 0.4; } to { transform: scale(1); opacity: 1; } }
+@keyframes dfans-h4-texto { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Compra por persona. */
+.dfans-personas { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+.dfans-persona { position: relative; margin: 0 !important; }
+.dfans-persona > * { margin: 0 !important; }
+.dfans-persona figure { overflow: hidden; background: var(--dfans-prenda); }
+.dfans-persona img { display: block; width: 100%; aspect-ratio: 3 / 4; height: auto; object-fit: cover; transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.dfans-persona:hover img { transform: scale(1.03); }
+.dfans-persona__nombre { position: absolute; left: 0; right: 0; bottom: 0; padding: 3rem 1.1rem 1rem; background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)); pointer-events: none; }
+.dfans-persona__nombre a {
+	pointer-events: auto;
+	color: #fff !important;
+	font-size: 0.82rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	text-decoration: none !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+	padding-bottom: 0.2rem;
+}
+
+/* Lo nuevo. */
+.dfans-p-nuevos .wc-block-product-template { row-gap: 2.8rem !important; column-gap: 0.75rem !important; }
+
+/* Exclusivos: foto y panel lado a lado, a todo el ancho. */
+.dfans-editorial { display: grid !important; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); padding: 0 !important; background: var(--dfans-prenda); }
+.dfans-editorial > * { margin: 0 !important; max-width: none !important; }
+.dfans-editorial__foto { overflow: hidden; }
+.dfans-editorial__foto a { display: block; height: 100%; }
+.dfans-editorial__foto img { display: block; width: 100%; height: 100% !important; min-height: 560px; object-fit: cover; object-position: center 25%; transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.dfans-editorial__foto:hover img { transform: scale(1.025); }
+.dfans-editorial__texto { display: flex !important; flex-direction: column; justify-content: center; padding: clamp(2.5rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5.5rem) !important; }
+.dfans-editorial__texto > * { margin: 0 !important; }
+.dfans-editorial__texto h2 { margin-bottom: 1rem !important; }
+.dfans-editorial__texto > p { max-width: 30rem; color: var(--dfans-tinta-2); line-height: 1.6; margin-bottom: 2rem !important; }
+.dfans-cortes { list-style: none; padding: 0 !important; border-top: 1px solid var(--dfans-linea-fuerte); }
+.dfans-cortes li { margin: 0 !important; border-bottom: 1px solid var(--dfans-linea-fuerte); }
+.dfans-cortes a {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	padding: 1.05rem 0;
+	color: var(--dfans-tinta) !important;
+	font-size: 0.86rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	text-decoration: none !important;
+	transition: padding 0.25s ease, color 0.25s ease;
+}
+.dfans-cortes li { display: flex; align-items: baseline; justify-content: space-between; }
+.dfans-cortes li span { color: var(--dfans-tinta-2); font-size: 0.85rem; }
+.dfans-cortes a:hover { padding-left: 0.5rem; color: #fff !important; }
+
+/* Fandoms: más sobrio. */
+.dfans-p-fandoms { background: var(--dfans-papel) !important; }
+.dfans-fandoms__nombre { font-size: clamp(2.2rem, 4.6vw, 4.2rem); font-stretch: 70%; font-weight: 800; letter-spacing: 0; }
+.dfans-fandoms__item > a { padding: 1rem 0 1.1rem; }
+.dfans-fandoms__item > a:hover .dfans-fandoms__nombre,
+.dfans-fandoms__item > a:focus-visible .dfans-fandoms__nombre { color: #fff; padding-left: 0.4rem; }
+.dfans-fandoms__nombre { transition: padding 0.25s ease, color 0.25s ease; }
+.dfans-fandoms__foto { border-radius: 0; }
+
+/* Beneficios. */
+.dfans-p-ventajas { padding-top: 3.2rem; padding-bottom: 3.2rem; border-top: 1px solid var(--dfans-linea); }
+.dfans-ventajas { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+.dfans-ventaja { display: grid !important; grid-template-columns: 26px minmax(0, 1fr); column-gap: 0.9rem; align-items: start; }
+.dfans-ventaja > * { margin: 0 !important; grid-column: 2; }
+.dfans-ventaja::before { content: ""; grid-row: 1 / span 2; grid-column: 1; width: 24px; height: 24px; background: var(--dfans-tinta); -webkit-mask: var(--i) center / contain no-repeat; mask: var(--i) center / contain no-repeat; }
+.dfans-ventaja h3 { font-size: 0.8rem !important; letter-spacing: 0.1em !important; text-transform: uppercase !important; }
+.dfans-ventaja p { margin-top: 0.35rem !important; color: var(--dfans-tinta-2); font-size: 0.9rem; line-height: 1.5; }
+.dfans-ventaja--envio { --i: var(--i-envio); }
+.dfans-ventaja--tienda { --i: var(--i-tienda); }
+.dfans-ventaja--pago { --i: var(--i-celular); }
+.dfans-ventaja--cambio { --i: var(--i-cambio); }
+
+/* ---------- Tarjetas de producto: foto 3:4, nombre en mayúsculas ---------- */
+.wc-block-product .wc-block-components-product-image,
+.wc-block-grid__product-image { position: relative; border-radius: 0 !important; background: var(--dfans-prenda); overflow: hidden; }
+.wc-block-product .wc-block-components-product-image img,
+.wc-block-grid__product-image img {
+	width: 100% !important;
+	height: auto !important;
+	aspect-ratio: 3 / 4 !important;
+	object-fit: cover !important;
+	object-position: center 20%;
+	border-radius: 0 !important;
+}
+.wc-block-product .dfans-img-alt { position: absolute; inset: 0; height: 100% !important; object-fit: cover !important; }
+.wc-block-product .wp-block-post-title,
+.wc-block-product .wp-block-post-title a {
+	font-size: 0.78rem !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.08em !important;
+	text-transform: uppercase !important;
+	line-height: 1.35 !important;
+}
+.wc-block-product .wp-block-post-title { margin: 0.9rem 0 0.2rem !important; }
+.wc-block-product .wc-block-components-product-price { font-size: 0.85rem !important; font-variant-numeric: tabular-nums; }
+.dfans-badge-match,
+.dfans-badge-corte {
+	border-radius: 0 !important;
+	font-size: 0.6rem !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.14em !important;
+	text-transform: uppercase !important;
+	padding: 0.3rem 0.5rem !important;
+}
+.dfans-badge-corte { background: rgba(11, 11, 11, 0.86) !important; color: #fff !important; }
+.dfans-fav:not(.dfans-fav--ficha) { border-radius: 0 !important; width: 34px !important; height: 34px !important; background: rgba(11, 11, 11, 0.6) !important; }
+.dfans-vista { border-radius: 0 !important; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.7rem !important; }
+
+/* Tienda y categorías. */
+.wp-block-query-title { margin-bottom: 0.4rem !important; }
+.wc-block-breadcrumbs, .woocommerce-breadcrumb { font-size: 0.7rem !important; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dfans-tinta-2) !important; }
+.woocommerce-breadcrumb a { color: var(--dfans-tinta-2) !important; text-decoration: none; }
+.woocommerce-breadcrumb a:hover { color: var(--dfans-tinta) !important; }
+.dfans-chip {
+	min-height: 36px;
+	border-radius: 0 !important;
+	font-size: 0.7rem !important;
+	font-weight: 700 !important;
+	letter-spacing: 0.12em !important;
+	text-transform: uppercase !important;
+	padding: 0.4rem 0.9rem !important;
+}
+.dfans-filtro-titulo { font-size: 0.7rem !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; }
+.dfans-filtro-grupo:first-child .dfans-chip[href*="tematica="]::before { display: none; }
+.wp-block-query-pagination .page-numbers,
+.wp-block-query-pagination-next,
+.wp-block-query-pagination-previous { border-radius: 0 !important; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.78rem !important; }
+.woocommerce-ordering select, .wc-block-catalog-sorting select { font-size: 0.8rem; }
+
+/* Tienda y categorías en 4 columnas en pantallas grandes. */
+@media (min-width: 1100px) {
+	main .wc-block-product-template__responsive.columns-3 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+}
+main .wc-block-product-template__responsive { column-gap: 0.75rem !important; row-gap: 2.8rem !important; }
+
+/* ---------- Ficha de producto ---------- */
+@media (min-width: 900px) {
+	.single-product main .wp-block-columns.alignwide { gap: clamp(2.5rem, 5vw, 5rem) !important; align-items: flex-start !important; }
+	.single-product main .wp-block-columns.alignwide > .wp-block-column:first-child { flex: 1 1 56% !important; }
+	.single-product main .wp-block-columns.alignwide > .wp-block-column:last-child { flex: 1 1 44% !important; position: sticky; top: 96px; }
+}
+.single-product main .wp-block-post-title { font-size: clamp(1.7rem, 2.6vw, 2.4rem) !important; margin-bottom: 0.6rem !important; }
+.single-product main .wp-block-columns > .wp-block-column:last-child > .wp-block-woocommerce-product-price,
+.single-product main .wp-block-columns > .wp-block-column:last-child > .wp-block-woocommerce-product-price *,
+.single-product .woocommerce-variation-price .price,
+.single-product .woocommerce-variation-price .price * { font-size: 1.15rem !important; font-weight: 600 !important; }
+.single-product .wp-block-post-excerpt { color: var(--dfans-tinta-2); font-size: 0.95rem; line-height: 1.6; }
+.woocommerce-product-gallery .flex-viewport,
+.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:first-child img { border-radius: 0 !important; background: var(--dfans-prenda); }
+.single-product .wp-block-woocommerce-product-image-gallery { max-width: 640px; }
+.woocommerce-product-gallery__image img { width: 100% !important; height: auto !important; }
+.woocommerce-product-gallery .flex-control-thumbs { gap: 0.4rem; }
+.woocommerce-product-gallery .flex-control-thumbs li { flex: 0 0 76px !important; width: 76px !important; }
+.woocommerce-product-gallery .flex-control-thumbs img { aspect-ratio: 3 / 4; border-radius: 0 !important; opacity: 0.55 !important; transition: opacity 0.2s ease; }
+.woocommerce-product-gallery .flex-control-thumbs img.flex-active,
+.woocommerce-product-gallery .flex-control-thumbs img:hover { opacity: 1 !important; border-color: var(--dfans-tinta) !important; }
+.variations_form table.variations th.label label,
+.dfans-opciones-titulo,
+.dfans-opciones__grupo > p,
+.dfans-guia__boton { font-size: 0.72rem !important; letter-spacing: 0.12em !important; text-transform: uppercase !important; }
+.dfans-opcion { border-radius: 0 !important; min-width: 3.4rem; font-stretch: 100% !important; font-size: 0.82rem !important; letter-spacing: 0.04em !important; }
+.dfans-fav--ficha {
+	border-radius: 0 !important;
+	border: 1px solid var(--dfans-linea-fuerte) !important;
+	font-size: 0.7rem !important;
+	letter-spacing: 0.12em !important;
+	text-transform: uppercase !important;
+	padding: 0.45rem 0.8rem !important;
+}
+.single_add_to_cart_button { min-height: 54px !important; }
+form.cart .quantity .qty { border-radius: 0 !important; min-height: 54px; }
+.dfans-ficha-info { font-size: 0.88rem; }
+.dfans-etiqueta { border-radius: 0; }
+.dfans-etiqueta::before { border-radius: 0; }
+.dfans-etiqueta__marca { font-stretch: 125%; font-weight: 900; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.woocommerce-tabs ul.tabs li a, .wc-tabs li a { font-size: 0.72rem !important; letter-spacing: 0.14em !important; text-transform: uppercase !important; }
+.woocommerce-tabs .panel { max-width: 72ch; color: var(--dfans-tinta-2); line-height: 1.7; }
+.single-product .wp-block-woocommerce-product-collection h2,
+.single-product main h2.wp-block-heading { font-size: clamp(1.3rem, 2vw, 1.7rem) !important; }
+
+/* ---------- Carrito, checkout y cuenta ---------- */
+.wp-block-woocommerce-cart .wc-block-cart__totals-title,
+.woocommerce-checkout .woocommerce-billing-fields > h3,
+.woocommerce-checkout .woocommerce-additional-fields > h3,
+.woocommerce-checkout #dfans-tipo-entrega h3,
+.woocommerce-checkout #order_review_heading { font-size: 0.82rem !important; letter-spacing: 0.14em !important; text-transform: uppercase !important; font-weight: 700 !important; }
+.wp-block-woocommerce-cart .wp-block-woocommerce-cart-totals-block,
+.woocommerce-checkout #order_review,
+.woocommerce-account .u-columns .u-column1,
+.woocommerce-account .u-columns .u-column2,
+.dfans-tarjeta, .dfans-panel__ayuda, .dfans-indice, .dfans-etiqueta,
+#dfans-tipo-entrega label, .woocommerce-checkout #payment ul.payment_methods li { border-radius: 0 !important; }
+.woocommerce-MyAccount-navigation li a { border-radius: 0; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.74rem; font-weight: 600; }
+.wc-block-components-product-name { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.82rem !important; font-weight: 700; }
+
+/* ---------- Pie ---------- */
+.dfans-footer-titulo { font-size: 0.7rem !important; letter-spacing: 0.16em !important; text-transform: uppercase !important; color: var(--dfans-tinta-2) !important; }
+.dfans-footer a { text-decoration: none; }
+.dfans-footer a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
+.dfans-pill { border-radius: 0 !important; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.66rem; }
+
+/* ---------- Tablet y celular ---------- */
+@media (max-width: 1024px) {
+	.dfans-ventajas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+	.dfans-editorial { grid-template-columns: 1fr; }
+	.dfans-editorial__foto img { min-height: 0; aspect-ratio: 4 / 5; height: auto !important; }
+}
+@media (max-width: 781px) {
+	.dfans-anuncios li:nth-child(n+2) { display: none !important; }
+	.dfans-anuncios li { padding: 0.55rem 1rem !important; }
+	.dfans-h4 { grid-template-columns: 1fr; grid-template-areas: "fotos" "texto"; height: auto; min-height: 0; max-height: none; }
+	.dfans-h4__fotos { height: 62svh; min-height: 380px; }
+	.dfans-h4__texto { padding: 1.8rem var(--wp--style--root--padding-right, 1.25rem) 2.6rem var(--wp--style--root--padding-left, 1.25rem) !important; }
+	.dfans-h4 h1 { font-size: clamp(2.2rem, 10vw, 3rem) !important; }
+	.dfans-h4 .wp-block-buttons { flex-direction: column; align-items: stretch; }
+	.dfans-h4 .wp-block-button, .dfans-h4 .wp-block-button__link { width: 100%; text-align: center; }
+	.dfans-personas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+	.dfans-p-nuevos .wc-block-product-template { column-gap: 0.5rem !important; row-gap: 2rem !important; }
+	.dfans-ventajas { grid-template-columns: 1fr; gap: 1.4rem; }
+	.dfans-header .wp-block-site-title, .dfans-header .wp-block-site-title a { font-size: 1.15rem !important; }
+	.dfans-header .alignwide > .wp-block-group > .wp-block-navigation { margin-inline: auto 0.4rem !important; }
+	body h2 { font-size: clamp(1.4rem, 6.4vw, 1.8rem) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.dfans-h4__fotos img, .dfans-persona img, .dfans-editorial__foto img, .dfans-cortes a, .dfans-fandoms__nombre { transition: none !important; animation: none !important; }
+	.dfans-h4__marco > * { animation: none !important; }
+}
+
+/* ---------- v5 (13/11/2026): con la referencia del usuario ----------
+   Cabecera en dos filas (buscador, logo al centro, iconos; menú debajo), rojo D'FANS en el botón principal,
+   esquinas suaves en botones, fotos y tarjetas, fila de colecciones con pestañas y, en celular,
+   el texto del hero sobre la foto. */
+:root { --dfans-accion: #e0262f; --dfans-accion-2: #c41d25; --r-boton: 4px; --r-tarjeta: 10px; }
+
+/* Cabecera en dos filas. */
+.dfans-header .alignwide { min-height: 0; }
+.dfans-header > .wp-block-group { position: relative; }
+.dfans-header__fila { display: grid !important; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; min-height: 64px; }
+.dfans-header__fila > * { margin: 0 !important; }
+.dfans-header__izq { justify-self: start; }
+.dfans-header__fila .wp-block-site-title { justify-self: center; }
+.dfans-header__der { justify-self: end; gap: 1.1rem !important; }
+.dfans-header .wp-block-site-title, .dfans-header .wp-block-site-title a { font-size: 1.65rem !important; letter-spacing: 0.1em !important; }
+.dfans-header__menu { justify-content: center !important; padding: 0 0 0.8rem; margin-top: 0 !important; }
+.dfans-header__menu .wp-block-navigation { margin: 0 !important; gap: 0.4rem 2.4rem; }
+.dfans-header .wp-block-navigation .wp-block-navigation-item__content::after { background: var(--dfans-accion) !important; height: 2px !important; bottom: -0.5rem !important; }
+.dfans-buscar { margin: 0 !important; }
+.dfans-buscar .wp-block-search__inside-wrapper { border: 0 !important; padding: 0 !important; background: transparent !important; gap: 0.4rem; }
+.dfans-buscar .wp-block-search__button { min-height: 0 !important; margin: 0 !important; padding: 6px !important; background: transparent !important; border: 0 !important; color: var(--dfans-tinta) !important; box-shadow: none !important; }
+.dfans-buscar .wp-block-search__button svg { width: 24px; height: 24px; fill: currentColor; }
+.dfans-buscar .wp-block-search__button:hover { color: #fff !important; opacity: 0.75; }
+.dfans-buscar:not(.wp-block-search__searchfield-hidden) .wp-block-search__input { width: 220px; min-height: 38px; padding: 0 0.8rem; border: 1px solid var(--dfans-linea-fuerte) !important; border-radius: var(--r-boton) !important; font-size: 0.85rem; }
+
+/* Rojo D'FANS en la acción principal. */
+.dfans-b-primario .wp-block-button__link,
+.single_add_to_cart_button,
+.woocommerce-checkout #place_order,
+.wc-block-cart__submit-button { background: var(--dfans-accion) !important; border-color: var(--dfans-accion) !important; color: #fff !important; }
+.dfans-b-primario .wp-block-button__link:hover,
+.single_add_to_cart_button:hover,
+.woocommerce-checkout #place_order:hover,
+.wc-block-cart__submit-button:hover { background: var(--dfans-accion-2) !important; border-color: var(--dfans-accion-2) !important; color: #fff !important; }
+body form.cart .single_add_to_cart_button.button,
+body form.cart .single_add_to_cart_button.button.alt { background: var(--dfans-accion) !important; border-color: var(--dfans-accion) !important; color: #fff !important; }
+body form.cart .single_add_to_cart_button.button:hover { background: var(--dfans-accion-2) !important; border-color: var(--dfans-accion-2) !important; }
+body form.cart .single_add_to_cart_button.button.disabled,
+body form.cart .single_add_to_cart_button.button:disabled { opacity: 0.55 !important; }
+
+/* Esquinas suaves. */
+.wp-block-button__link, .dfans-boton, .woocommerce .button, .woocommerce button.button,
+.wc-block-components-button:not(.is-link), .single_add_to_cart_button, .woocommerce-checkout #place_order,
+.wc-block-cart__submit-button, .dfans-chip, .dfans-opcion, .dfans-fav--ficha, .dfans-arriba,
+input, select, textarea, .input-text, .select2-selection, form.cart .quantity .qty,
+.wp-block-query-pagination .page-numbers, .wp-block-query-pagination-next, .wp-block-query-pagination-previous { border-radius: var(--r-boton) !important; }
+.wc-block-product .wc-block-components-product-image,
+.wc-block-grid__product-image,
+.dfans-persona figure,
+.woocommerce-product-gallery .flex-viewport,
+.woocommerce-product-gallery__wrapper > .woocommerce-product-gallery__image:first-child img,
+.dfans-fandoms__foto,
+.dfans-etiqueta, .dfans-etiqueta::before,
+.wp-block-woocommerce-cart .wp-block-woocommerce-cart-totals-block, .woocommerce-checkout #order_review,
+.dfans-tarjeta, .dfans-panel__ayuda { border-radius: var(--r-tarjeta) !important; }
+.woocommerce-product-gallery .flex-control-thumbs img { border-radius: 6px !important; }
+.dfans-badge-match, .dfans-badge-corte { border-radius: 3px !important; }
+.dfans-fav:not(.dfans-fav--ficha) { border-radius: 50% !important; }
+
+/* Hero: las fotos se funden con el panel oscuro. */
+.dfans-h4__fotos { position: relative; }
+.dfans-h4__fotos::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 18%; background: linear-gradient(to right, var(--dfans-papel), rgba(11, 11, 11, 0)); pointer-events: none; z-index: 1; }
+
+/* Colecciones con pestañas. */
+.dfans-p-colecciones { padding-top: clamp(2.6rem, 4.5vw, 4rem) !important; }
+.dfans-pestanas { display: flex; gap: 2.2rem; margin: 0 auto 1.5rem !important; padding: 0 !important; list-style: none; border-bottom: 1px solid var(--dfans-linea); overflow-x: auto; scrollbar-width: none; }
+.dfans-pestanas li { margin: 0 !important; flex: 0 0 auto; }
+.dfans-pestanas a { display: block; margin-bottom: -1px; padding: 0 0 0.85rem; border-bottom: 2px solid transparent; color: var(--dfans-tinta-2) !important; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none !important; transition: color 0.2s ease, border-color 0.2s ease; }
+.dfans-pestanas li.is-activa a,
+.dfans-pestanas a:hover { color: var(--dfans-tinta) !important; border-bottom-color: var(--dfans-accion); }
+.dfans-colecciones { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.9rem; }
+.dfans-coleccion { position: relative; margin: 0 !important; }
+.dfans-coleccion > * { margin: 0 !important; }
+.dfans-coleccion figure { position: relative; overflow: hidden; border-radius: var(--r-tarjeta); background: var(--dfans-prenda); }
+.dfans-coleccion figure::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0) 55%); pointer-events: none; }
+.dfans-coleccion img { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: cover; object-position: center 22%; transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.dfans-coleccion:hover img { transform: scale(1.03); }
+.dfans-coleccion__nombre { position: absolute; left: 1.25rem; bottom: 2.7rem; z-index: 1; pointer-events: none; }
+.dfans-coleccion__nombre a { pointer-events: auto; color: #fff !important; font-size: 1rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none !important; }
+.dfans-coleccion__dato { position: absolute; left: 1.25rem; bottom: 1.15rem; z-index: 1; color: #d2d2ce; font-size: 0.85rem; pointer-events: none; }
+.dfans-persona__nombre { border-radius: 0 0 var(--r-tarjeta) var(--r-tarjeta); }
+
+@media (max-width: 781px) {
+	/* Hero en celular: el texto sobre la foto, como en la referencia. */
+	.dfans-h4 { grid-template-columns: 1fr; grid-template-areas: "todo"; height: auto; min-height: 0; max-height: none; }
+	.dfans-h4__fotos, .dfans-h4__texto { grid-area: todo; }
+	.dfans-h4__fotos { height: 84svh; min-height: 520px; }
+	.dfans-h4__fotos::after { top: auto; right: 0; bottom: 0; left: 0; width: auto; height: 100%; background: linear-gradient(to top, rgba(11, 11, 11, 0.96) 0%, rgba(11, 11, 11, 0.6) 34%, rgba(11, 11, 11, 0) 62%); }
+	.dfans-h4__texto { z-index: 2; align-self: end; padding: 0 var(--wp--style--root--padding-right, 1.25rem) 1.8rem var(--wp--style--root--padding-left, 1.25rem) !important; background: none; }
+	.dfans-h4 h1 { font-size: clamp(2.1rem, 9.5vw, 2.7rem) !important; margin-bottom: 0.7rem !important; }
+	.dfans-h4__marco > p { color: #d6d6d2 !important; font-size: 0.92rem; margin-bottom: 1.2rem !important; }
+	.dfans-h4 .wp-block-buttons { flex-direction: row; flex-wrap: nowrap; }
+	.dfans-h4 .wp-block-button { flex: 1 1 0; }
+	.dfans-h4 .wp-block-button__link { width: 100%; padding: 0.9rem 0.6rem !important; font-size: 0.7rem !important; letter-spacing: 0.08em !important; }
+	/* Colecciones en fila deslizable. */
+	.dfans-colecciones { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 78%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 0.2rem; }
+	.dfans-coleccion { scroll-snap-align: start; }
+	.dfans-pestanas { gap: 1.4rem; }
+	.dfans-header .wp-block-site-title, .dfans-header .wp-block-site-title a { font-size: 1.3rem !important; }
+	.dfans-header__der { gap: 0.6rem !important; }
+}
+@media (max-width: 599px) {
+	/* El botón del menú pasa a la izquierda de la primera fila. */
+	.dfans-header__menu { position: absolute; top: 0; left: var(--wp--style--root--padding-left, 1rem); height: 100%; padding: 0; align-items: center; }
+	.dfans-header__izq { padding-left: 40px; }
+	.dfans-buscar:not(.wp-block-search__searchfield-hidden) .wp-block-search__input { width: 150px; }
+	.dfans-header .dfans-fav-cabecera { display: none !important; }
+	.dfans-header .wp-block-site-title, .dfans-header .wp-block-site-title a { font-size: 1.2rem !important; letter-spacing: 0.08em !important; }
+}
+
+/* ---------- v6 (13/11/2026): hero "Cartelera", elegido por el usuario ----------
+   Una foto grande a la derecha que se funde con el fondo y un título muy grande que la cruza. */
+.dfans-cartelera-wrap { margin-block: 0 !important; padding: 0 !important; }
+.dfans-cartelera {
+	position: relative;
+	height: calc(100svh - 136px);
+	min-height: 620px;
+	max-height: 920px;
+	overflow: hidden;
+	background: var(--dfans-papel);
+}
+.dfans-cartelera::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to top, var(--dfans-papel), rgba(11, 11, 11, 0)); pointer-events: none; z-index: 1; }
+.dfans-cartelera__foto { position: absolute; top: 0; right: 0; bottom: 0; width: 62%; display: block; }
+.dfans-cartelera__foto img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 14%;
+	-webkit-mask-image: linear-gradient(to right, transparent 0, #000 34%);
+	mask-image: linear-gradient(to right, transparent 0, #000 34%);
+}
+.dfans-cartelera__texto {
+	position: relative;
+	z-index: 2;
+	height: 100%;
+	max-width: var(--wp--style--global--wide-size, 1340px);
+	margin: 0 auto;
+	padding: 0 var(--wp--style--root--padding-right, 1.5rem) 0 var(--wp--style--root--padding-left, 1.5rem);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.dfans-cartelera__texto > * { margin: 0; }
+.dfans-cartelera__chip {
+	align-self: flex-start;
+	margin-bottom: 1.4rem !important;
+	padding: 0.5rem 0.85rem;
+	border-radius: 3px;
+	background: var(--dfans-accion);
+	color: #fff;
+	font-size: 0.74rem;
+	font-weight: 800;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+.dfans-cartelera .dfans-cartelera__titulo {
+	margin: 0 0 1.5rem !important;
+	color: #fff !important;
+	font-family: var(--dfans-letra) !important;
+	font-stretch: 75%;
+	font-weight: 900 !important;
+	font-size: clamp(3.6rem, 8.4vw, 8.8rem) !important;
+	line-height: 0.85 !important;
+	letter-spacing: -0.012em !important;
+	text-transform: uppercase !important;
+	text-shadow: 0 6px 40px rgba(0, 0, 0, 0.5);
+}
+.dfans-cartelera__titulo span { display: block; }
+.dfans-cartelera__bajada { max-width: 32rem; margin-bottom: 2rem !important; color: #d8d8d4; font-size: 1.12rem; line-height: 1.55; }
+.dfans-cartelera__botones { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.dfans-cbtn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 56px;
+	padding: 0 2.1rem;
+	border-radius: 4px;
+	font-size: 0.82rem;
+	font-weight: 800;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	text-decoration: none !important;
+	transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.dfans-cbtn:hover { transform: translateY(-2px); }
+.dfans-cbtn:active { transform: translateY(0); }
+.dfans-cbtn--rojo { background: var(--dfans-accion); color: #fff !important; }
+.dfans-cbtn--rojo:hover { background: var(--dfans-accion-2); }
+.dfans-cbtn--borde { border: 1px solid rgba(255, 255, 255, 0.55); color: #fff !important; }
+.dfans-cbtn--borde:hover { background: #fff; color: #000 !important; }
+.dfans-cartelera__tambien { display: flex; align-items: center; gap: 0.6rem; margin-top: 2.4rem !important; color: var(--dfans-tinta-2); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.dfans-cartelera__tambien span { margin-right: 0.3rem; }
+.dfans-cartelera__tambien a { width: 54px; height: 54px; border-radius: 50%; overflow: hidden; border: 2px solid var(--dfans-linea-fuerte); transition: border-color 0.2s ease, transform 0.2s ease; }
+.dfans-cartelera__tambien a:hover { border-color: var(--dfans-accion); transform: translateY(-2px); }
+.dfans-cartelera__tambien img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
+@media (prefers-reduced-motion: no-preference) {
+	.dfans-cartelera__foto img { animation: dfans-cart-foto 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+	.dfans-cartelera__titulo span { animation: dfans-cart-linea 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+	.dfans-cartelera__titulo span:nth-child(2) { animation-delay: 0.1s; }
+	.dfans-cartelera__titulo span:nth-child(3) { animation-delay: 0.2s; }
+	.dfans-cartelera__chip, .dfans-cartelera__bajada, .dfans-cartelera__botones, .dfans-cartelera__tambien { animation: dfans-cart-linea 0.8s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+}
+@keyframes dfans-cart-foto { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: none; } }
+@keyframes dfans-cart-linea { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@media (max-width: 781px) {
+	.dfans-cartelera { height: calc(100svh - 110px); min-height: 580px; max-height: none; }
+	.dfans-cartelera__foto { width: 100%; }
+	.dfans-cartelera__foto img { -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(0, 0, 0, 0.18) 34%, #000 74%); mask-image: linear-gradient(to top, transparent 0, rgba(0, 0, 0, 0.18) 34%, #000 74%); object-position: center 6%; }
+	.dfans-cartelera::after { display: none; }
+	.dfans-cartelera__texto { justify-content: flex-end; padding-bottom: 1.8rem; }
+	.dfans-cartelera__chip { margin-bottom: 0.9rem !important; font-size: 0.66rem; }
+	.dfans-cartelera .dfans-cartelera__titulo { font-size: clamp(3rem, 14.5vw, 4.4rem) !important; margin-bottom: 0.9rem !important; }
+	.dfans-cartelera__bajada { font-size: 0.95rem; margin-bottom: 1.2rem !important; }
+	.dfans-cartelera__botones { flex-wrap: nowrap; }
+	.dfans-cbtn { flex: 1 1 0; min-height: 50px; padding: 0 0.6rem; font-size: 0.7rem; letter-spacing: 0.08em; }
+	.dfans-cartelera__tambien { margin-top: 1.2rem !important; }
+	.dfans-cartelera__tambien a { width: 42px; height: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.dfans-cartelera *, .dfans-cbtn { animation: none !important; transition: none !important; }
+}
+
+/* ---------- v7 (13/11/2026): encuadre del hero, fandoms en círculos, carrusel, banners y WhatsApp ---------- */
+/* Hero: en pantallas anchas la foto es más angosta, así se ve el polo completo y no solo la cara. */
+/* Solo escritorio: en el celular la foto sigue a todo el ancho detrás del texto. */
+@media (min-width: 782px) {
+	.dfans-cartelera__foto { width: min(62%, calc(min(max(100svh - 136px, 620px), 920px) * 0.92)); }
+	.dfans-cartelera__foto img { object-position: center 24%; }
+}
+@media (min-width: 1700px) {
+	.dfans-cartelera__foto { right: max(0px, calc((100vw - 1800px) / 2)); }
+}
+
+/* A. Explora por fandom (círculos). */
+.dfans-p-circulos { padding-top: clamp(3rem, 5vw, 4.5rem) !important; padding-bottom: clamp(2rem, 4vw, 3rem) !important; }
+.dfans-circulos-wrap { margin-top: 0 !important; }
+.dfans-circulos { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: clamp(0.6rem, 1.6vw, 1.4rem); }
+.dfans-circ { display: flex; flex-direction: column; align-items: center; gap: 0.8rem; text-decoration: none !important; color: var(--dfans-tinta) !important; }
+.dfans-circ__foto { display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 2px solid var(--dfans-linea-fuerte); background: var(--dfans-prenda); transition: border-color 0.25s ease, transform 0.25s ease; }
+.dfans-circ__foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 16%; display: block; transition: transform 0.5s ease; }
+.dfans-circ:hover .dfans-circ__foto { border-color: var(--dfans-accion); transform: translateY(-3px); }
+.dfans-circ:hover .dfans-circ__foto img { transform: scale(1.06); }
+.dfans-circ__nombre { font-size: 0.74rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; }
+
+/* C. «Lo nuevo» como carrusel con flechas. */
+.dfans-p-nuevos .dfans-p-cabecera .dfans-p-ver { display: flex; align-items: center; gap: 1rem; }
+.dfans-flecha {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	border: 1px solid var(--dfans-linea-fuerte);
+	background: transparent;
+	color: var(--dfans-tinta);
+	font-size: 1.3rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.dfans-flecha:hover { background: var(--dfans-tinta); color: #000; border-color: var(--dfans-tinta); }
+.dfans-p-nuevos .wc-block-product-template {
+	display: grid !important;
+	grid-template-columns: none !important;
+	grid-auto-flow: column;
+	grid-auto-columns: calc((100% - 3 * 0.75rem) / 4.25);
+	gap: 0.75rem !important;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	padding-bottom: 0.3rem;
+}
+.dfans-p-nuevos .wc-block-product-template::-webkit-scrollbar { display: none; }
+.dfans-p-nuevos .wp-block-woocommerce-product-collection { min-width: 0; max-width: var(--wp--style--global--wide-size, 1340px) !important; overflow: hidden; }
+.dfans-p-nuevos .wc-block-product-template { width: 100% !important; max-width: 100% !important; min-width: 0; position: relative; }
+.dfans-p-nuevos .wp-block-woocommerce-product-collection, .dfans-p-nuevos .wc-block-product-template > li { position: relative; }
+.dfans-p-nuevos .wc-block-product-template > li { width: auto !important; max-width: none !important; margin: 0 !important; scroll-snap-align: start; }
+
+/* B. Dos banners de exclusivos. */
+.dfans-p-banners { padding-top: clamp(1rem, 3vw, 2rem) !important; }
+.dfans-banners { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; max-width: var(--wp--style--global--wide-size, 1340px); margin: 0 auto; }
+.dfans-banner { position: relative; display: block; height: clamp(380px, 38vw, 520px); border-radius: var(--r-tarjeta); overflow: hidden; background: var(--dfans-prenda); text-decoration: none !important; }
+.dfans-banner img { width: 100%; height: 100%; object-fit: cover; object-position: center 24%; display: block; transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.dfans-banner:hover img { transform: scale(1.03); }
+.dfans-banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 75%); pointer-events: none; }
+.dfans-banner__texto { position: absolute; left: clamp(1.4rem, 3vw, 2.4rem); top: 50%; transform: translateY(-50%); z-index: 1; max-width: 60%; display: flex; flex-direction: column; align-items: flex-start; }
+.dfans-banner__titulo { margin-bottom: 0.7rem; color: #fff; font-stretch: 75%; font-weight: 900; font-size: clamp(2rem, 3.4vw, 3.2rem); line-height: 0.9; text-transform: uppercase; }
+.dfans-banner__bajada { margin-bottom: 1.4rem; color: #d6d6d2; font-size: 0.95rem; line-height: 1.5; }
+.dfans-banner .dfans-cbtn { min-height: 48px; }
+
+/* Botón flotante de WhatsApp. */
+.dfans-wsp {
+	position: fixed;
+	right: 1.2rem;
+	bottom: 1.2rem;
+	z-index: 90;
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	height: 56px;
+	padding: 0 1.15rem 0 0.95rem;
+	border-radius: 999px;
+	background: #25d366;
+	color: #fff !important;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-decoration: none !important;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+	transition: transform 0.2s ease, background 0.2s ease;
+}
+.dfans-wsp:hover { transform: translateY(-2px); background: #1fbd5b; }
+.dfans-wsp svg { width: 28px; height: 28px; fill: #fff; flex: 0 0 auto; }
+/* El botón «volver arriba» sube para no chocar con WhatsApp. */
+.dfans-arriba { bottom: 5.4rem !important; right: 1.45rem !important; }
+
+@media (max-width: 1024px) {
+	.dfans-p-nuevos .wc-block-product-template { grid-auto-columns: calc((100% - 2 * 0.75rem) / 3.2); }
+}
+@media (max-width: 781px) {
+	.dfans-circulos { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 92px; overflow-x: auto; scrollbar-width: none; padding-bottom: 0.3rem; }
+	.dfans-circ__nombre { font-size: 0.66rem; }
+	.dfans-p-nuevos .wc-block-product-template { grid-auto-columns: 64%; }
+	.dfans-flecha { display: none; }
+	.dfans-banners { grid-template-columns: 1fr; }
+	.dfans-banner { height: 360px; }
+	.dfans-banner__texto { max-width: 78%; }
+	.dfans-wsp { height: 52px; width: 52px; padding: 0; justify-content: center; right: 1rem; bottom: 1rem; }
+	.dfans-wsp span { display: none; }
+	.dfans-arriba { bottom: 4.6rem !important; right: 1.1rem !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.dfans-circ__foto, .dfans-circ__foto img, .dfans-banner img, .dfans-wsp { transition: none !important; }
+}
+
+/* ---------- v8 (13/11/2026): las miniaturas del hero cambian la foto grande ---------- */
+.dfans-cartelera__elige { width: 54px; height: 54px; padding: 0; border-radius: 50%; overflow: hidden; border: 2px solid var(--dfans-linea-fuerte); background: var(--dfans-prenda); cursor: pointer; transition: border-color 0.2s ease, transform 0.2s ease; }
+.dfans-cartelera__elige:hover { border-color: var(--dfans-tinta); transform: translateY(-2px); }
+.dfans-cartelera__elige[aria-pressed="true"] { border-color: var(--dfans-accion); box-shadow: 0 0 0 2px rgba(224, 38, 47, 0.35); }
+.dfans-cartelera__elige:focus-visible { outline: 2px solid var(--dfans-tinta); outline-offset: 3px; }
+@media (max-width: 781px) {
+	/* En el celular el texto va arriba y las miniaturas abajo, lejos del botón de WhatsApp. */
+	.dfans-cartelera__tambien { flex-wrap: wrap; gap: 0.55rem; }
+	.dfans-cartelera__tambien span { flex-basis: 100%; margin: 0; }
+	.dfans-cartelera__elige { width: 44px; height: 44px; }
+}
+
+/* ---------- v9 (13/11/2026): ficha, miniaturas con flechas y siempre enteras ---------- */
+.woocommerce-product-gallery .dfans-miniaturas { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; }
+.woocommerce-product-gallery .dfans-miniaturas .flex-control-thumbs {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: grid !important;
+	grid-auto-flow: column;
+	grid-auto-columns: calc((100% - 4 * 0.4rem) / 5);
+	gap: 0.4rem;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow-x: auto !important;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+}
+.woocommerce-product-gallery .dfans-miniaturas .flex-control-thumbs::-webkit-scrollbar { display: none; }
+.woocommerce-product-gallery .dfans-miniaturas .flex-control-thumbs li { flex: none !important; width: auto !important; margin: 0 !important; scroll-snap-align: start; }
+.woocommerce-product-gallery .dfans-miniaturas .flex-control-thumbs img { box-sizing: border-box; width: 100%; height: auto; display: block; }
+.dfans-mini-flecha {
+	flex: 0 0 36px;
+	height: 36px;
+	padding: 0;
+	border-radius: 50%;
+	border: 1px solid var(--dfans-linea-fuerte);
+	background: transparent;
+	color: var(--dfans-tinta);
+	font-size: 1.3rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.dfans-mini-flecha:hover { background: var(--dfans-tinta); color: #000; border-color: var(--dfans-tinta); }
+.dfans-mini-flecha:focus-visible { outline: 2px solid var(--dfans-tinta); outline-offset: 2px; }
+@media (max-width: 781px) {
+	.woocommerce-product-gallery .dfans-miniaturas .flex-control-thumbs { grid-auto-columns: calc((100% - 3 * 0.4rem) / 4); }
+	.dfans-mini-flecha { flex-basis: 32px; height: 32px; }
+}
+
+/* ---------- v10 (13/11/2026): logo oficial (imagen) en la cabecera y en el pie ---------- */
+.wp-block-site-title a:has(.dfans-logo) { display: inline-flex; align-items: center; line-height: 0; }
+.wp-block-site-title .dfans-logo { display: block; height: 40px; width: auto; }
+.dfans-footer-logo a { display: inline-block; line-height: 0; }
+.dfans-footer-logo .dfans-logo-pie { display: block; height: 104px; width: auto; }
+@media (max-width: 781px) {
+	.wp-block-site-title .dfans-logo { height: 32px; }
+	.dfans-footer-logo .dfans-logo-pie { height: 88px; }
+}
+
+/* ---------- v11 (14/11/2026): titular «Desata tu fandom» con sobrecarga de energía ---------- */
+.dfans-cartelera__titulo .dfans-energia { color: var(--dfans-accion); text-shadow: 0 0 34px rgba(224, 38, 47, 0.45), 0 6px 40px rgba(0, 0, 0, 0.5); }
+@media (prefers-reduced-motion: no-preference) {
+	/* Cada 5,5 s las letras se «sobrecargan»: parpadean, cambian de color y se separan en rojo/cian. */
+	.dfans-cartelera__titulo span { animation: dfans-cart-linea 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both, dfans-sobrecarga 5.5s 1.6s infinite; }
+	.dfans-cartelera__titulo span:nth-child(2) { animation-delay: 0.1s, 1.72s; }
+	.dfans-cartelera__titulo .dfans-energia { animation-name: dfans-cart-linea, dfans-sobrecarga-roja; }
+}
+@keyframes dfans-sobrecarga {
+	0%, 78%, 100% { color: #fff; text-shadow: 0 6px 40px rgba(0, 0, 0, 0.5); transform: none; opacity: 1; }
+	80% { color: #ff3b44; text-shadow: -4px 0 rgba(0, 229, 255, 0.75), 4px 0 rgba(224, 38, 47, 0.9), 0 0 26px rgba(255, 45, 54, 0.9); transform: translateX(-3px) skewX(-6deg); }
+	81% { opacity: 0.35; transform: translateX(4px); }
+	82% { opacity: 1; color: #fff; text-shadow: 0 0 18px #fff, 0 0 42px rgba(255, 45, 54, 0.95), 0 0 90px rgba(224, 38, 47, 0.7); transform: none; }
+	84% { opacity: 0.55; }
+	85% { opacity: 1; color: #ff2d36; text-shadow: 3px 0 rgba(0, 229, 255, 0.7), -3px 0 rgba(224, 38, 47, 0.9), 0 0 30px rgba(255, 45, 54, 0.85); transform: translateX(2px); }
+	87% { color: #fff; text-shadow: 0 0 22px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 45, 54, 0.6); transform: none; }
+	92% { text-shadow: 0 0 10px rgba(255, 45, 54, 0.35), 0 6px 40px rgba(0, 0, 0, 0.5); }
+}
+@keyframes dfans-sobrecarga-roja {
+	0%, 78%, 100% { color: var(--dfans-accion); text-shadow: 0 0 34px rgba(224, 38, 47, 0.45), 0 6px 40px rgba(0, 0, 0, 0.5); transform: none; opacity: 1; }
+	80% { color: #fff; text-shadow: 4px 0 rgba(0, 229, 255, 0.75), -4px 0 rgba(224, 38, 47, 0.95), 0 0 30px rgba(255, 255, 255, 0.9); transform: translateX(3px) skewX(6deg); }
+	81% { opacity: 0.3; transform: translateX(-4px); }
+	82% { opacity: 1; color: #ffe4e6; text-shadow: 0 0 20px #fff, 0 0 50px rgba(255, 45, 54, 1), 0 0 110px rgba(224, 38, 47, 0.8); transform: none; }
+	84% { opacity: 0.5; }
+	85% { opacity: 1; color: #ff2d36; text-shadow: -3px 0 rgba(0, 229, 255, 0.7), 3px 0 rgba(224, 38, 47, 0.9), 0 0 40px rgba(255, 45, 54, 0.95); transform: translateX(-2px); }
+	87% { color: #ff4a52; text-shadow: 0 0 28px rgba(255, 45, 54, 0.95), 0 0 80px rgba(224, 38, 47, 0.7); transform: none; }
+	92% { text-shadow: 0 0 34px rgba(224, 38, 47, 0.55), 0 6px 40px rgba(0, 0, 0, 0.5); }
 }

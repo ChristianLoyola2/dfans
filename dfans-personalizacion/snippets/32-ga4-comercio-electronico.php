@@ -2,7 +2,7 @@
 /**
  * Snippet #32: D'FANS - GA4 comercio electrónico
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 14/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 21/11/2026. La copia activa está en la base de datos.
  */
 
 /*

@@ -2,7 +2,7 @@
 /**
  * Snippet #31: D'FANS - Rediseño visual
  * Alcance: global · prioridad 10
- * Exportado de Code Snippets el 14/11/2026. La copia activa está en la base de datos.
+ * Exportado de Code Snippets el 21/11/2026. La copia activa está en la base de datos.
  */
 
 /*
@@ -307,13 +307,25 @@ add_action( 'woocommerce_account_dashboard', function () {
 	};
 	$direccion = wc_get_account_formatted_address( 'shipping' ) ?: wc_get_account_formatted_address( 'billing' );
 
+	$desde = date_i18n( 'F \d\e Y', strtotime( $usuario->user_registered ) );
+	$ico   = array(
+		'pedido'    => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8.5 12 3 3 8.5v7L12 21l9-5.5zM12 5.3l6.2 3.7L12 12.7 5.8 9zM5 10.7l6 3.6v4.3l-6-3.7zm8 7.9v-4.3l6-3.6v4.2z"/></svg>',
+		'corazon'   => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.1 3.1 4 7 4c2 0 3.5 1.1 5 2.8C13.5 5.1 15 4 17 4c3.9 0 6.1 4.1 4.6 7.7C19.5 16.4 12 21 12 21z"/></svg>',
+		'direccion' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>',
+	);
+
 	echo '<div class="dfans-panel">';
-	echo '<div class="dfans-panel__saludo"><h2>Hola, ' . esc_html( $nombre ) . '</h2>'
-		. '<p>Desde aquí sigues tus pedidos, guardas tus direcciones y cambias tus datos.</p></div>';
+	echo '<div class="dfans-panel__saludo">'
+		. '<span class="dfans-panel__inicial" aria-hidden="true">' . esc_html( mb_strtoupper( mb_substr( $nombre, 0, 1 ) ) ) . '</span>'
+		. '<div class="dfans-panel__hola"><p class="dfans-panel__miembro">Miembro D’FANS desde ' . esc_html( $desde ) . '</p>'
+		. '<h2>Hola, ' . esc_html( $nombre ) . '</h2>'
+		. '<p>Sigue tus pedidos, guarda tus direcciones y cambia tus datos desde aquí.</p></div>'
+		. '<div class="dfans-panel__acciones"><a class="dfans-cbtn dfans-cbtn--rojo" href="' . esc_url( wc_get_page_permalink( 'shop' ) ) . '">Seguir comprando</a>'
+		. '<a class="dfans-cbtn dfans-cbtn--borde" href="' . esc_url( wc_get_account_endpoint_url( 'orders' ) ) . '">Mis pedidos</a></div></div>';
 
 	echo '<div class="dfans-panel__tarjetas">';
 	// Último pedido.
-	echo '<section class="dfans-tarjeta"><h3>Tu último pedido</h3>';
+	echo '<section class="dfans-tarjeta"><span class="dfans-tarjeta__ico">' . $ico['pedido'] . '</span><h3>Tu último pedido</h3>';
 	if ( $ultimo ) {
 		echo '<p class="dfans-tarjeta__dato">Pedido #' . esc_html( $ultimo->get_order_number() ) . '</p>'
 			. '<p>' . esc_html( wc_format_datetime( $ultimo->get_date_created() ) ) . ', ' . wp_kses_post( $ultimo->get_formatted_order_total() ) . '</p>'
@@ -325,12 +337,12 @@ add_action( 'woocommerce_account_dashboard', function () {
 	}
 	echo '</section>';
 	// Favoritos (los cuenta el navegador).
-	echo '<section class="dfans-tarjeta"><h3>Tus favoritos</h3>'
+	echo '<section class="dfans-tarjeta"><span class="dfans-tarjeta__ico">' . $ico['corazon'] . '</span><h3>Tus favoritos</h3>'
 		. '<p class="dfans-tarjeta__dato"><span class="dfans-fav-total">0</span> polos guardados</p>'
 		. '<p>Se guardan en este navegador cuando tocas el corazón de un polo.</p>'
 		. '<a class="dfans-tarjeta__enlace" href="' . esc_url( home_url( '/favoritos/' ) ) . '">Ver mis favoritos</a></section>';
 	// Dirección.
-	echo '<section class="dfans-tarjeta"><h3>Dirección de envío</h3>';
+	echo '<section class="dfans-tarjeta"><span class="dfans-tarjeta__ico">' . $ico['direccion'] . '</span><h3>Dirección de envío</h3>';
 	if ( $direccion ) {
 		echo '<address>' . wp_kses_post( $direccion ) . '</address><a class="dfans-tarjeta__enlace" href="' . esc_url( wc_get_account_endpoint_url( 'edit-address' ) ) . '">Cambiar dirección</a>';
 	} else {
@@ -351,7 +363,9 @@ add_action( 'woocommerce_account_dashboard', function () {
 	}
 
 	// Ayuda.
-	echo '<p class="dfans-panel__ayuda">¿Dudas con un pedido o un cambio de talla? <a href="https://wa.me/51912353175" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> o revisa la <a href="' . esc_url( home_url( '/cambios-y-devoluciones/' ) ) . '">política de cambios</a>.</p>';
+	echo '<div class="dfans-panel__ayuda"><div><p class="dfans-panel__ayuda-titulo">¿Dudas con un pedido o un cambio de talla?</p>'
+		. '<p>Te respondemos por WhatsApp. También puedes revisar la <a href="' . esc_url( home_url( '/cambios-y-devoluciones/' ) ) . '">política de cambios</a>.</p></div>'
+		. '<a class="dfans-panel__wsp" href="https://wa.me/51912353175" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></div>';
 	echo '</div>';
 	?>
 	<script>
@@ -446,4 +460,52 @@ add_filter( 'render_block_core/paragraph', function ( $html, $block ) {
 	}
 	return '<p class="dfans-footer-logo"><a href="' . esc_url( home_url( '/' ) ) . '" aria-label="D’FANS, ir al inicio"><img class="dfans-logo-pie" src="' . esc_url( $logo ) . '" alt="D’FANS" width="403" height="809" loading="lazy"></a></p>';
 }, 20, 2 );
+
+// Datos de la cuenta: frase de introducción sobre el formulario.
+add_action( 'woocommerce_before_edit_account_form', function () {
+	echo '<p class="dfans-form-intro">Actualiza tu nombre, tu correo y tu contraseña. Tus datos solo se usan para tus pedidos.</p>';
+} );
+
+// Correos con la marca: logo en franja negra, línea roja, botones y pie oscuro.
+add_filter( 'woocommerce_email_styles', function ( $css ) {
+	return $css . '
+#outer_wrapper { background-color: #f2f2f0; }
+#inner_wrapper { background-color: #f2f2f0; }
+#template_header_image { padding: 0; }
+#template_header_image p { margin: 0; text-align: center; }
+#template_header_image img { display: block; width: 100%; max-width: 600px; height: auto; border-radius: 12px 12px 0 0; }
+#template_container { border: 1px solid #e4e4e0; border-top: 0; border-radius: 0 0 12px 12px; background-color: #ffffff; }
+#template_header { border-top: 4px solid #e0262f; background-color: #ffffff; border-radius: 0; }
+#header_wrapper { padding: 36px 40px 8px; }
+#header_wrapper h1 { color: #0b0b0b; font-size: 30px; font-weight: 800; letter-spacing: -0.5px; line-height: 115%; }
+#body_content_inner_cell { padding: 12px 40px 32px; }
+#body_content_inner { color: #3d3d3a; font-size: 16px; line-height: 160%; }
+#body_content_inner a { color: #e0262f; font-weight: bold; }
+#body_content_inner .hr { border-color: #ececea; }
+#template_footer { background-color: #0b0b0b; border-radius: 12px; }
+#template_footer #credit, #template_footer #credit p, #template_footer a { color: #a3a39f; font-size: 12px; }
+';
+}, 20 );
+
+// Correos: los enlaces de contraseña y de «Mi cuenta» se muestran como botones (estilo en línea, válido en todo cliente de correo).
+function dfans_correo_botones( $html ) {
+	$base  = 'display:inline-block;padding:14px 28px;border-radius:4px;color:#ffffff;font-size:13px;font-weight:bold;letter-spacing:1px;text-decoration:none;text-transform:uppercase;';
+	$tipos = array(
+		'#<a\s([^>]*href="[^"]*action=(?:newaccount|rp)[^"]*"[^>]*)>#i' => $base . 'background-color:#e0262f;',
+		'#<a\s([^>]*href="[^"]*/my-account/"[^>]*)>#i'                => $base . 'background-color:#0b0b0b;',
+	);
+	foreach ( $tipos as $patron => $estilo ) {
+		$html = preg_replace_callback( $patron, function ( $m ) use ( $estilo ) {
+			return '<a ' . trim( preg_replace( '/\sstyle="[^"]*"/i', '', ' ' . $m[1] ) ) . ' style="' . $estilo . '">';
+		}, $html );
+	}
+	return $html;
+}
+add_filter( 'woocommerce_mail_content', 'dfans_correo_botones', 20 );
+
+// Ficha: el carrusel de fotos no cambia de alto entre una foto y otra (todas van en un marco cuadrado).
+add_filter( 'woocommerce_single_product_carousel_options', function ( $opciones ) {
+	$opciones['smoothHeight'] = false;
+	return $opciones;
+} );
 

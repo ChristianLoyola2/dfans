@@ -199,7 +199,11 @@ $banners = p4_seccion( 'dfans-p-banners', "<!-- wp:html -->\n<div class=\"dfans-
 
 // Orden v7: hero, fandoms en círculos, colecciones, lo nuevo (carrusel), exclusivos (2 banners), compra por persona y ventajas.
 // Salen el bloque de exclusivos con lista de cortes y el índice de fandoms (los reemplazan B y A).
-$s     = array( $s[0], $circ, $col, $s[2], $banners, $s[1], $s[5] );
+// v13: «Lo que dicen los fans» (shortcode del snippet 34; no muestra nada mientras no haya reseñas).
+$resenas = "<!-- wp:shortcode -->
+[dfans_resenas]
+<!-- /wp:shortcode -->";
+$s     = array( $s[0], $circ, $col, $s[2], $banners, $s[1], $resenas, $s[5] );
 $nuevo = implode( "\n\n", $s );
 $antes = get_post( 60 )->post_content;
 echo 'Portada: ', strlen( $antes ), ' -> ', strlen( $nuevo ), " caracteres, 6 secciones\n";
